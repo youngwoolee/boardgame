@@ -1,0 +1,91 @@
+package com.project.boardgame.service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import com.project.boardgame.domain.Game;
+import com.project.boardgame.domain.ReservationDetail;
+import com.project.boardgame.domain.ReservationStatus;
+import com.project.boardgame.endpoint.request.GameRequest;
+import com.project.boardgame.endpoint.response.GameDetailResponse;
+import com.project.boardgame.endpoint.response.GameReservationResponse;
+import com.project.boardgame.endpoint.response.GameResponse;
+import com.project.boardgame.endpoint.response.GameStatusResponse;
+import com.project.boardgame.endpoint.response.ReservationStatusResponse;
+import com.project.boardgame.repository.GameRepository;
+import com.project.boardgame.repository.ReservationDetailRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
+@Service
+@RequiredArgsConstructor
+public class GameService {
+    private final GameRepository gameRepository;
+    private final ReservationDetailRepository reservationDetailRepository;
+
+    public List<Game> getAvailableGames() {
+        return gameRepository.findAll().stream()
+                .filter(game -> reservationDetailRepository.countByGameAndStatus(game, ReservationStatus.예약) < game.getTotalQuantity())
+                .collect(Collectors.toList());
+    }
+
+    public GameResponse addGame(GameRequest request) {
+        Game game = Game.builder()
+                .name(request.getName())
+                .description(request.getDescription())
+                .totalQuantity(request.getTotalQuantity())
+                .build();
+        Game saveGame = gameRepository.save(game);
+        return GameResponse.from(saveGame);
+    }
+
+    public List<GameResponse> getAllGames() {
+        List<Game> games = gameRepository.findAll();
+        List<GameResponse> response = games.stream()
+                .map(GameResponse::from)
+                .collect(Collectors.toList());
+        return response;
+
+    }
+
+    public GameReservationResponse getReserveInfo(Long id) {
+        Game findGame = gameRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 게임이 없습니다."));
+
+        Optional<ReservationDetail> findReservation = reservationDetailRepository
+                .findFirstByGameAndStatus(findGame, ReservationStatus.예약);
+
+        if (findReservation.isPresent()) {
+            ReservationDetail reservation = findReservation.get();
+            return GameReservationResponse.builder()
+                    .userId(reservation.getMaster().getUserId())
+                    .userName(reservation.getMaster().getUserNickname())
+                    .build();
+        }
+
+        return GameReservationResponse.empty();
+    }
+
+    @Transactional
+    public GameResponse updateGame(Long id, GameRequest request) {
+        Game game = gameRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게임이 존재하지 않습니다."));
+
+        game.setName(request.getName());
+        game.setDescription(request.getDescription());
+        game.setTotalQuantity(request.getTotalQuantity());
+
+        return GameResponse.from(game);
+    }
+
+    public List<GameDetailResponse> getAllGamesDetail() {
+        List<Game> games = gameRepository.findAll();
+        List<GameDetailResponse> response = games.stream()
+                .map(GameDetailResponse::from)
+                .collect(Collectors.toList());
+        return response;
+    }
+}

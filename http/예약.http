@@ -1,0 +1,25 @@
+### 내 예약조회
+GET http://localhost:8080/api/reservations/user123
+Content-Type: application/json
+
+###예약 하기
+POST http://localhost:8080/api/reservations/reserve
+Content-Type: application/json
+
+{
+  "userId": "user123",
+  "nickname": "철수",
+  "gameIds": [1, 2]
+}
+
+###예약 취소
+PATCH http://localhost:8080/api/reservations/1/cancel
+Content-Type: application/json
+
+###예약된 게임 반납
+PATCH http://localhost:8080/api/reservations/1/return
+Content-Type: application/json
+
+###예약 상세 확인
+GET http://localhost:8080/api/reservations/user123/detail
+Content-Type: application/json

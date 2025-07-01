@@ -1,0 +1,35 @@
+### 게임조회
+GET http://localhost:8080/api/games
+Content-Type: application/json
+
+### 게임상세조회
+GET http://localhost:8080/api/games/detail
+Content-Type: application/json
+
+### 예약 가능한 게임 조회
+GET http://localhost:8080/api/games/available
+Content-Type: application/json
+
+### 특정 게임 예약현황 조회
+GET http://localhost:8080/api/games/2/reserve
+Content-Type: application/json
+
+###신규 보드게임 추가
+POST http://localhost:8080/api/games
+Content-Type: application/json
+
+{
+  "name": "모자가 아니잖아",
+  "description": "기억력 게임",
+  "totalQuantity": 1
+}
+
+### 보드게임 수정
+PUT http://localhost:8080/api/games/4
+Content-Type: application/json
+
+{
+  "name": "모자가 아니잖아",
+  "description": "기억력 게임",
+  "totalQuantity": 2
+}
