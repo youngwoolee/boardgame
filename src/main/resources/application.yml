@@ -14,3 +14,21 @@ spring:
       ddl-auto: update
     show-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: shc.ywlee@gmail.com
+    password: oamp klei mryb sueh
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+secret-key: ThisStatementIsJwtSecretKeyDoNotUseThisStatement
+
+##gmail 설정
+
