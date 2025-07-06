@@ -42,7 +42,7 @@ public class WebSecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/api/v1/auth/**").permitAll()
+                        .requestMatchers("/", "/h2-console/**", "/api/v1/auth/**").permitAll()
                         .requestMatchers("/", "/api/v1/user/**").hasRole("USER")
                         .requestMatchers("/", "/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

@@ -2,7 +2,6 @@ package com.project.boardgame.endpoint.request.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SignUpRequest {
+public class SignInRequest {
 
     @NotBlank
     private String id;
@@ -19,10 +18,4 @@ public class SignUpRequest {
     @NotBlank
     private String password;
 
-    @Email
-    @NotBlank
-    private String email;
-
-    @NotBlank
-    private String certificationNumber;
 }

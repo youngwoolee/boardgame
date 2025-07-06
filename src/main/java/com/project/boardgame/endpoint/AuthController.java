@@ -3,10 +3,12 @@ package com.project.boardgame.endpoint;
 import com.project.boardgame.endpoint.request.auth.CheckCertificationRequest;
 import com.project.boardgame.endpoint.request.auth.EmailCertificationRequest;
 import com.project.boardgame.endpoint.request.auth.IdCheckRequest;
+import com.project.boardgame.endpoint.request.auth.SignInRequest;
 import com.project.boardgame.endpoint.request.auth.SignUpRequest;
 import com.project.boardgame.endpoint.response.auth.CheckCertificationResponse;
 import com.project.boardgame.endpoint.response.auth.EmailCertificationResponse;
 import com.project.boardgame.endpoint.response.auth.IdCheckResponse;
+import com.project.boardgame.endpoint.response.auth.SignInResponse;
 import com.project.boardgame.endpoint.response.auth.SignUpResponse;
 import com.project.boardgame.repository.UserRepository;
 import com.project.boardgame.service.AuthService;
@@ -48,6 +50,12 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<? super SignUpResponse> signUp(@RequestBody @Valid SignUpRequest request) {
         ResponseEntity<? super SignUpResponse> response = authService.signUp(request);
+        return response;
+    }
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<? super SignInResponse> signUp(@RequestBody @Valid SignInRequest request) {
+        ResponseEntity<? super SignInResponse> response = authService.signIn(request);
         return response;
     }
 }

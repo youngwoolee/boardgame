@@ -8,13 +8,16 @@ import com.project.boardgame.domain.Member;
 import com.project.boardgame.endpoint.request.auth.CheckCertificationRequest;
 import com.project.boardgame.endpoint.request.auth.EmailCertificationRequest;
 import com.project.boardgame.endpoint.request.auth.IdCheckRequest;
+import com.project.boardgame.endpoint.request.auth.SignInRequest;
 import com.project.boardgame.endpoint.request.auth.SignUpRequest;
 import com.project.boardgame.endpoint.response.ResponseDto;
 import com.project.boardgame.endpoint.response.auth.CheckCertificationResponse;
 import com.project.boardgame.endpoint.response.auth.EmailCertificationResponse;
 import com.project.boardgame.endpoint.response.auth.IdCheckResponse;
+import com.project.boardgame.endpoint.response.auth.SignInResponse;
 import com.project.boardgame.endpoint.response.auth.SignUpResponse;
 import com.project.boardgame.provider.EmailProvider;
+import com.project.boardgame.provider.JwtProvider;
 import com.project.boardgame.repository.CertificationRepository;
 import com.project.boardgame.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final UserRepository userRepository;
     private final EmailProvider emailProvider;
+    private final JwtProvider jwtProvider;
     private final CertificationRepository certificationRepository;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -119,5 +123,29 @@ public class AuthService {
             return ResponseDto.databaseError();
         }
         return SignUpResponse.success();
+    }
+
+    public ResponseEntity<? super SignInResponse> signIn(SignInRequest request) {
+        String token = null;
+        try {
+
+            String userId = request.getId();
+
+            Member member = userRepository.findByUserId(userId);
+            if(member == null) return SignInResponse.signInFail();
+
+            String password = request.getPassword();
+            String encodedPassword = member.getPassword();
+
+            boolean isMatched = passwordEncoder.matches(password, encodedPassword);
+            if(!isMatched) return SignInResponse.signInFail();
+
+            token = jwtProvider.create(userId);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return SignInResponse.success(token);
     }
 }

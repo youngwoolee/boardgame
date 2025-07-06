@@ -9,6 +9,7 @@ interface Props {
     isErrorMessage?: boolean;
     buttonTitle?: string;
     message?: string;
+    buttonDisabled?: boolean; // ✅ 추가
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
     onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
     onButtonClick?: () => void;
@@ -16,18 +17,18 @@ interface Props {
 }
 const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
 
-    const {title, placeholder, type, value, isErrorMessage, buttonTitle, message, onChange, onKeyDown, onButtonClick } = props;
+    const {title, placeholder, type, value, isErrorMessage, buttonTitle, message, buttonDisabled = false, onChange, onKeyDown, onButtonClick } = props;
 
-    const buttonClass = value === '' ? 'input-box-button-disable' : 'input-box-button';
+    const buttonClass = value === '' || buttonDisabled ? 'input-box-button-disable' : 'input-box-button';
     const messageClass = isErrorMessage? 'input-box-message-error' : 'input-box-message';
 
     return (
         <div className='input-box'>
-            <div className='input-box-title'>{'아이디'}</div>
+            <div className='input-box-title'>{title}</div>
             <div className='input-box-content'>
                 <div className='input-box-body'>
                     <input ref={ref} className='input-box-input' placeholder={placeholder} type={type} value = {value} onChange={onChange} onKeyDown={onKeyDown}/>
-                    {buttonTitle !== undefined && onButtonClick !== undefined && <div className={buttonClass} onClick={onButtonClick}>{buttonTitle}</div>}
+                    {buttonTitle !== undefined && onButtonClick !== undefined && <div className={buttonClass} onClick={!buttonDisabled ? onButtonClick : undefined}>{buttonTitle}</div>}
                 </div>
                 {message !== undefined && <div className={messageClass}>{message}</div>}
             </div>
