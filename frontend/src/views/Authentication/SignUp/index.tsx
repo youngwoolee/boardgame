@@ -11,7 +11,7 @@ import {
     checkCertificationRequest,
     emailCertificationRequest,
     idCheckRequest,
-    signUpRequest
+    signUpRequest, SNS_SIGN_IN_URL
 } from "../../../apis";
 import {
     CheckCertificationResponseDto,
@@ -225,6 +225,10 @@ export default function SignUp() {
         navigate('/auth/sign-in');
     };
 
+    const onSnsSignInButtonClickHandler = (type: 'kakao' | 'naver') => {
+        window.location.href = SNS_SIGN_IN_URL(type);
+    }
+
     const onIdKeyDownClickHandler = (event: KeyboardEvent<HTMLInputElement>) => {
         if(event.key !== 'Enter') return;
         onIdButtonClickHandler();
@@ -259,8 +263,8 @@ export default function SignUp() {
                         <div className={"sign-up-content-sns-sign-in-box"}>
                             <div className={"sign-up-content-sns-sign-in-title"}>{"SNS 회원가입"}</div>
                             <div className={"sign-up-content-sns-sign-in-button-box"}>
-                                <div className={"kakao-sign-in-button"}></div>
-                                <div className={"naver-sign-in-button"}></div>
+                                <div className={"kakao-sign-in-button"} onClick={() => onSnsSignInButtonClickHandler('kakao')}></div>
+                                <div className={"naver-sign-in-button"} onClick={() => onSnsSignInButtonClickHandler('naver')}></div>
                             </div>
                         </div>
                         <div className={"sign-up-content-divider"}></div>

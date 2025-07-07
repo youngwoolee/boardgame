@@ -31,4 +31,11 @@ public class Member {
 
     }
 
+    public Member(String userId, String email, String type) {
+        this.userId = userId;
+        this.password = "Passw0rd";
+        this.email = email;
+        this.type = type;
+        this.role = "ROLE_USER";
+    }
 }
