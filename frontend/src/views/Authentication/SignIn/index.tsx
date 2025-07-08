@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useRef, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent, useEffect, useRef, useState} from "react";
 import InputBox from "../../../components/InputBox";
 import './style.css';
 import {useNavigate} from "react-router-dom";
@@ -25,6 +25,13 @@ export default function SignIn() {
     const [message, setMessage] = useState<string>('');
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (cookie.accessToken) {
+            // 이미 로그인된 사용자이면 홈으로 이동
+            navigate('/');
+        }
+    }, [cookie, navigate]);
 
     const signInResponse = (responseBody: ResponseBody<SignInResponseDto>) => {
         if(!responseBody) return;

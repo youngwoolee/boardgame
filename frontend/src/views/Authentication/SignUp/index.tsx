@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useRef, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent, useEffect, useRef, useState} from "react";
 import InputBox from "../../../components/InputBox";
 import './style.css';
 import {useNavigate} from "react-router-dom";
@@ -22,6 +22,7 @@ import {ResponseDto} from "../../../apis/response";
 import {ResponseCode} from "../../../types/enums";
 import {ResponseBody} from "../../../types";
 import {log} from "util";
+import {useCookies} from "react-cookie";
 
 export default function SignUp() {
     const idRef = useRef<HTMLInputElement | null>(null);
@@ -57,6 +58,15 @@ export default function SignUp() {
 
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordPattern = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{}|\\:;"'<>,.?/~`])[a-z\d!@#$%^&*()_\-+=$begin:math:display$$end:math:display${}|\\:;"'<>,.?/~`]{8,15}$/;
+
+    const [cookie, setCookie] = useCookies();
+
+    useEffect(() => {
+        if (cookie.accessToken) {
+            // 이미 로그인된 사용자이면 홈으로 이동
+            navigate('/');
+        }
+    }, [cookie, navigate]);
 
     const idCheckResponse = (responseBody: ResponseBody<IdCheckResponseDto>) => {
         if(!responseBody) return;

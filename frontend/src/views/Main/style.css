@@ -1,0 +1,140 @@
+.main-wrapper {
+    padding: 16px;
+    font-family: Pretendard, sans-serif;
+}
+
+.main-tag {
+    margin-left: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.main-tag.hot {
+    background-color: #ff7675;
+    color: white;
+}
+
+.main-tag.new {
+    background-color: #55efc4;
+    color: black;
+}
+
+/* 검색창 컨테이너를 flex로 구성 */
+.main-search-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    z-index: 10;
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+}
+
+/* 검색 input */
+.main-search-box input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* 돋보기 버튼 */
+.search-button {
+    background-color: #007aff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* 아래쪽 전체 wrapper는 검색창 높이만큼 마진 줘야함 */
+.main-grid {
+    margin-top: 68px; /* 검색창 높이 + padding */
+    margin-bottom: 48px; /* 하단바 높이만큼 */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+/* 각 보드게임 카드 고정 사이즈 */
+.main-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fafafa;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    min-height: 160px;
+}
+
+/* 이미지가 없어도 빈 박스로 영역 유지 */
+.main-card-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background-color: #eee;
+    display: block;
+}
+
+/* 이미지 로드 실패 시 대체 텍스트 공간 확보 */
+.main-card-image::before {
+    content: '';
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+/* 타이틀 아래 여백, 텍스트 고정 */
+.main-card-title {
+    width: 100%;
+    text-align: center;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    min-height: 32px; /* 이름 + 태그 영역 고정 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 하단 고정 내비게이션 */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    background-color: white;
+    display: flex;
+    border-top: 1px solid #ddd;
+    z-index: 10;
+}
+
+/* 내비게이션 아이템 */
+.nav-item {
+    flex: 1;
+    text-align: center;
+    line-height: 48px;
+    font-size: 13px;
+    color: #777;
+}
+
+.nav-item.active {
+    color: #000;
+    font-weight: bold;
+}
+
