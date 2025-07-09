@@ -100,11 +100,11 @@
 .main-card-title {
     width: 100%;
     text-align: center;
-    padding: 8px;
+    padding: 6px;
     font-size: 14px;
     font-weight: 500;
     position: relative;
-    min-height: 32px; /* 이름 + 태그 영역 고정 */
+    min-height: 18px; /* 이름 + 태그 영역 고정 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -117,7 +117,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 48px;
+    height: 52px;
     background-color: white;
     display: flex;
     border-top: 1px solid #ddd;
