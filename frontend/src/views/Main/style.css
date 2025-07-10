@@ -3,6 +3,40 @@
     font-family: Pretendard, sans-serif;
 }
 
+.main-card {
+    background-color: #fafafa;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    transition: filter 0.3s, opacity 0.3s;
+    height: 220px; /* 카드 높이 증가 */
+}
+
+
+.main-card.selected {
+    opacity: 0.5;
+}
+
+/* 이미지 wrapper를 고정 높이 + overflow로 구성 */
+.main-card-image-wrapper {
+    width: 100%;
+    height: 150px; /* 고정 이미지 높이 */
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #eee;
+    cursor: pointer;
+}
+
+.main-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 보드게임 태그 */
 .main-tag {
     margin-left: 6px;
     font-size: 10px;
@@ -21,7 +55,7 @@
     color: black;
 }
 
-/* 검색창 컨테이너를 flex로 구성 */
+/* 검색창 컨테이너 */
 .main-search-box {
     position: fixed;
     top: 0;
@@ -58,57 +92,33 @@
     cursor: pointer;
 }
 
-/* 아래쪽 전체 wrapper는 검색창 높이만큼 마진 줘야함 */
+/* 카드 그리드 */
 .main-grid {
-    margin-top: 68px; /* 검색창 높이 + padding */
-    margin-bottom: 48px; /* 하단바 높이만큼 */
+    margin-top: 68px; /* 검색창 높이 보정 */
+    margin-bottom: 80px; /* 하단바 + 플로팅버튼 여백 */
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
 }
 
-/* 각 보드게임 카드 고정 사이즈 */
-.main-card {
+.main-card-footer {
+    flex: 1;
+    padding: 4px 8px 8px; /* 상단 padding 줄이고 하단 유지 */
+    text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    background-color: #fafafa;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    min-height: 160px;
+    justify-content: center;
+    gap: 4px;
 }
 
-/* 이미지가 없어도 빈 박스로 영역 유지 */
-.main-card-image {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    background-color: #eee;
-    display: block;
-}
-
-/* 이미지 로드 실패 시 대체 텍스트 공간 확보 */
-.main-card-image::before {
-    content: '';
-    display: block;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-}
-
-/* 타이틀 아래 여백, 텍스트 고정 */
 .main-card-title {
-    width: 100%;
-    text-align: center;
-    padding: 6px;
     font-size: 14px;
-    font-weight: 500;
-    position: relative;
-    min-height: 18px; /* 이름 + 태그 영역 고정 */
+    margin-top: 1px;
+    font-weight: 600;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
 }
 
 /* 하단 고정 내비게이션 */
@@ -138,3 +148,97 @@
     font-weight: bold;
 }
 
+/* 우측 하단 플로팅 버튼 */
+.floating-button {
+    position: fixed;
+    bottom: 64px; /* 하단 내비게이션 위 */
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    background-color: #007aff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    cursor: pointer;
+    z-index: 20;
+}
+
+/* 선택 목록 모달 */
+.selection-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.selection-modal {
+    width: 100%;
+    max-height: 400px;
+    background: white;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding: 16px;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease-out;
+}
+
+.selection-modal h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.selection-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.selection-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.selection-card img {
+    width: 56px;
+    height: 56px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: #eee;
+}
+
+.selection-card span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+/* 대여 버튼 강화 */
+.rent-button {
+    font-size: 14px;
+    padding: 8px 16px;
+    background-color: #007aff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.rent-button:hover {
+    background-color: #005bbb;
+}

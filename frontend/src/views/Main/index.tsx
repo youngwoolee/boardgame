@@ -1,8 +1,21 @@
 import React, {JSX, useState} from 'react';
 import './style.css';
-import { FiSearch } from 'react-icons/fi';
+import {FiBookmark, FiSearch, FiShoppingCart, FiUsers} from 'react-icons/fi';
 import GameDetailModal from '../Game/GameDetailModal';
+import RentalModal from "../Game/GameRentalModal";
 
+type Game = {
+    id: number;
+    name: string;
+    imageUrl: string;
+    tag: string | null;
+    players: string;
+    age: string;
+    time: string;
+    genre: string;
+    system: string;
+    description: string;
+};
 
 const dummyGames = [
     {
@@ -57,12 +70,22 @@ const dummyGames = [
 
 export default function Main() {
     const [search, setSearch] = useState('');
+    const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+    const [selectedList, setSelectedList] = useState<Game[]>([]);
+    const [showRentalModal, setShowRentalModal] = useState(false);
 
     const filteredGames = dummyGames.filter((game) =>
         game.name.toLowerCase().includes(search.toLowerCase())
     );
 
-    const [selectedGame, setSelectedGame] = useState<null | typeof dummyGames[0]>(null);
+    const toggleSelect = (game: Game) => {
+        if (selectedList.find((g) => g.id === game.id)) {
+            setSelectedList((prev) => prev.filter((g) => g.id !== game.id));
+        } else {
+            setSelectedList((prev) => [...prev, game]);
+        }
+    };
+
 
     return (
         <div className="main-wrapper">
@@ -81,15 +104,35 @@ export default function Main() {
 
             {/* 보드게임 목록 */}
             <div className="main-grid">
-                {filteredGames.map((game) => (
-                    <div className="main-card" key={game.id} onClick={() => setSelectedGame(game)}>
-                        <img src={game.imageUrl} alt={game.name} className="main-card-image" />
-                        <div className="main-card-title">
-                            <span>{game.name}</span>
-                            {game.tag && <span className={`main-tag ${game.tag.toLowerCase()}`}>{game.tag}</span>}
+                {filteredGames.map((game) => {
+                    const isSelected = selectedList.find((g) => g.id === game.id);
+                    return (
+                        <div
+                            className={`main-card ${isSelected ? 'selected' : ''}`}
+                            key={game.id}
+                        >
+                            <div
+                                className="main-card-image-wrapper"
+                                onClick={() => setSelectedGame(game)}
+                            >
+                                <img
+                                    src={game.imageUrl}
+                                    alt={game.name}
+                                    className="main-card-image"
+                                />
+                            </div>
+                            <div className="main-card-footer">
+                                <div className="main-card-title">
+                                    {game.name}
+                                    {game.tag && <span className={`main-tag ${game.tag.toLowerCase()}`}>{game.tag}</span>}
+                                </div>
+                                <button className="rent-button" onClick={() => toggleSelect(game)}>
+                                    {isSelected ? '선택됨' : '대여하기'}
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             {/* 하단 내비게이션 고정 */}
@@ -99,8 +142,22 @@ export default function Main() {
                 <div className="nav-item">나의 정보</div>
             </div>
 
+            {/* 플로팅 버튼 */}
+            <div className="floating-button" onClick={() => setShowRentalModal(true)}>
+                {FiShoppingCart as unknown as JSX.Element}
+                {selectedList.length > 0 && (
+                    <div className="badge">{selectedList.length}</div>
+                )}
+            </div>
+
+            {/* 상세 모달 */}
             {selectedGame && (
                 <GameDetailModal game={selectedGame} onClose={() => setSelectedGame(null)} />
+            )}
+
+            {/* 대여 모달 */}
+            {showRentalModal && (
+                <RentalModal list={selectedList} onClose={() => setShowRentalModal(false)} />
             )}
         </div>
     );
