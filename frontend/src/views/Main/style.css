@@ -92,6 +92,14 @@
     cursor: pointer;
 }
 
+.camera-button {
+    background: white;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
 /* 카드 그리드 */
 .main-grid {
     margin-top: 68px; /* 검색창 높이 보정 */
