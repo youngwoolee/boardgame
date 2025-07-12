@@ -86,9 +86,7 @@ export default function BarcodeScanner({ onScan, onClose }: Props) {
         <div className="scanner-overlay">
             <div className="scanner-container">
                 <div id={scanId} />
-                <button className="close-button" onClick={onClose}>
-                    닫기
-                </button>
+                <button className="close-button" onClick={onClose}>×</button>
             </div>
         </div>
     );

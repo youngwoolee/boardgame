@@ -10,6 +10,10 @@ import {
     IdCheckResponseDto, SignInResponseDto, SignUpResponseDto
 } from "./response/auth";
 import {ResponseDto} from "./response";
+import {GameListResponseDto} from "./response/game";
+import { getAccessTokenHeader } from '../utils/token';
+import ReserveGameRequestDto from "./request/game/reserve-game.request.dto";
+import ReserveGameResponseDto from "./response/game/reserve-game.response.dto";
 
 const responseHandler = <T> (response: AxiosResponse<any, any>) => {
     const responseBody: T = response.data;
@@ -31,6 +35,24 @@ const CHECK_CERTIFICATION_URL = () => `${API_DOMAIN}/auth/check-certification`;
 const SIGN_UP_URL = () => `${API_DOMAIN}/auth/sign-up`;
 const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`;
 export const SNS_SIGN_IN_URL = (type: 'kakao' | 'naver') => `${API_DOMAIN}/auth/oauth2/${type}`;
+const GAME_LIST_URL = () => `${API_DOMAIN}/games`;
+const RESERVE_GAME_URL = () => `${API_DOMAIN}/reservations/reserve`;
+
+export const reserveGamesRequest = async (requestBody: ReserveGameRequestDto) => {
+    const headers = getAccessTokenHeader();
+    const result = await axios.post(RESERVE_GAME_URL(), requestBody, { headers })
+        .then(responseHandler<ReserveGameResponseDto>)
+        .catch(errorHandler);
+    return result;
+};
+
+export const getGameListRequest = async () => {
+    const headers = getAccessTokenHeader();
+    const result = await axios.get(GAME_LIST_URL(), { headers })
+        .then(responseHandler<GameListResponseDto>)
+        .catch(errorHandler);
+    return result;
+}
 
 export const signInRequest = async (requestBody: SignInRequestDto) => {
 

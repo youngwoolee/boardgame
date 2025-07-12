@@ -1,5 +1,6 @@
 package com.project.boardgame.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,16 +28,16 @@ public class GameService {
     private final ReservationDetailRepository reservationDetailRepository;
 
     public List<Game> getAvailableGames() {
-        return gameRepository.findAll().stream()
-                .filter(game -> reservationDetailRepository.countByGameAndStatus(game, ReservationStatus.예약) < game.getTotalQuantity())
-                .collect(Collectors.toList());
+//        return gameRepository.findAll().stream()
+//                .filter(game -> reservationDetailRepository.countByGameAndStatus(game, ReservationStatus.예약) < game.getTotalQuantity())
+//                .collect(Collectors.toList());
+        return Collections.emptyList();
     }
 
     public GameResponse addGame(GameRequest request) {
         Game game = Game.builder()
                 .name(request.getName())
                 .description(request.getDescription())
-                .totalQuantity(request.getTotalQuantity())
                 .build();
         Game saveGame = gameRepository.save(game);
         return GameResponse.from(saveGame);
@@ -76,7 +77,6 @@ public class GameService {
 
         game.setName(request.getName());
         game.setDescription(request.getDescription());
-        game.setTotalQuantity(request.getTotalQuantity());
 
         return GameResponse.from(game);
     }

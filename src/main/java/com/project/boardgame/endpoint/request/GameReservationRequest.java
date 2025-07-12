@@ -13,7 +13,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GameReservationRequest {
-    private String userId;
-    private String nickname;
-    private List<Long> gameIds;
+    private List<String> barcodes;
 }

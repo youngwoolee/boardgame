@@ -8,6 +8,7 @@ import com.project.boardgame.endpoint.response.ReservationResponse;
 import com.project.boardgame.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/reservations")
+@RequestMapping("/api/v1/reservations")
 @RequiredArgsConstructor
 public class ReservationController {
 
@@ -50,7 +51,8 @@ public class ReservationController {
 
     @PostMapping("/reserve")
     public ResponseEntity<ReservationResponse> reserveGame(@RequestBody GameReservationRequest request) {
-        ReservationResponse response = reservationService.reserve(request);
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ReservationResponse response = reservationService.reserve(userId, request);
         return ResponseEntity.ok(response);
     }
 

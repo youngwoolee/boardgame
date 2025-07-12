@@ -33,13 +33,9 @@ public class GameDetailResponse {
                 .map(ReservationUser::from)
                 .collect(Collectors.toList());
 
-        int availableQuantity = game.getTotalQuantity() - reservationUsers.size();
-
         return GameDetailResponse.builder()
                 .name(game.getName())
                 .description(game.getDescription())
-                .totalQuantity(game.getTotalQuantity())
-                .availableQuantity(availableQuantity)
                 .reservationUsers(reservationUsers)
                 .build();
     }

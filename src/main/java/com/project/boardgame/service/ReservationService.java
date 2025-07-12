@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.project.boardgame.domain.Game;
+import com.project.boardgame.domain.Member;
 import com.project.boardgame.domain.ReservationDetail;
 import com.project.boardgame.domain.ReservationMaster;
 import com.project.boardgame.domain.ReservationStatus;
@@ -15,6 +16,7 @@ import com.project.boardgame.endpoint.response.ReservationResponse;
 import com.project.boardgame.repository.GameRepository;
 import com.project.boardgame.repository.ReservationDetailRepository;
 import com.project.boardgame.repository.ReservationMasterRepository;
+import com.project.boardgame.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,7 @@ public class ReservationService {
     private final ReservationMasterRepository reservationMasterRepository;
     private final ReservationDetailRepository reservationDetailRepository;
     private final GameRepository gameRepository;
+    private final UserRepository userRepository;
     private static final int RESERVATION_DATE = 4;
 
     public List<ReservationResponse> getMyReservations(String userId) {
@@ -82,26 +85,24 @@ public class ReservationService {
     }
 
     @Transactional
-    public ReservationResponse reserve(GameReservationRequest request) {
+    public ReservationResponse reserve(String userId, GameReservationRequest request) {
+        // 유저 정보 SecurityContext에서 가져오기
+        Member member = userRepository.findByUserId(userId);
+
         LocalDateTime now = LocalDateTime.now();
 
         ReservationMaster master = ReservationMaster.builder()
-                .userId(request.getUserId())
-                .userNickname(request.getNickname())
+                .userId(userId)
+                .userNickname(member.getName())
                 .reservedAt(now)
                 .dueDate(now.plusDays(RESERVATION_DATE))
                 .status(ReservationStatus.예약)
                 .build();
 
-        List<ReservationDetail> details = request.getGameIds().stream()
-                .map(gameId -> {
-                    Game game = gameRepository.findById(gameId)
-                            .orElseThrow(() -> new IllegalArgumentException("게임 ID " + gameId + "를 찾을 수 없습니다."));
-
-                    long reservedCount = reservationDetailRepository.countByGameAndStatus(game, ReservationStatus.예약);
-                    if (reservedCount >= game.getTotalQuantity()) {
-                        throw new IllegalStateException(game.getName() + " 예약 불가: 수량 부족");
-                    }
+        List<ReservationDetail> details = request.getBarcodes().stream()
+                .map(barcode -> {
+                    Game game = gameRepository.findByBarcode(barcode)
+                            .orElseThrow(() -> new IllegalArgumentException("해당 바코드 [" + barcode + "] 를 찾을 수 없습니다."));
 
                     return ReservationDetail.builder()
                             .master(master)
@@ -112,9 +113,8 @@ public class ReservationService {
                 .collect(Collectors.toList());
 
         master.setDetails(details);
-        ReservationMaster saveReservationMaster = reservationMasterRepository.save(master);
-
-        return ReservationResponse.from(saveReservationMaster);
+        ReservationMaster saved = reservationMasterRepository.save(master);
+        return ReservationResponse.from(saved);
     }
 
     public List<ReservationResponse> getUserReservationDetail(String userId) {

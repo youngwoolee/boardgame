@@ -15,7 +15,7 @@
     max-height: 80%;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
-    padding: 16px;
+
     display: flex;
     flex-direction: column;
     animation: slideUp 0.3s ease-out;
@@ -31,12 +31,14 @@
 }
 
 .rental-modal-header {
+    position: relative;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 12px;
 }
 
 .close-button {
@@ -44,6 +46,8 @@
     border: none;
     font-size: 24px;
     cursor: pointer;
+    line-height: 1;
+    color: #333;
 }
 
 .rental-modal-body {

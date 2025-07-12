@@ -2,10 +2,12 @@ package com.project.boardgame.endpoint;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.project.boardgame.domain.Game;
 import com.project.boardgame.endpoint.request.GameRequest;
 import com.project.boardgame.endpoint.response.GameDetailResponse;
+import com.project.boardgame.endpoint.response.GameListResponse;
 import com.project.boardgame.endpoint.response.GameReservationResponse;
 import com.project.boardgame.endpoint.response.GameResponse;
 import com.project.boardgame.service.GameService;
@@ -21,15 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/games")
+@RequestMapping("/api/v1/games")
 @RequiredArgsConstructor
 public class GameController {
     private final GameService gameService;
 
     @GetMapping
-    public ResponseEntity<List<GameResponse>> getAllGames() {
+    public ResponseEntity<GameListResponse> getAllGames() {
         List<GameResponse> games = gameService.getAllGames();
-        return ResponseEntity.ok(games);
+        return ResponseEntity.ok(
+                GameListResponse.builder().data(games).build()
+        );
     }
 
     @GetMapping("/detail")

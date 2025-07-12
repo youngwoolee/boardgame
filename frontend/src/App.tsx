@@ -9,7 +9,7 @@ function App() {
 
   return (
     <Routes>
-        <Route path="/game" element={<Main />} />  {/* ✅ 메인페이지 추가 */}
+        <Route path="/" element={<Main />} />  {/* ✅ 메인페이지 추가 */}
         <Route path={'/auth'}>
             <Route path={'sign-up'} element={<SignUp />} />
             <Route path={'sign-in'} element={<SignIn />} />

@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationResponse {
+public class ReservationResponse extends ResponseDto{
     private Long id;
     private String userId;
     private String nickname;
