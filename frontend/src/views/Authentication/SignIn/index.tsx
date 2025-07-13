@@ -94,7 +94,6 @@ export default function SignIn() {
 
     return(
         <div id={"sign-in-wrapper"}>
-            <div className={"sign-in-image"}></div>
             <div className={"sign-in-container"}>
                 <div className={"sign-in-box"}>
                     <div className={"sign-in-title"}>{"보드게임 대여"}</div>

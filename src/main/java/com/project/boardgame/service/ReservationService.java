@@ -13,11 +13,14 @@ import com.project.boardgame.domain.ReservationStatus;
 import com.project.boardgame.endpoint.request.GameReservationRequest;
 import com.project.boardgame.endpoint.response.ReservationStatusResponse;
 import com.project.boardgame.endpoint.response.ReservationResponse;
+import com.project.boardgame.endpoint.response.ResponseDto;
+import com.project.boardgame.endpoint.response.auth.IdCheckResponse;
 import com.project.boardgame.repository.GameRepository;
 import com.project.boardgame.repository.ReservationDetailRepository;
 import com.project.boardgame.repository.ReservationMasterRepository;
 import com.project.boardgame.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,10 +88,8 @@ public class ReservationService {
     }
 
     @Transactional
-    public ReservationResponse reserve(String userId, GameReservationRequest request) {
-        // 유저 정보 SecurityContext에서 가져오기
+    public ResponseEntity<? super ReservationResponse> reserve(String userId, GameReservationRequest request) {
         Member member = userRepository.findByUserId(userId);
-
         LocalDateTime now = LocalDateTime.now();
 
         ReservationMaster master = ReservationMaster.builder()
@@ -99,22 +100,30 @@ public class ReservationService {
                 .status(ReservationStatus.예약)
                 .build();
 
-        List<ReservationDetail> details = request.getBarcodes().stream()
-                .map(barcode -> {
-                    Game game = gameRepository.findByBarcode(barcode)
-                            .orElseThrow(() -> new IllegalArgumentException("해당 바코드 [" + barcode + "] 를 찾을 수 없습니다."));
+        List<ReservationDetail> details = new ArrayList<>();
 
-                    return ReservationDetail.builder()
-                            .master(master)
-                            .game(game)
-                            .status(ReservationStatus.예약)
-                            .build();
-                })
-                .collect(Collectors.toList());
+        for (String barcode : request.getBarcodes()) {
+            Game game = gameRepository.findByBarcode(barcode)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 바코드 [" + barcode + "] 를 찾을 수 없습니다."));
+
+            // ✅ 이미 예약 중인 게임인지 확인
+            boolean alreadyReserved = reservationDetailRepository.existsByGameAndStatus(game, ReservationStatus.예약);
+            if (alreadyReserved) {
+                return ReservationResponse.alreadyReservation();
+            }
+
+            ReservationDetail detail = ReservationDetail.builder()
+                    .master(master)
+                    .game(game)
+                    .status(ReservationStatus.예약)
+                    .build();
+
+            details.add(detail);
+        }
 
         master.setDetails(details);
         ReservationMaster saved = reservationMasterRepository.save(master);
-        return ReservationResponse.from(saved);
+        return ReservationResponse.success(saved);
     }
 
     public List<ReservationResponse> getUserReservationDetail(String userId) {

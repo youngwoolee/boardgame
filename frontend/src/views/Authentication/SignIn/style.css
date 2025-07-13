@@ -1,16 +1,13 @@
-#sign-in-wrapper{
+#sign-in-wrapper {
     width: 100vw;
-    min-width: 1440px;
     height: 100vh;
-    min-height: 1024px;
     display: flex;
+    flex-direction: column; /* 모바일에서는 세로 배치 */
+    background-color: #ffffff;
 }
 
 .sign-in-image {
-    background-image: url("assets/images/sign-in-image.png");
-    width: 830px;
-    background-position: 50% 50%;
-    background-size: 100% 100%;
+    display: none; /* 모바일에서 배경 이미지 제거 */
 }
 
 .sign-in-container {
@@ -18,57 +15,30 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
+    padding: 24px;
+    box-sizing: border-box;
 }
+
 .sign-in-box {
     display: flex;
     flex-direction: column;
-
-    width: 380px;
+    width: 100%;
+    max-width: 400px; /* 모바일 최적 너비 제한 */
     gap: 24px;
 }
 
 .sign-in-title {
-    color: rgba(64,64,64,1);
-    display: flex;
-
-    justify-content: center;
-    font-size: 30px;
+    color: #404040;
+    text-align: center;
+    font-size: 24px;
     font-weight: 700;
-    line-height: 173%;
+    line-height: 1.5;
 }
 
 .sign-in-content-box {
-    width: 100%;
     display: flex;
     flex-direction: column;
-
-    align-items: center;
     gap: 24px;
-}
-
-.sign-in-content-sns-sign-in-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-}
-
-.sign-in-content-sns-sign-in-title {
-    color: rgba(138,146, 166,1);
-    font-weight: 400;
-    font-size: 16px;
-    line-height: normal;
-}
-
-.sign-in-content-sns-sign-in-button-box {
-    gap: 24px;
-    display: flex;
-}
-
-.sign-in-content-divider {
-    border-top: 1px solid rgba(238,238,238,1);
-    width: 64px;
 }
 
 .sign-in-content-input-box {
@@ -82,5 +52,29 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    gap: 12px;
+}
+
+.sign-in-content-divider {
+    border-top: 1px solid #eeeeee;
+    width: 100%;
+}
+
+.sign-in-content-sns-sign-in-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.sign-in-content-sns-sign-in-title {
+    color: #8a92a6;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.sign-in-content-sns-sign-in-button-box {
+    display: flex;
+    justify-content: center;
     gap: 16px;
 }

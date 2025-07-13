@@ -8,6 +8,8 @@ enum ResponseMessage {
 
     MAIL_FAIL="Mail send failed.",
     DATABASE_ERROR="Database error.",
+
+    ALREADY_RESERVATION="Already reservation."
 };
 
 export default ResponseMessage;

@@ -1,16 +1,13 @@
-#sign-up-wrapper{
+#sign-up-wrapper {
     width: 100vw;
-    min-width: 1440px;
     height: 100vh;
-    min-height: 1024px;
     display: flex;
+    flex-direction: column;
+    background-color: #fff;
 }
 
 .sign-up-image {
-    background-image: url("assets/images/sign-up-image.png");
-    width: 830px;
-    background-position: 50% 50%;
-    background-size: 100% 100%;
+    display: none; /* 모바일에서는 숨김 */
 }
 
 .sign-up-container {
@@ -18,31 +15,30 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
+    padding: 24px;
+    box-sizing: border-box;
 }
+
 .sign-up-box {
     display: flex;
     flex-direction: column;
-
-    width: 380px;
+    width: 100%;
+    max-width: 400px;
     gap: 24px;
 }
 
 .sign-up-title {
-    color: rgba(64,64,64,1);
-    display: flex;
-
-    justify-content: center;
-    font-size: 30px;
+    color: #404040;
+    text-align: center;
+    font-size: 24px;
     font-weight: 700;
-    line-height: 173%;
+    line-height: 1.5;
 }
 
 .sign-up-content-box {
     width: 100%;
     display: flex;
     flex-direction: column;
-
     align-items: center;
     gap: 24px;
 }
@@ -55,23 +51,24 @@
 }
 
 .sign-up-content-sns-sign-in-title {
-    color: rgba(138,146, 166,1);
+    color: #8a92a6;
     font-weight: 400;
-    font-size: 16px;
-    line-height: normal;
+    font-size: 14px;
 }
 
 .sign-up-content-sns-sign-in-button-box {
-    gap: 24px;
     display: flex;
+    justify-content: center;
+    gap: 16px;
 }
 
 .sign-up-content-divider {
-    border-top: 1px solid rgba(238,238,238,1);
-    width: 64px;
+    border-top: 1px solid #eeeeee;
+    width: 100%;
 }
 
 .sign-up-content-input-box {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 14px;

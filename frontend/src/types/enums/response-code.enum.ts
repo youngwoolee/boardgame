@@ -5,7 +5,8 @@ enum ResponseCode {
     SING_IN_FAIL ="SF",
     CERTIFICATION_FAIL= "CF",
     MAIL_FAIL="MF",
-    DATABASE_ERROR="DBE"
+    DATABASE_ERROR="DBE",
+    ALREADY_RESERVATION="AR"
 };
 
 export default ResponseCode;

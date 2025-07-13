@@ -265,7 +265,6 @@ export default function SignUp() {
     const signUpButtonClass = id && password && passwordCheck && email && certificationNumber && isIdCheck? 'primary-button-lg' : 'disable-button-lg';
     return(
         <div id={"sign-up-wrapper"}>
-            <div className={"sign-up-image"}></div>
             <div className={"sign-up-container"}>
                 <div className={"sign-up-box"}>
                     <div className={"sign-up-title"}>{"보드게임 대여"}</div>
