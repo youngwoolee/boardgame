@@ -23,9 +23,9 @@ interface Props {
 export default function RentalModal({ list, onClose, onRented }: Props) {
     const reserveGameResponse = (responseBody: ResponseBody<ReserveGameResponseDto>) => {
         if(!responseBody) return;
-        const { code } = responseBody;
+        const { code, message } = responseBody;
         if( code === ResponseCode.DATABASE_ERROR) alert('데이터베이스 오류입니다');
-        if( code === ResponseCode.ALREADY_RESERVATION) alert('이미 대여 보드게임입니다');
+        if( code === ResponseCode.ALREADY_RESERVATION) alert(message);
         if( code !== ResponseCode.SUCCESS) return;
 
         alert('대여가 완료되었습니다.');

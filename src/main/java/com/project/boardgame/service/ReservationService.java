@@ -109,7 +109,7 @@ public class ReservationService {
             // ✅ 이미 예약 중인 게임인지 확인
             boolean alreadyReserved = reservationDetailRepository.existsByGameAndStatus(game, ReservationStatus.예약);
             if (alreadyReserved) {
-                return ReservationResponse.alreadyReservation();
+                return ReservationResponse.alreadyReservation(game.getName() + "는 이미 대여된 게임입니다");
             }
 
             ReservationDetail detail = ReservationDetail.builder()

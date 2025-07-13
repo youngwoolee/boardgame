@@ -11,4 +11,5 @@ export default interface GameResponseDto {
     genre: string;
     system: string;
     barcode: string;
+    available: boolean;
 }

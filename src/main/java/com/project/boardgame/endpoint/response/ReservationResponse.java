@@ -63,8 +63,8 @@ public class ReservationResponse extends ResponseDto{
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
-    public static ResponseEntity<ResponseDto> alreadyReservation() {
-        ResponseDto responseBody = new ResponseDto(ResponseCode.ALREADY_RESERVATION, ResponseMessage.ALREADY_RESERVATION);
+    public static ResponseEntity<ResponseDto> alreadyReservation(String message) {
+        ResponseDto responseBody = new ResponseDto(ResponseCode.ALREADY_RESERVATION, message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 }

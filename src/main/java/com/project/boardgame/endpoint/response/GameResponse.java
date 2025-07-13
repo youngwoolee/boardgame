@@ -25,6 +25,7 @@ public class GameResponse {
     private String genre;
     private String system;
     private String barcode;
+    private boolean available;
 
     public static GameResponse from(Game game) {
         return GameResponse.builder()
@@ -39,6 +40,23 @@ public class GameResponse {
                 .genre(game.getGenre())
                 .system(game.getSystem())
                 .barcode(game.getBarcode())
+                .build();
+    }
+
+    public static GameResponse from(Game game, boolean available) {
+        return GameResponse.builder()
+                .id(game.getId())
+                .name(game.getName())
+                .description(game.getDescription())
+                .imageUrl(game.getImageUrl())
+                .tag(game.getTag())
+                .players(game.getPlayers())
+                .age(game.getAge())
+                .time(game.getTime())
+                .genre(game.getGenre())
+                .system(game.getSystem())
+                .barcode(game.getBarcode())
+                .available(available)
                 .build();
     }
 }

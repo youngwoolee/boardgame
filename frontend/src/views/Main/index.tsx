@@ -25,12 +25,15 @@ export default function Main() {
     const [showRentalModal, setShowRentalModal] = useState(false);
     const [showScanner, setShowScanner] = useState(false);
 
+    const [genreFilter, setGenreFilter] = useState<string>('');
+    const [playerFilter, setPlayerFilter] = useState<string>('');
+    const [rentalStatusFilter, setRentalStatusFilter] = useState<string>('');
+
     useEffect(() => {
-        const fetchGames = async () => {
+        (async () => {
             const response = await getGameListRequest();
             gameListResponseHandler(response, setGameList);
-        };
-        fetchGames();
+        })();
     }, []);
 
     const gameListResponseHandler = (
@@ -81,11 +84,23 @@ export default function Main() {
         setSelectedList(prev => prev.filter(g => g.name !== name));
     };
 
-    const filteredGames = gameList.filter(game =>
-        game.name.toLowerCase().includes(search.toLowerCase())
-    );
 
-    const uniqueGameList = Array.from(
+
+    // 필터링 및 정렬 처리
+    const filteredGames = gameList
+        .filter(game => game.name.toLowerCase().includes(search.toLowerCase()))
+        .filter(game => genreFilter ? game.genre === genreFilter : true)
+        .filter(game => playerFilter ? game.players.includes(playerFilter) : true)
+        .filter(game => {
+            if (rentalStatusFilter === 'available') return game.available;
+            if (rentalStatusFilter === 'rented') return !game.available;
+            return true;
+        })
+        .sort((a, b) => a.name.localeCompare(b.name));
+    const genres = Array.from(new Set(gameList.map(game => game.genre))).sort();
+    const playerCounts = Array.from(new Set(gameList.map(game => game.players))).sort();
+
+    const uniqueFilteredGames = Array.from(
         new Map(filteredGames.map(game => [game.name, game])).values()
     );
 
@@ -93,23 +108,49 @@ export default function Main() {
         <div className="main-wrapper">
             {/* 상단 검색창 */}
             <div className="main-search-box">
-                <input
-                    type="text"
-                    placeholder="보드게임 검색..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-                <button className="search-button" type="button">
-                    {FiSearch({ size: 20 }) as unknown as JSX.Element}
-                </button>
-                <button className="camera-button" onClick={() => setShowScanner(true)}>
-                    {FiCamera({ size: 20 }) as unknown as JSX.Element}
-                </button>
+                <div className="main-search-row">
+                    <input
+                        type="text"
+                        placeholder="보드게임 검색..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <button className="search-button" type="button">
+                        {FiSearch({ size: 20 }) as unknown as JSX.Element}
+                    </button>
+                    <button className="camera-button" onClick={() => setShowScanner(true)}>
+                        {FiCamera({ size: 20 }) as unknown as JSX.Element}
+                    </button>
+                </div>
+
+                <div className="filter-row">
+                    <select value={playerFilter} onChange={(e) => setPlayerFilter(e.target.value)}>
+                        <option value=''>전체 인원</option>
+                        {playerCounts.map(count => (
+                            <option key={count} value={count}>{count}</option>
+                        ))}
+                    </select>
+
+                    <select value={genreFilter} onChange={(e) => setGenreFilter(e.target.value)}>
+                        <option value=''>전체 장르</option>
+                        {genres.map(genre => (
+                            <option key={genre} value={genre}>{genre}</option>
+                        ))}
+                    </select>
+
+                    <select value={rentalStatusFilter} onChange={(e) => setRentalStatusFilter(e.target.value)}>
+                        <option value=''>전체</option>
+                        <option value='available'>대여 가능</option>
+                        <option value='rented'>대여 중</option>
+                    </select>
+                </div>
             </div>
+
+
 
             {/* 게임 목록 */}
             <div className="main-grid">
-                {uniqueGameList.map((game) => {
+                {uniqueFilteredGames.map((game) => {
                     const isSelected = selectedList.some(g => g.name === game.name);
                     return (
                         <div className={`main-card ${isSelected ? 'selected' : ''}`} key={game.name}>

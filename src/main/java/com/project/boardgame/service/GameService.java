@@ -45,11 +45,13 @@ public class GameService {
 
     public List<GameResponse> getAllGames() {
         List<Game> games = gameRepository.findAll();
-        List<GameResponse> response = games.stream()
-                .map(GameResponse::from)
+        return games.stream()
+                .map(game -> {
+                    boolean isReserved = reservationDetailRepository.existsByGameAndStatus(game, ReservationStatus.예약);
+                    boolean isAvailable = !isReserved;
+                    return GameResponse.from(game, isAvailable);
+                })
                 .collect(Collectors.toList());
-        return response;
-
     }
 
     public GameReservationResponse getReserveInfo(Long id) {

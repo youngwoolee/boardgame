@@ -20,7 +20,7 @@ public class InitConfig {
 
             games.addAll(createGames("스플렌더", "보석 상인이 되어 보석을 수집하고, 카드와 귀족을 구매해 점수를 얻는 전략형 보드게임입니다.",
                                      "/assets/스플렌더.webp", "hot", "2~4명", "만 10세+", "30분 내외",
-                                     "전략 게임", "셋 컬렉션, 카드 구매", "SPLEND", 3));
+                                     "전략 게임", "셋 컬렉션, 카드 구매", "SPLEND", 1));
 
             games.addAll(createGames("아발론", "아발론은 선과 악의 세력이 대결하는 정체 은닉 기반의 심리전 게임입니다.",
                                      "/assets/아발론.webp", "new", "5~10명", "만 14세+", "30~60분",

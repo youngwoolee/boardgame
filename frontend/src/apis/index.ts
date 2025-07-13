@@ -14,6 +14,7 @@ import {GameListResponseDto} from "./response/game";
 import { getAccessTokenHeader } from '../utils/token';
 import ReserveGameRequestDto from "./request/game/reserve-game.request.dto";
 import ReserveGameResponseDto from "./response/game/reserve-game.response.dto";
+import axiosInstance from "../utils/axiosInstance";
 
 const responseHandler = <T> (response: AxiosResponse<any, any>) => {
     const responseBody: T = response.data;
@@ -37,6 +38,7 @@ const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`;
 export const SNS_SIGN_IN_URL = (type: 'kakao' | 'naver') => `${API_DOMAIN}/auth/oauth2/${type}`;
 const GAME_LIST_URL = () => `${API_DOMAIN}/games`;
 const RESERVE_GAME_URL = () => `${API_DOMAIN}/reservations/reserve`;
+
 
 export const reserveGamesRequest = async (requestBody: ReserveGameRequestDto) => {
     const headers = getAccessTokenHeader();
