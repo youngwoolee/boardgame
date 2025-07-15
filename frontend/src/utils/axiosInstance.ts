@@ -10,9 +10,9 @@ const instance = axios.create({
 instance.interceptors.response.use(
     response => response,
     error => {
-        if (error.response?.status === 403) {
-            // ✅ 403 오류 발생 시 로그인 페이지로 이동
-            window.location.href = '/auth/sign-in';
+        const status = error.response?.status;
+        if (status === 401 || status === 403) {
+            window.location.href = '/auth/sign-in'; // 로그인 페이지 경로
         }
         return Promise.reject(error);
     }

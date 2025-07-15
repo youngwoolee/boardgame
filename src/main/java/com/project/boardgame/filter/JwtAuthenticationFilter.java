@@ -37,12 +37,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String token = parseBearerToken(request);
             if(token == null) {
-                filterChain.doFilter(request, response);
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing token");
                 return;
             }
             String userId = jwtProvider.validate(token);
             if(userId == null) {
-                filterChain.doFilter(request, response);
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "token is not validated");
                 return;
             }
             Member member = userRepository.findByUserId(userId);

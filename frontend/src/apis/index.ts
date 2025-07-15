@@ -50,7 +50,7 @@ export const reserveGamesRequest = async (requestBody: ReserveGameRequestDto) =>
 
 export const getGameListRequest = async () => {
     const headers = getAccessTokenHeader();
-    const result = await axios.get(GAME_LIST_URL(), { headers })
+    const result = await axiosInstance.get(GAME_LIST_URL(), { headers })
         .then(responseHandler<GameListResponseDto>)
         .catch(errorHandler);
     return result;
