@@ -191,7 +191,9 @@ export default function Main() {
             {/* 플로팅 버튼 */}
             <div className="floating-button" onClick={() => setShowRentalModal(true)}>
                 <FiShoppingCart />
-                {selectedList.length > 0 && <div className="badge">{selectedList.length}</div>}
+                {selectedList.length > 0 && (
+                    <div className="badge">{selectedList.length}</div>
+                )}
             </div>
 
             {/* 상세 모달 */}
