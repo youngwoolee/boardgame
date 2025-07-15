@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import { BrowserMultiFormatReader } from '@zxing/browser';
 import './index.css';
-import { Html5Qrcode, Html5QrcodeScannerState } from 'html5-qrcode';
+import BarcodeManualInputModal from "../BarcodeManualInputModal";
 
 type Props = {
     onScan: (code: string) => void;
@@ -8,86 +9,79 @@ type Props = {
 };
 
 export default function BarcodeScanner({ onScan, onClose }: Props) {
-    const scannerRef = useRef<Html5Qrcode | null>(null);
-    const scanId = 'reader';
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const codeReaderRef = useRef<BrowserMultiFormatReader | null>(null);
+    const [showManualInput, setShowManualInput] = useState(false);
+    const [activeStream, setActiveStream] = useState<MediaStream | null>(null);
+
 
     useEffect(() => {
-        const element = document.getElementById(scanId);
-        if (element) {
-            element.innerHTML = '';
-        }
+        const reader = new BrowserMultiFormatReader();
+        codeReaderRef.current = reader;
 
-        if (!scannerRef.current) {
-            scannerRef.current = new Html5Qrcode(scanId);
-        }
-
-        const scanner = scannerRef.current;
-
-        const startScanner = async () => {
+        const scan = async () => {
             try {
-                const state = scanner.getState();
-                if (state !== Html5QrcodeScannerState.NOT_STARTED) {
-                    // 중복 시작 방지
-                    return;
-                }
+                const devices = await BrowserMultiFormatReader.listVideoInputDevices();
+                const selectedDeviceId = devices[0]?.deviceId;
+                if (!selectedDeviceId || !videoRef.current) return;
 
-                const config = {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 },
-                    aspectRatio: 1.0,
-                };
-
-                await scanner.start(
-                    { facingMode: 'environment' },
-                    config,
-                    (decodedText) => {
-                        console.log('📦 Scanned:', decodedText);
-                        onScan(decodedText);
-                    },
-                    () => {
-                        // 오류 무시
+                await reader.decodeFromVideoDevice(
+                    selectedDeviceId,
+                    videoRef.current,
+                    (result) => {
+                        if (result) {
+                            onScan(result.getText());
+                        }
                     }
                 );
-            } catch (err) {
-                console.error('Camera start error:', err);
+
+                const stream = videoRef.current?.srcObject as MediaStream;
+                if (stream) {
+                    setActiveStream(stream);
+                }
+            } catch (e) {
+                console.error('Camera error:', e);
             }
         };
 
-        startScanner();
+        if (!showManualInput) {
+            scan();
+        }
 
         return () => {
-            if (scannerRef.current) {
-                const state = scannerRef.current.getState();
-                if (state === Html5QrcodeScannerState.SCANNING) {
-                    scannerRef.current
-                        .stop()
-                        .then(() => {
-                            try {
-                                scannerRef.current?.clear();
-                            } catch (e) {
-                                console.warn("Clear failed:", e);
-                            }
-                        })
-                        .catch((err) => {
-                            console.warn("Stop error:", err);
-                        });
-                } else {
-                    try {
-                        scannerRef.current.clear();
-                    } catch (e) {
-                        console.warn("Clear error:", e);
-                    }
-                }
+            // cleanup
+            if (activeStream) {
+                activeStream.getTracks().forEach((track) => track.stop());
             }
         };
-    }, []);
+    }, [onScan, showManualInput]);
 
     return (
-        <div className="scanner-overlay">
-            <div className="scanner-container">
-                <div id={scanId} />
-                <button className="close-button" onClick={onClose}>×</button>
-            </div>
-        </div>
+        <>
+            {!showManualInput && (
+                <div className="scanner-overlay">
+                    <div className="scanner-container">
+                        <video ref={videoRef} className="scanner-video" />
+                        <button className="close-button" onClick={onClose}>×</button>
+                        <button
+                            className="manual-input-button"
+                            onClick={() => setShowManualInput(true)}
+                        >
+                            바코드 수동 입력
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {showManualInput && (
+                <BarcodeManualInputModal
+                    onSubmit={(code) => {
+                        onScan(code);
+                        setShowManualInput(false);
+                    }}
+                    onClose={() => setShowManualInput(false)}
+                />
+            )}
+        </>
     );
 }
