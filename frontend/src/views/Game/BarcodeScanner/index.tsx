@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './index.css';
 import { Html5Qrcode, Html5QrcodeScannerState } from 'html5-qrcode';
-import BarcodeManualInputModal from '../BarcodeManualInputModal';
+import './index.css';
 
 type Props = {
     onScan: (code: string) => void;
@@ -11,23 +10,19 @@ type Props = {
 export default function BarcodeScanner({ onScan, onClose }: Props) {
     const scannerRef = useRef<Html5Qrcode | null>(null);
     const scanId = 'reader';
-    const [showManualInput, setShowManualInput] = useState(false);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const element = document.getElementById(scanId);
         if (element) element.innerHTML = '';
 
-        if (!scannerRef.current) {
-            scannerRef.current = new Html5Qrcode(scanId);
-        }
+        const scanner = new Html5Qrcode(scanId);
+        scannerRef.current = scanner;
 
-        const scanner = scannerRef.current;
-
-        const startScanner = async () => {
+        // 딜레이 후 시작 (렌더링 보장)
+        timeoutRef.current = setTimeout(async () => {
             try {
-                const state = scanner.getState();
-                if (state !== Html5QrcodeScannerState.NOT_STARTED) return;
-
                 await scanner.start(
                     { facingMode: 'environment' },
                     {
@@ -41,68 +36,59 @@ export default function BarcodeScanner({ onScan, onClose }: Props) {
                     },
                     () => {}
                 );
+                setIsLoading(false); // ✅ 로딩 완료
             } catch (err) {
                 console.error('Camera start error:', err);
+                setIsLoading(false); // 실패해도 버튼 열어줌
             }
-        };
-
-        if (!showManualInput) {
-            startScanner();
-        }
+        }, 300);
 
         return () => {
-            if (scannerRef.current) {
-                const state = scannerRef.current.getState();
-                if (state === Html5QrcodeScannerState.SCANNING) {
-                    scannerRef.current
-                        .stop()
-                        .then(() => {
-                            try {
-                                scannerRef.current?.clear();
-                            } catch (e) {
-                                console.warn("Clear failed:", e);
-                            }
-                        })
-                        .catch((err) => {
-                            console.warn("Stop error:", err);
-                        });
-                } else {
-                    try {
-                        scannerRef.current.clear();
-                    } catch (e) {
-                        console.warn("Clear error:", e);
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+            const stopAndClear = async () => {
+                try {
+                    const current = scannerRef.current;
+                    if (!current) return;
+
+                    const state = current.getState?.();
+                    if (state === Html5QrcodeScannerState.SCANNING) {
+                        await current.stop();
                     }
+
+                    setTimeout(() => {
+                        try {
+                            current.clear();
+                        } catch (e) {
+                            console.warn('clear() error:', e);
+                        }
+                    }, 100);
+                } catch (err) {
+                    console.warn('stop() error:', err);
                 }
-            }
+            };
+
+            stopAndClear();
         };
-    }, [showManualInput]);
+    }, [onScan]);
 
     return (
-        <>
-            {!showManualInput && (
-                <div className="scanner-overlay">
-                    <div className="scanner-container">
-                        <div id={scanId} />
-                        <button className="close-button" onClick={onClose}>×</button>
-                        <button
-                            className="manual-input-button"
-                            onClick={() => setShowManualInput(true)}
-                        >
-                            바코드 수동 입력
-                        </button>
-                    </div>
-                </div>
-            )}
+        <div className="scanner-overlay">
+            <div className="scanner-container">
+                <div id={scanId} />
+                <button
+                    className="close-button"
+                    onClick={onClose}
+                    disabled={isLoading}
+                    style={{ opacity: isLoading ? 0.4 : 1, pointerEvents: isLoading ? 'none' : 'auto' }}
+                >
+                    ×
+                </button>
 
-            {showManualInput && (
-                <BarcodeManualInputModal
-                    onSubmit={(code) => {
-                        onScan(code);
-                        setShowManualInput(false);
-                    }}
-                    onClose={() => setShowManualInput(false)}
-                />
-            )}
-        </>
+                {isLoading && (
+                    <div className="loading-spinner" />
+                )}
+            </div>
+        </div>
     );
 }
