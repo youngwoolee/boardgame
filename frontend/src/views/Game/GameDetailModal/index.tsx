@@ -49,7 +49,7 @@ export default function GameDetailModal({ game, onClose }: Props) {
                         <img src={game.imageUrl} alt={game.name} className="modal-thumbnail" />
                         <div className="modal-attributes">
                             <div className="attribute">
-                                {FiUsers({ className: 'icon' }) as unknown as JSX.Element}
+                                <FiUsers className='icon' />
                                 <div>
                                     <div className="label">인원</div>
                                     <div className="value">
@@ -62,28 +62,29 @@ export default function GameDetailModal({ game, onClose }: Props) {
                                 </div>
                             </div>
                             <div className="attribute">
-                                {FiHeart({ className: 'icon' }) as unknown as JSX.Element}
+                                <FiHeart className='icon' />
+
                                 <div>
                                     <div className="label">연령</div>
                                     <div className="value">{game.age}</div>
                                 </div>
                             </div>
                             <div className="attribute">
-                                {FiClock({ className: 'icon' }) as unknown as JSX.Element}
+                                <FiClock className='icon' />
                                 <div>
                                     <div className="label">소요시간</div>
                                     <div className="value">{game.time}</div>
                                 </div>
                             </div>
                             <div className="attribute">
-                                {FiTag({ className: 'icon' }) as unknown as JSX.Element}
+                                <FiTag className='icon' />
                                 <div>
                                     <div className="label">장르</div>
                                     <div className="value">{game.genre}</div>
                                 </div>
                             </div>
                             <div className="attribute">
-                                {FiSettings({ className: 'icon' }) as unknown as JSX.Element}
+                                <FiSettings className='icon' />
                                 <div>
                                     <div className="label">시스템</div>
                                     <div className="value">{game.system}</div>
