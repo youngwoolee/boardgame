@@ -19,7 +19,8 @@ public class GameResponse {
     private int totalQuantity;
     private String imageUrl;
     private String tag;
-    private String players;
+    private int minPlayers;
+    private int maxPlayers;
     private String age;
     private String time;
     private String genre;
@@ -34,7 +35,8 @@ public class GameResponse {
                 .description(game.getDescription())
                 .imageUrl(game.getImageUrl())
                 .tag(game.getTag())
-                .players(game.getPlayers())
+                .minPlayers(game.getMinPlayers())
+                .maxPlayers(game.getMaxPlayers())
                 .age(game.getAge())
                 .time(game.getTime())
                 .genre(game.getGenre())
@@ -50,7 +52,8 @@ public class GameResponse {
                 .description(game.getDescription())
                 .imageUrl(game.getImageUrl())
                 .tag(game.getTag())
-                .players(game.getPlayers())
+                .minPlayers(game.getMinPlayers())
+                .maxPlayers(game.getMaxPlayers())
                 .age(game.getAge())
                 .time(game.getTime())
                 .genre(game.getGenre())

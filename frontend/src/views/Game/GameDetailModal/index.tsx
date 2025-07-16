@@ -13,7 +13,8 @@ type Game = {
     name: string;
     imageUrl: string;
     tag?: string | null;
-    players?: string;
+    minPlayers?: number;
+    maxPlayers?: number;
     age?: string;
     time?: string;
     genre?: string;
@@ -51,7 +52,13 @@ export default function GameDetailModal({ game, onClose }: Props) {
                                 {FiUsers({ className: 'icon' }) as unknown as JSX.Element}
                                 <div>
                                     <div className="label">인원</div>
-                                    <div className="value">{game.players}</div>
+                                    <div className="value">
+                                        {game.minPlayers && game.maxPlayers
+                                            ? game.minPlayers === game.maxPlayers
+                                                ? `${game.minPlayers}명`
+                                                : `${game.minPlayers} ~ ${game.maxPlayers}명`
+                                            : '정보 없음'}
+                                    </div>
                                 </div>
                             </div>
                             <div className="attribute">

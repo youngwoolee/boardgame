@@ -38,7 +38,9 @@ public class Game {
 
     private String tag;
 
-    private String players;
+    private int minPlayers;
+
+    private int maxPlayers;
 
     private String age;
 
@@ -59,5 +61,9 @@ public class Game {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    public boolean supportsPlayerCount(int count) {
+        return count >= minPlayers && count <= maxPlayers;
     }
 }

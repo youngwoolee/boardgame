@@ -5,7 +5,8 @@ export default interface GameResponseDto {
     totalQuantity: number;
     imageUrl: string;
     tag: string | null;
-    players: string;
+    minPlayers: number;
+    maxPlayers: number;
     age: string;
     time: string;
     genre: string;

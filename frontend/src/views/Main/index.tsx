@@ -31,6 +31,8 @@ export default function Main() {
     const [playerFilter, setPlayerFilter] = useState<string>('');
     const [rentalStatusFilter, setRentalStatusFilter] = useState<string>('');
 
+    const playerOptions = ['1', '2', '3', '4', '5', '6+'];
+
     useEffect(() => {
         console.log("선택된 게임:", selectedGame);
     }, [selectedGame]);
@@ -96,7 +98,11 @@ export default function Main() {
     const filteredGames = gameList
         .filter(game => game.name.toLowerCase().includes(search.toLowerCase()))
         .filter(game => genreFilter ? game.genre === genreFilter : true)
-        .filter(game => playerFilter ? game.players.includes(playerFilter) : true)
+        .filter(game => {
+            if (!playerFilter) return true;
+            const selectedCount = playerFilter === '6+' ? 6 : parseInt(playerFilter, 10);
+            return game.minPlayers <= selectedCount && selectedCount <= game.maxPlayers;
+        })
         .filter(game => {
             if (rentalStatusFilter === 'available') return game.available;
             if (rentalStatusFilter === 'rented') return !game.available;
@@ -104,7 +110,6 @@ export default function Main() {
         })
         .sort((a, b) => a.name.localeCompare(b.name));
     const genres = Array.from(new Set(gameList.map(game => game.genre))).sort();
-    const playerCounts = Array.from(new Set(gameList.map(game => game.players))).sort();
 
     const uniqueFilteredGames = Array.from(
         new Map(filteredGames.map(game => [game.name, game])).values()
@@ -132,8 +137,8 @@ export default function Main() {
                 <div className="filter-row">
                     <select value={playerFilter} onChange={(e) => setPlayerFilter(e.target.value)}>
                         <option value=''>전체 인원</option>
-                        {playerCounts.map(count => (
-                            <option key={count} value={count}>{count}</option>
+                        {playerOptions.map(count => (
+                            <option key={count} value={count}>{count}명</option>
                         ))}
                     </select>
 
