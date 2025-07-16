@@ -8,6 +8,7 @@ import {GameListResponseDto, GameResponseDto} from "../../apis/response/game";
 import {getGameListRequest} from "../../apis";
 import {ResponseCode} from "../../types/enums";
 import {ResponseBody} from "../../types";
+import BarcodeManualInputModal from "../Game/BarcodeManualInputModal";
 
 
 interface SelectedGame {
@@ -24,6 +25,7 @@ export default function Main() {
     const [selectedGame, setSelectedGame] = useState<GameResponseDto | null>(null);
     const [showRentalModal, setShowRentalModal] = useState(false);
     const [showScanner, setShowScanner] = useState(false);
+    const [showManualInput, setShowManualInput] = useState(false);
 
     const [genreFilter, setGenreFilter] = useState<string>('');
     const [playerFilter, setPlayerFilter] = useState<string>('');
@@ -223,8 +225,46 @@ export default function Main() {
                 <BarcodeScanner
                     onScan={handleBarcodeScanned}
                     onClose={() => setShowScanner(false)}
+                    onManualInput={() => {
+                        setShowScanner(false);
+                        setShowManualInput(true); // 수동입력 모달 열기
+                    }}
+                />
+            )}
+
+            {/* 바코드 수동입력 모달 */}
+            {showManualInput && (
+                <BarcodeManualInputModal
+                    onSubmit={(code: string) => {
+                        const isAlreadySelected = selectedList.some(game => game.barcode === code);
+                        if (isAlreadySelected) {
+                            alert('이미 대여 목록에 추가된 보드게임입니다.');
+                            setShowManualInput(false);
+                            return;
+                        }
+
+                        const matched = gameList.find(g => g.barcode === code);
+                        if (!matched) {
+                            alert('일치하는 보드게임을 찾을 수 없습니다.');
+                            setShowManualInput(false);
+                            return;
+                        }
+
+                        const newEntry: SelectedGame = {
+                            id: matched.id,
+                            barcode: matched.barcode,
+                            name: matched.name,
+                            imageUrl: matched.imageUrl
+                        };
+
+                        setSelectedList(prev => [...prev, newEntry]);
+                        alert(`'${matched.name}'이(가) 대여 목록에 추가되었습니다.`);
+                        setShowManualInput(false);
+                    }}
+                    onClose={() => setShowManualInput(false)}
                 />
             )}
         </div>
+
     );
 }

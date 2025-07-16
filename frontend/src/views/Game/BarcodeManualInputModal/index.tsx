@@ -11,6 +11,16 @@ export default function BarcodeManualInputModal({ onSubmit, onClose }: Props) {
     const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
     useEffect(() => {
+        // 모달 열릴 때 스크롤 막기
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            // 모달 닫힐 때 원복
+            document.body.style.overflow = 'auto';
+        };
+    }, []);
+
+    useEffect(() => {
         // ✅ 마운트 시 카메라 스트림 해제
         const stopCameraStream = () => {
             const videoElements = document.querySelectorAll('video');

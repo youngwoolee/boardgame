@@ -5,13 +5,24 @@ import './index.css';
 type Props = {
     onScan: (code: string) => void;
     onClose: () => void;
+    onManualInput: () => void;
 };
 
-export default function BarcodeScanner({ onScan, onClose }: Props) {
+export default function BarcodeScanner({ onScan, onClose, onManualInput }: Props) {
     const scannerRef = useRef<Html5Qrcode | null>(null);
     const scanId = 'reader';
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // 모달 열릴 때 스크롤 막기
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            // 모달 닫힐 때 원복
+            document.body.style.overflow = 'auto';
+        };
+    }, []);
 
     useEffect(() => {
         const element = document.getElementById(scanId);
@@ -29,6 +40,7 @@ export default function BarcodeScanner({ onScan, onClose }: Props) {
                         fps: 10,
                         qrbox: { width: 250, height: 250 },
                         aspectRatio: 1.0,
+                        disableFlip: true
                     },
                     (decodedText) => {
                         console.log('📦 Scanned:', decodedText);
@@ -76,17 +88,26 @@ export default function BarcodeScanner({ onScan, onClose }: Props) {
         <div className="scanner-overlay">
             <div className="scanner-container">
                 <div id={scanId} />
+
                 <button
                     className="close-button"
                     onClick={onClose}
                     disabled={isLoading}
-                    style={{ opacity: isLoading ? 0.4 : 1, pointerEvents: isLoading ? 'none' : 'auto' }}
+                    style={{
+                        opacity: isLoading ? 0.4 : 1,
+                        pointerEvents: isLoading ? 'none' : 'auto',
+                    }}
                 >
                     ×
                 </button>
 
-                {isLoading && (
-                    <div className="loading-spinner" />
+                {isLoading && <div className="loading-spinner" />}
+
+                {/* ✅ 수동입력 버튼 추가 */}
+                {!isLoading && (
+                    <button className="manual-input-button" onClick={onManualInput}>
+                        수동 입력
+                    </button>
                 )}
             </div>
         </div>
