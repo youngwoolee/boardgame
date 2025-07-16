@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './index.css';
 
 type Props = {
@@ -7,77 +7,101 @@ type Props = {
 };
 
 export default function BarcodeManualInputModal({ onSubmit, onClose }: Props) {
+    const [inputs, setInputs] = useState<string[]>(Array(8).fill(''));
     const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
-    const isCharValid = (index: number, char: string) => {
-        if (index < 6) return /^[a-zA-Z0-9]$/.test(char); // 문자/숫자
-        return /^[0-9]$/.test(char); // 숫자만
-    };
-
-    const handleChange = (index: number, value: string) => {
-        if (!isCharValid(index, value)) return;
-
-        inputsRef.current[index]!.value = value;
-
-        if (value && index < 7) {
-            const nextInput = inputsRef.current[index + (index === 5 ? 2 : 1)];
-            nextInput?.focus();
-        }
-
-        const code = getBarcode();
-        if (code.length === 9) onSubmit(code);
-    };
-
-    const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
-        if (e.key === 'Backspace' && !inputsRef.current[index]?.value && index > 0) {
-            const prevInput = inputsRef.current[index - (index === 7 ? 2 : 1)];
-            prevInput?.focus();
-        }
-    };
-
-    const getBarcode = () => {
-        const parts = inputsRef.current.map((input) => input?.value || '');
-        return `${parts.slice(0, 6).join('')}-${parts.slice(6).join('')}`;
-    };
-
     useEffect(() => {
-        inputsRef.current[0]?.focus();
+        // ✅ 마운트 시 카메라 스트림 해제
+        const stopCameraStream = () => {
+            const videoElements = document.querySelectorAll('video');
+            videoElements.forEach((video) => {
+                const stream = (video as HTMLVideoElement).srcObject as MediaStream | null;
+                if (stream) {
+                    stream.getTracks().forEach((track) => track.stop());
+                    (video as HTMLVideoElement).srcObject = null;
+                }
+            });
+        };
+
+        stopCameraStream();
+
+        // ✅ 첫 번째 input 자동 포커스
+        setTimeout(() => {
+            inputsRef.current[0]?.focus();
+        }, 50);
     }, []);
 
+    const handleChange = (index: number, value: string) => {
+        const updated = [...inputs];
+
+        // 앞 6자리는 영문 대문자만 허용
+        if (index < 6) {
+            const upper = value.toUpperCase();
+            if (!/^[A-Z]?$/.test(upper)) return;
+            updated[index] = upper;
+        } else {
+            // 뒤 2자리는 숫자만 허용
+            if (!/^\d?$/.test(value)) return;
+            updated[index] = value;
+        }
+
+        setInputs(updated);
+
+        // 다음 칸으로 자동 이동
+        if (value && index < inputs.length - 1) {
+            inputsRef.current[index + 1]?.focus();
+        }
+    };
+
+    const handleKeyDown = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Backspace' && !inputs[index] && index > 0) {
+            const updated = [...inputs];
+            updated[index - 1] = '';
+            setInputs(updated);
+            inputsRef.current[index - 1]?.focus();
+        }
+        // ✅ 엔터 키 입력 시 제출
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            handleSubmit();
+        }
+    };
+
+    const handleSubmit = () => {
+        const code = inputs.join('');
+        if (code.length !== 8) {
+            alert('총 8자리를 정확히 입력해주세요.');
+            return;
+        }
+        const finalCode = code.slice(0, 6) + '-' + code.slice(6);
+        onSubmit(finalCode);
+    };
+
     return (
-        <div className="barcode-modal-overlay">
-            <div className="barcode-modal">
+        <div className="manual-input-overlay">
+            <div className="manual-input-modal">
                 <h3>바코드 수동 입력</h3>
-                <div className="barcode-input-container">
-                    {Array.from({ length: 6 }).map((_, i) => (
-                        <input
-                            key={i}
-                            maxLength={1}
-                            className="barcode-input"
-                            ref={(el) => {
-                                inputsRef.current[i] = el;
-                            }}
-                            onChange={(e) => handleChange(i, e.target.value)}
-                            onKeyDown={(e) => handleKeyDown(i, e)}
-                        />
-                    ))}
-                    <span className="barcode-hyphen">-</span>
-                    {Array.from({ length: 2 }).map((_, i) => (
-                        <input
-                            key={i}
-                            maxLength={1}
-                            className="barcode-input"
-                            ref={(el: HTMLInputElement | null) => {
-                                inputsRef.current[i] = el;
-                            }}
-                            onChange={(e) => handleChange(i, e.target.value)}
-                            onKeyDown={(e) => handleKeyDown(i, e)}
-                        />
+                <div className="input-group">
+                    {inputs.map((char, i) => (
+                        <React.Fragment key={i}>
+                            {i === 6 && <span className="hyphen">-</span>}
+                            <input
+                                type="text"
+                                value={char}
+                                maxLength={1}
+                                ref={(el) => {
+                                    inputsRef.current[i] = el;
+                                }}
+                                className="barcode-input"
+                                onChange={(e) => handleChange(i, e.target.value)}
+                                onKeyDown={(e) => handleKeyDown(i, e)}
+                            />
+                        </React.Fragment>
                     ))}
                 </div>
-                <div className="barcode-buttons">
-                    <button onClick={() => onSubmit(getBarcode())}>확인</button>
-                    <button onClick={onClose}>취소</button>
+                <div className="button-group">
+                    <button className="submit-button" onClick={handleSubmit}>입력</button>
+                    <button className="cancel-button" onClick={onClose}>취소</button>
                 </div>
             </div>
         </div>

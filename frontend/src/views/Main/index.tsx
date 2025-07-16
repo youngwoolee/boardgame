@@ -30,6 +30,10 @@ export default function Main() {
     const [rentalStatusFilter, setRentalStatusFilter] = useState<string>('');
 
     useEffect(() => {
+        console.log("선택된 게임:", selectedGame);
+    }, [selectedGame]);
+
+    useEffect(() => {
         (async () => {
             const response = await getGameListRequest();
             gameListResponseHandler(response, setGameList);
@@ -153,11 +157,12 @@ export default function Main() {
                 {uniqueFilteredGames.map((game) => {
                     const isSelected = selectedList.some(g => g.name === game.name);
                     return (
-                        <div className={`main-card ${isSelected ? 'selected' : ''}`} key={game.name}>
-                            <div
-                                className="main-card-image-wrapper"
-                                onClick={() => setSelectedGame(game)}
-                            >
+                        <div
+                            className={`main-card ${isSelected ? 'selected' : ''}`}
+                            key={game.name}
+                            onClick={() => setSelectedGame(game)}
+                        >
+                            <div className="main-card-image-wrapper">
                                 <img src={game.imageUrl} alt={game.name} className="main-card-image" />
                             </div>
                             <div className="main-card-footer">
@@ -170,7 +175,10 @@ export default function Main() {
                                 {isSelected && (
                                     <button
                                         className="rent-button"
-                                        onClick={() => toggleSelectByGame(game.name)}
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // 클릭 이벤트 전파 중지
+                                            toggleSelectByGame(game.name);
+                                        }}
                                     >
                                         선택됨
                                     </button>

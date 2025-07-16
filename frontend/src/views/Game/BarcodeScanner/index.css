@@ -1,71 +1,70 @@
 .scanner-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.85);
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
 }
 
 .scanner-container {
     position: relative;
     width: 90%;
-    max-width: 500px;
-    aspect-ratio: 4 / 3;
-    border: 4px solid white;
+    max-width: 400px;
+    background: #fff;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.scanner-video {
+#reader {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    background: #000; /* 비디오 로딩 전 검정 배경 */
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-/* 닫기 버튼 (우상단 X) */
 .close-button {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 28px;
-    font-weight: bold;
-    background: rgba(0, 0, 0, 0.7);
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.8);
     color: white;
     border: none;
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    font-weight: bold;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: background 0.2s ease;
 }
 
 .close-button:hover {
-    background: rgba(255, 0, 0, 0.8);
+    background: rgba(255, 0, 0, 0.85);
 }
+
 .manual-input-button {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 8px 14px;
-    background-color: white;
-    color: black;
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: #000;
+    color: white;
     border: none;
     border-radius: 8px;
     font-size: 14px;
-    font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: background 0.2s ease;
 }
 
 .manual-input-button:hover {
-    background-color: #f0f0f0;
+    background: #333;
 }

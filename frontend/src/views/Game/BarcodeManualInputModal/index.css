@@ -1,46 +1,91 @@
-.barcode-modal-overlay {
+.manual-input-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.6);
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
 }
 
-.barcode-modal {
-    background-color: white;
-    padding: 20px;
-    border-radius: 12px;
+.manual-input-modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
     text-align: center;
-    min-width: 300px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 400px;
 }
 
-.barcode-input-container {
+.manual-input-modal h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.input-group {
     display: flex;
     justify-content: center;
-    margin: 16px 0;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
 }
 
 .barcode-input {
-    width: 32px;
-    height: 40px;
+    width: 30px;
+    height: 32px;
+    border: none;
+    border-bottom: 2px solid #ccc;
     font-size: 20px;
     text-align: center;
-    margin: 0 4px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    background: transparent;
 }
 
-.barcode-hyphen {
-    font-size: 20px;
-    line-height: 40px;
-    margin: 0 4px;
+.barcode-input:focus {
+    border-color: #007aff;
 }
 
-.barcode-buttons button {
-    margin: 0 8px;
-    padding: 8px 16px;
-    font-size: 16px;
+.hyphen {
+    margin: 0 6px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.submit-button,
+.cancel-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.submit-button {
+    background-color: #007aff;
+    color: white;
+}
+
+.submit-button:hover {
+    background-color: #005ecb;
+}
+
+.cancel-button {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.cancel-button:hover {
+    background-color: #c6c6c6;
 }

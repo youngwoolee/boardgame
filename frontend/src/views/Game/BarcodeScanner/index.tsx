@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react';
-import { BrowserMultiFormatReader } from '@zxing/browser';
+import React, { useEffect, useRef, useState } from 'react';
 import './index.css';
-import BarcodeManualInputModal from "../BarcodeManualInputModal";
+import { Html5Qrcode, Html5QrcodeScannerState } from 'html5-qrcode';
+import BarcodeManualInputModal from '../BarcodeManualInputModal';
 
 type Props = {
     onScan: (code: string) => void;
@@ -9,59 +9,80 @@ type Props = {
 };
 
 export default function BarcodeScanner({ onScan, onClose }: Props) {
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const codeReaderRef = useRef<BrowserMultiFormatReader | null>(null);
+    const scannerRef = useRef<Html5Qrcode | null>(null);
+    const scanId = 'reader';
     const [showManualInput, setShowManualInput] = useState(false);
-    const [activeStream, setActiveStream] = useState<MediaStream | null>(null);
-
 
     useEffect(() => {
-        const reader = new BrowserMultiFormatReader();
-        codeReaderRef.current = reader;
+        const element = document.getElementById(scanId);
+        if (element) element.innerHTML = '';
 
-        const scan = async () => {
+        if (!scannerRef.current) {
+            scannerRef.current = new Html5Qrcode(scanId);
+        }
+
+        const scanner = scannerRef.current;
+
+        const startScanner = async () => {
             try {
-                const devices = await BrowserMultiFormatReader.listVideoInputDevices();
-                const selectedDeviceId = devices[0]?.deviceId;
-                if (!selectedDeviceId || !videoRef.current) return;
+                const state = scanner.getState();
+                if (state !== Html5QrcodeScannerState.NOT_STARTED) return;
 
-                await reader.decodeFromVideoDevice(
-                    selectedDeviceId,
-                    videoRef.current,
-                    (result) => {
-                        if (result) {
-                            onScan(result.getText());
-                        }
-                    }
+                await scanner.start(
+                    { facingMode: 'environment' },
+                    {
+                        fps: 10,
+                        qrbox: { width: 250, height: 250 },
+                        aspectRatio: 1.0,
+                    },
+                    (decodedText) => {
+                        console.log('📦 Scanned:', decodedText);
+                        onScan(decodedText);
+                    },
+                    () => {}
                 );
-
-                const stream = videoRef.current?.srcObject as MediaStream;
-                if (stream) {
-                    setActiveStream(stream);
-                }
-            } catch (e) {
-                console.error('Camera error:', e);
+            } catch (err) {
+                console.error('Camera start error:', err);
             }
         };
 
         if (!showManualInput) {
-            scan();
+            startScanner();
         }
 
         return () => {
-            // cleanup
-            if (activeStream) {
-                activeStream.getTracks().forEach((track) => track.stop());
+            if (scannerRef.current) {
+                const state = scannerRef.current.getState();
+                if (state === Html5QrcodeScannerState.SCANNING) {
+                    scannerRef.current
+                        .stop()
+                        .then(() => {
+                            try {
+                                scannerRef.current?.clear();
+                            } catch (e) {
+                                console.warn("Clear failed:", e);
+                            }
+                        })
+                        .catch((err) => {
+                            console.warn("Stop error:", err);
+                        });
+                } else {
+                    try {
+                        scannerRef.current.clear();
+                    } catch (e) {
+                        console.warn("Clear error:", e);
+                    }
+                }
             }
         };
-    }, [onScan, showManualInput]);
+    }, [showManualInput]);
 
     return (
         <>
             {!showManualInput && (
                 <div className="scanner-overlay">
                     <div className="scanner-container">
-                        <video ref={videoRef} className="scanner-video" />
+                        <div id={scanId} />
                         <button className="close-button" onClick={onClose}>×</button>
                         <button
                             className="manual-input-button"
