@@ -7,6 +7,7 @@ import com.project.boardgame.endpoint.request.auth.EmailCertificationRequest;
 import com.project.boardgame.endpoint.request.auth.IdCheckRequest;
 import com.project.boardgame.endpoint.request.auth.SignInRequest;
 import com.project.boardgame.endpoint.request.auth.SignUpRequest;
+import com.project.boardgame.endpoint.response.ResponseDto;
 import com.project.boardgame.endpoint.response.auth.CheckCertificationResponse;
 import com.project.boardgame.endpoint.response.auth.EmailCertificationResponse;
 import com.project.boardgame.endpoint.response.auth.IdCheckResponse;
@@ -60,9 +61,7 @@ public class AuthController {
     }
 
     @PostMapping("/complete-signup")
-    public ResponseEntity<?> completeSignup(@RequestBody Map<String, String> body) {
-        ResponseEntity response = authService.completeSignUp(body.get("realName"));
-
-        return response;
+    public ResponseEntity<ResponseDto> completeSignup(@RequestBody Map<String, String> body) {
+        return authService.completeSignUp(body.get("realName"));
     }
 }

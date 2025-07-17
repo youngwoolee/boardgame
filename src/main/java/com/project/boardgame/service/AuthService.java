@@ -3,6 +3,7 @@ package com.project.boardgame.service;
 import java.util.Optional;
 
 import com.project.boardgame.common.CertificationNumber;
+import com.project.boardgame.common.ResponseCode;
 import com.project.boardgame.domain.Certification;
 import com.project.boardgame.domain.Member;
 import com.project.boardgame.endpoint.request.auth.CheckCertificationRequest;
@@ -154,16 +155,23 @@ public class AuthService {
     }
 
     @Transactional
-    public ResponseEntity completeSignUp(String realName) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = (String) authentication.getPrincipal(); // 또는 UserDetails 캐스팅 방식
+    public ResponseEntity<ResponseDto> completeSignUp(String realName) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext()
+                    .getAuthentication();
+            String userId = (String) authentication.getPrincipal(); // 또는 UserDetails 캐스팅 방식
 
-        Member member = userRepository.findByUserId(userId);
-        if (member == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            Member member = userRepository.findByUserId(userId);
+            if (member == null) return ResponseDto.validationFail();
 
-        member.setRealName(realName);
-        member.setRegistered(true); // 가입 완료
+            member.setRealName(realName);
+            member.setRegistered(true); // 가입 완료
 
-        return ResponseEntity.ok().build();
+            return ResponseEntity.ok()
+                    .body(new ResponseDto(ResponseCode.SUCCESS, "가입 완료"));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
     }
 }

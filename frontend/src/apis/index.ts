@@ -1,5 +1,5 @@
 import {
-    CheckCertificationRequestDto,
+    CheckCertificationRequestDto, CompleteSignupRequestDto,
     EmailCertificationRequestDto,
     IdCheckRequestDto, SignInRequestDto, SignUpRequestDto
 } from "./request/auth";
@@ -35,10 +35,23 @@ const EMAIL_CERTIFICATION_URL = () => `${API_DOMAIN}/auth/email-certification`;
 const CHECK_CERTIFICATION_URL = () => `${API_DOMAIN}/auth/check-certification`;
 const SIGN_UP_URL = () => `${API_DOMAIN}/auth/sign-up`;
 const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`;
+const COMPLETE_SIGN_UP_URL = () => `${API_DOMAIN}/auth/complete-signup`;
 export const SNS_SIGN_IN_URL = (type: 'kakao' | 'naver') => `${API_DOMAIN}/auth/oauth2/${type}`;
 const GAME_LIST_URL = () => `${API_DOMAIN}/games`;
 const RESERVE_GAME_URL = () => `${API_DOMAIN}/reservations/reserve`;
 
+export const completeSignUpRequest = async (requestBody: CompleteSignupRequestDto, token: string) => {
+    const result = await axios.post(
+        COMPLETE_SIGN_UP_URL(),
+        requestBody,
+        {
+            headers: { Authorization: `Bearer ${token}` }
+        }
+    )
+        .then(responseHandler<ResponseDto>)
+        .catch(errorHandler);
+    return result;
+}
 
 export const reserveGamesRequest = async (requestBody: ReserveGameRequestDto) => {
     const headers = getAccessTokenHeader();

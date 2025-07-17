@@ -3,6 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import InputBox from "../../../components/InputBox";
 import useTokenHandler from '../../../hooks/useTokenHandler';
+import {CompleteSignupRequestDto} from "../../../apis/request/auth";
+import {completeSignUpRequest} from "../../../apis";
+import {ResponseBody} from "../../../types";
+import {ResponseCode} from "../../../types/enums";
 
 
 export default function AdditionalInfo() {
@@ -41,19 +45,35 @@ export default function AdditionalInfo() {
             return;
         }
 
-        try {
-            await axios.post(
-                'http://localhost:8080/api/v1/auth/complete-signup',
-                { realName },
-                {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
-            );
-            alert("가입이 완료되었습니다.");
-            handleTokenAndRedirect(token, expirationTime);
-        } catch (error) {
-            alert("가입 실패");
+        const requestBody: CompleteSignupRequestDto = { realName };
+
+        const response = await completeSignUpRequest(requestBody, token);
+        handleCompleteSignUpResponse(response);
+    };
+
+    const handleCompleteSignUpResponse = (responseBody: ResponseBody<null>) => {
+        if (!responseBody) {
+            alert('서버 응답 오류');
+            return;
         }
+
+        const { code } = responseBody;
+
+        if (code === ResponseCode.VALIDATION_FAIL) {
+            setRealNameError(true);
+            setRealNameMessage("유효하지 않은 입력입니다.");
+            return;
+        }
+
+        if (code === ResponseCode.DATABASE_ERROR) {
+            alert("데이터베이스 오류입니다.");
+            return;
+        }
+
+        if (code !== ResponseCode.SUCCESS) return;
+
+        alert("가입이 완료되었습니다.");
+        handleTokenAndRedirect(token!, expirationTime!);
     };
 
     return (
