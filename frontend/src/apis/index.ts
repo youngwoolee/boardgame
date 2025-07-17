@@ -15,6 +15,12 @@ import { getAccessTokenHeader } from '../utils/token';
 import ReserveGameRequestDto from "./request/game/reserve-game.request.dto";
 import ReserveGameResponseDto from "./response/game/reserve-game.response.dto";
 import axiosInstance from "../utils/axiosInstance";
+import {
+    ReservationMasterListResponseDto
+} from "./response/reservation/reservation-master.response.dto";
+import {
+    ReservationDetailListResponseDto
+} from "./response/reservation/reservation-detail.response.dto";
 
 const responseHandler = <T> (response: AxiosResponse<any, any>) => {
     const responseBody: T = response.data;
@@ -39,6 +45,34 @@ const COMPLETE_SIGN_UP_URL = () => `${API_DOMAIN}/auth/complete-signup`;
 export const SNS_SIGN_IN_URL = (type: 'kakao' | 'naver') => `${API_DOMAIN}/auth/oauth2/${type}`;
 const GAME_LIST_URL = () => `${API_DOMAIN}/games`;
 const RESERVE_GAME_URL = () => `${API_DOMAIN}/reservations/reserve`;
+const MY_RESERVATION_URL = () => `${API_DOMAIN}/reservations/me`;
+const MY_RESERVATION_DETAIL_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}`;
+const MY_RESERVATION_RETURN_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}/return`;
+
+
+export const getMyReservationsRequest = async () => {
+    const headers = getAccessTokenHeader();
+    const result = await axios.get(MY_RESERVATION_URL(), { headers })
+        .then(responseHandler<ReservationMasterListResponseDto>)
+        .catch(errorHandler);
+    return result;
+};
+
+export const getReservationDetailRequest = async (reservationId: number) => {
+    const headers = getAccessTokenHeader();
+    const result = await axios.get(MY_RESERVATION_DETAIL_URL(reservationId), { headers })
+        .then(responseHandler<ReservationDetailListResponseDto>)
+        .catch(errorHandler);
+    return result;
+};
+
+export const returnReservationRequest = async (reservationId: number) => {
+    const headers = getAccessTokenHeader();
+    const result = await axios.patch(MY_RESERVATION_RETURN_URL(reservationId), {}, { headers })
+        .then(responseHandler<ResponseDto>)
+        .catch(errorHandler);
+    return result;
+};
 
 export const completeSignUpRequest = async (requestBody: CompleteSignupRequestDto, token: string) => {
     const result = await axios.post(
