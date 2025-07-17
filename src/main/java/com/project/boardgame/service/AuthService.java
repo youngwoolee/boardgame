@@ -20,8 +20,12 @@ import com.project.boardgame.provider.EmailProvider;
 import com.project.boardgame.provider.JwtProvider;
 import com.project.boardgame.repository.CertificationRepository;
 import com.project.boardgame.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -147,5 +151,19 @@ public class AuthService {
             return ResponseDto.databaseError();
         }
         return SignInResponse.success(token);
+    }
+
+    @Transactional
+    public ResponseEntity completeSignUp(String realName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = (String) authentication.getPrincipal(); // 또는 UserDetails 캐스팅 방식
+
+        Member member = userRepository.findByUserId(userId);
+        if (member == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        member.setRealName(realName);
+        member.setRegistered(true); // 가입 완료
+
+        return ResponseEntity.ok().build();
     }
 }

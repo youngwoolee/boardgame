@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css';
+import './style.css';
 import {reserveGamesRequest} from "../../../apis";
 import ReserveGameRequestDto from "../../../apis/request/game/reserve-game.request.dto";
 import ReserveGameResponseDto from "../../../apis/response/game/reserve-game.response.dto";

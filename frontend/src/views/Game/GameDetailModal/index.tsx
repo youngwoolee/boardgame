@@ -1,5 +1,5 @@
 import React, {JSX, useEffect } from 'react';
-import './index.css';
+import './style.css';
 import {
     FiUsers,
     FiHeart,

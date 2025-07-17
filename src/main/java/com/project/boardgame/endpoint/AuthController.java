@@ -1,5 +1,7 @@
 package com.project.boardgame.endpoint;
 
+import java.util.Map;
+
 import com.project.boardgame.endpoint.request.auth.CheckCertificationRequest;
 import com.project.boardgame.endpoint.request.auth.EmailCertificationRequest;
 import com.project.boardgame.endpoint.request.auth.IdCheckRequest;
@@ -10,9 +12,7 @@ import com.project.boardgame.endpoint.response.auth.EmailCertificationResponse;
 import com.project.boardgame.endpoint.response.auth.IdCheckResponse;
 import com.project.boardgame.endpoint.response.auth.SignInResponse;
 import com.project.boardgame.endpoint.response.auth.SignUpResponse;
-import com.project.boardgame.repository.UserRepository;
 import com.project.boardgame.service.AuthService;
-import com.project.boardgame.service.KakaoOAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +56,13 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseEntity<? super SignInResponse> signUp(@RequestBody @Valid SignInRequest request) {
         ResponseEntity<? super SignInResponse> response = authService.signIn(request);
+        return response;
+    }
+
+    @PostMapping("/complete-signup")
+    public ResponseEntity<?> completeSignup(@RequestBody Map<String, String> body) {
+        ResponseEntity response = authService.completeSignUp(body.get("realName"));
+
         return response;
     }
 }

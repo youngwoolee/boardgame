@@ -23,13 +23,14 @@ public class Member {
     private String type;
     private String role;
 
+    boolean isRegistered;
+
     public Member(SignUpRequest request) {
         this.userId = request.getId();
         this.password = request.getPassword();
         this.email = request.getEmail();
         this.type = "app";
         this.role = "ROLE_USER";
-
     }
 
     public Member(String userId, String email, String type) {
@@ -38,5 +39,13 @@ public class Member {
         this.email = email;
         this.type = type;
         this.role = "ROLE_USER";
+    }
+
+    public void setRealName(String realName) {
+        this.name = realName;
+    }
+
+    public void setRegistered(boolean registered) {
+        this.isRegistered = registered;
     }
 }

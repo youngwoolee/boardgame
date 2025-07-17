@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode, Html5QrcodeScannerState } from 'html5-qrcode';
-import './index.css';
+import './style.css';
 
 type Props = {
     onScan: (code: string) => void;

@@ -4,6 +4,7 @@ import SignUp from "./views/Authentication/SignUp";
 import SignIn from "./views/Authentication/SignIn";
 import OAuth from "./views/Authentication/OAuth";
 import Main from "./views/Main";
+import AdditionalInfo from "./views/Authentication/AdditionalInfo";
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
             <Route path={'sign-up'} element={<SignUp />} />
             <Route path={'sign-in'} element={<SignIn />} />
             <Route path={'oauth-response/:token/:expirationTime'} element={<OAuth />} />
+            <Route path={'additional-info/:token/:expirationTime'} element={<AdditionalInfo />} />
         </Route>
     </Routes>
   );

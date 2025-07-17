@@ -6,15 +6,18 @@ import java.util.Map;
 
 import com.project.boardgame.service.OAuth2UserService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class CustomOAuth2User implements OAuth2User {
 
     private String userId;
+    private boolean isRegistered;
 
     @Override
     public Map<String, Object> getAttributes() {
