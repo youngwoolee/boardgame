@@ -9,6 +9,8 @@ import {getGameListRequest} from "../../apis";
 import {ResponseCode} from "../../types/enums";
 import {ResponseBody} from "../../types";
 import BarcodeManualInputModal from "../Game/BarcodeManualInputModal";
+import {useNavigate} from "react-router-dom";
+import BottomNavigation from "../../components/BottomNavigation";
 
 
 interface SelectedGame {
@@ -19,6 +21,7 @@ interface SelectedGame {
 }
 
 export default function Main() {
+    const navigate = useNavigate();
     const [search, setSearch] = useState('');
     const [selectedList, setSelectedList] = useState<SelectedGame[]>([]);
     const [gameList, setGameList] = useState<GameResponseDto[]>([]);
@@ -197,11 +200,7 @@ export default function Main() {
             </div>
 
             {/* 하단 내비게이션 */}
-            <div className="bottom-nav">
-                <div className="nav-item active">대여</div>
-                <div className="nav-item">순위</div>
-                <div className="nav-item">나의 정보</div>
-            </div>
+            <BottomNavigation />
 
             {/* 플로팅 버튼 */}
             <div className="floating-button" onClick={() => setShowRentalModal(true)}>

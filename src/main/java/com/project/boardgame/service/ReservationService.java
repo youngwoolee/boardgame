@@ -11,6 +11,8 @@ import com.project.boardgame.domain.ReservationDetail;
 import com.project.boardgame.domain.ReservationMaster;
 import com.project.boardgame.domain.ReservationStatus;
 import com.project.boardgame.endpoint.request.GameReservationRequest;
+import com.project.boardgame.endpoint.response.ReservationListResponse;
+import com.project.boardgame.endpoint.response.ReservationMasterResponse;
 import com.project.boardgame.endpoint.response.ReservationStatusResponse;
 import com.project.boardgame.endpoint.response.ReservationResponse;
 import com.project.boardgame.endpoint.response.ResponseDto;
@@ -35,11 +37,14 @@ public class ReservationService {
     private final UserRepository userRepository;
     private static final int RESERVATION_DATE = 4;
 
-    public List<ReservationResponse> getMyReservations(String userId) {
-        List<ReservationMaster> masters = reservationMasterRepository.findByUserId(userId);
-        return masters.stream()
-                .map(ReservationResponse::from)
-                .collect(Collectors.toList());
+    public List<ReservationMasterResponse> getMyReservations(String userId) {
+        List<ReservationMaster> reservationMasterList = reservationMasterRepository.findByUserId(userId);
+        return reservationMasterList.stream().map(ReservationMasterResponse::from).collect(Collectors.toList());
+    }
+
+    public List<ReservationResponse> getReservations(String userId) {
+        List<ReservationMaster> reservationMasterList = reservationMasterRepository.findByUserId(userId);
+        return reservationMasterList.stream().map(ReservationResponse::from).collect(Collectors.toList());
     }
 
     @Transactional
