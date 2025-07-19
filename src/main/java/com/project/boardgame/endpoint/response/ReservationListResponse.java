@@ -34,9 +34,4 @@ public class ReservationListResponse extends ResponseDto{
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(new ReservationListResponse(reservationResponseList));
     }
-
-    public static ResponseEntity<ResponseDto> alreadyReservation(String message) {
-        ResponseDto responseBody = new ResponseDto(ResponseCode.ALREADY_RESERVATION, message);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
-    }
 }

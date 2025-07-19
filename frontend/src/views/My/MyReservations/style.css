@@ -30,6 +30,7 @@
     transition: transform 0.2s ease;
 }
 
+
 .reservation-card:hover {
     transform: scale(1.03);
 }
@@ -39,17 +40,68 @@
     font-size: 13px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
     text-align: center;
+    gap: 8px;
 }
 
 .reservation-game-name {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 15px;
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.reservation-info-row {
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.reservation-info-row.due {
+    font-weight: bold;
+    color: #007bff;
+    font-size: 13.5px;
+    margin-top: 4px;
+}
+
+.reservation-label {
+    color: #555;
+    font-weight: 500;
 }
 
 .overdue-text {
     font-size: 12px;
     color: red;
     font-weight: 600;
+    margin-top: 4px;
+}
+
+.reservation-status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    width: fit-content;
+    margin: 4px auto 0;
+}
+
+.reservation-status-badge[data-status="RESERVED"] {
+    color: #007bff;
+    background-color: #e6f0ff;
+    border-color: #007bff;
+}
+
+.reservation-status-badge[data-status="RETURNED"] {
+    color: #28a745;
+    background-color: #e8f5e9;
+    border-color: #28a745;
+}
+
+.reservation-status-badge[data-status="CANCELLED"] {
+    color: #dc3545;
+    background-color: #fbeaea;
+    border-color: #dc3545;
 }

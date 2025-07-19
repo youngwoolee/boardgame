@@ -1,0 +1,94 @@
+.reservation-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.reservation-modal {
+    width: 100%;
+    max-height: 400px;
+    background: white;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding: 16px;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+/* 모달 헤더 */
+.reservation-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+}
+
+/* 닫기 버튼 */
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* 상세 리스트 */
+.reservation-detail-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.reservation-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.reservation-detail-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.detail-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.game-name {
+    font-weight: bold;
+}
+
+.status {
+    color: #555;
+    font-size: 0.9rem;
+}
+
+/* 하단 버튼 */
+.reservation-modal-footer {
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+.return-button {
+    width: 100%;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+}

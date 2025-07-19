@@ -52,7 +52,7 @@ public class ReservationResponse extends ResponseDto{
                 .dueDate(master.getDueDate())
                 .status(master.getStatus()
                                 .name())
-                .overdue(master.getStatus() == ReservationStatus.예약
+                .overdue(master.getStatus() == ReservationStatus.RESERVED
                                  && master.getDueDate()
                         .isBefore(LocalDateTime.now()))
                 .build();

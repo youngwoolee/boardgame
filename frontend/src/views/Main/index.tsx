@@ -58,7 +58,6 @@ export default function Main() {
 
         const {data} = responseBody as GameListResponseDto;
 
-        console.log(data);
         if (Array.isArray(data)) {
             setGameList(data);
         }

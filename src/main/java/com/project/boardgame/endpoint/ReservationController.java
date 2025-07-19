@@ -8,6 +8,8 @@ import com.project.boardgame.endpoint.response.ReservationListResponse;
 import com.project.boardgame.endpoint.response.ReservationMasterResponse;
 import com.project.boardgame.endpoint.response.ReservationStatusResponse;
 import com.project.boardgame.endpoint.response.ReservationResponse;
+import com.project.boardgame.endpoint.response.reservation.ReservationDetailListResponse;
+import com.project.boardgame.endpoint.response.reservation.ReservationDetailResponse;
 import com.project.boardgame.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +40,13 @@ public class ReservationController {
         return ResponseEntity.ok(ReservationListResponse.builder().data(reservations).build());
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{reservationId}")
+    public ResponseEntity<ReservationDetailListResponse> getReservationDetails(@PathVariable("reservationId") Long reservationId) {
+        List<ReservationDetailResponse> details = reservationService.getReservationDetails(reservationId);
+        return ResponseEntity.ok(new ReservationDetailListResponse(details));
+    }
+
+    @GetMapping("/user/{userId}")
     public ResponseEntity<List<ReservationResponse>> getReservations(@PathVariable String userId) {
         List<ReservationResponse> reservations = reservationService.getReservations(userId);
         return ResponseEntity.ok(reservations);

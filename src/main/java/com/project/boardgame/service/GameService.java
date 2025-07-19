@@ -47,7 +47,7 @@ public class GameService {
         List<Game> games = gameRepository.findAll();
         return games.stream()
                 .map(game -> {
-                    boolean isReserved = reservationDetailRepository.existsByGameAndStatus(game, ReservationStatus.예약);
+                    boolean isReserved = reservationDetailRepository.existsByGameAndStatus(game, ReservationStatus.RESERVED);
                     boolean isAvailable = !isReserved;
                     return GameResponse.from(game, isAvailable);
                 })
@@ -59,7 +59,7 @@ public class GameService {
                 .orElseThrow(() -> new RuntimeException("해당 게임이 없습니다."));
 
         Optional<ReservationDetail> findReservation = reservationDetailRepository
-                .findFirstByGameAndStatus(findGame, ReservationStatus.예약);
+                .findFirstByGameAndStatus(findGame, ReservationStatus.RESERVED);
 
         if (findReservation.isPresent()) {
             ReservationDetail reservation = findReservation.get();

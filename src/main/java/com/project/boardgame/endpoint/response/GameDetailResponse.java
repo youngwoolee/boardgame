@@ -29,7 +29,7 @@ public class GameDetailResponse {
 
     public static GameDetailResponse from(Game game) {
         List<ReservationUser> reservationUsers = game.getReservations().stream()
-                .filter(r -> r.getStatus() == ReservationStatus.예약)
+                .filter(r -> r.getStatus() == ReservationStatus.RESERVED)
                 .map(ReservationUser::from)
                 .collect(Collectors.toList());
 
