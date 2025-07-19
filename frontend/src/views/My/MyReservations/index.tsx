@@ -35,9 +35,8 @@ export default function MyReservations() {
     return (
         <>
             <div className="my-reservation-wrapper">
-                <div className="my-reservation-title">나의 예약 내역</div>
                 {reservations.length === 0 ? (
-                    <p>현재 예약된 보드게임이 없습니다.</p>
+                    <p>현재 예약한 보드게임이 없습니다.</p>
                 ) : (
                     <div className="reservation-grid">
                         {reservations.map((res) => (
@@ -59,7 +58,6 @@ export default function MyReservations() {
                     </div>
                 )}
             </div>
-            <BottomNavigation />
         </>
     );
 }

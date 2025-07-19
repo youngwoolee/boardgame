@@ -64,7 +64,7 @@ export default function SignUp() {
     useEffect(() => {
         if (cookie.accessToken) {
             // 이미 로그인된 사용자이면 홈으로 이동
-            navigate('/');
+            navigate('/',{ replace: true });
         }
     }, [cookie, navigate]);
 

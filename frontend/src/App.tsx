@@ -8,6 +8,7 @@ import AdditionalInfo from "./views/Authentication/AdditionalInfo";
 import MyReservations from "./views/My/MyReservations";
 import MyReservationDetail from "./views/My/MyReservationDetail";
 import AppLayout from "./views/AppLayout";
+import MyPage from "./views/My/MyPage";
 
 function App() {
 
@@ -15,7 +16,7 @@ function App() {
     <Routes>
         <Route path="/" element={<AppLayout />}>
             <Route index element={<Main />} />
-            <Route path="reservations" element={<MyReservations />} />
+            <Route path="my" element={<MyPage />} />
             <Route path="reservations/:reservationId" element={<MyReservationDetail />} />
         </Route>
         {/* 인증 관련 페이지는 공통 레이아웃 없이 별도 처리 */}

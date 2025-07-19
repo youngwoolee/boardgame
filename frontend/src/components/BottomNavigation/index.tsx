@@ -13,7 +13,7 @@ export default function BottomNavigation() {
         <div className="bottom-nav">
             <div
                 className={`nav-item ${isActive('/') ? 'active' : ''}`}
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/', { replace: true })}
                 role="button"
                 tabIndex={0}
                 style={{ cursor: 'pointer' }}
@@ -29,8 +29,8 @@ export default function BottomNavigation() {
                 <span>순위</span>
             </div>
             <div
-                className={`nav-item ${isActive('/reservations') ? 'active' : ''}`}
-                onClick={() => navigate('/reservations')}
+                className={`nav-item ${isActive('/my') ? 'active' : ''}`}
+                onClick={() => navigate('/my', { replace: true })}
                 role="button"
                 tabIndex={0}
                 style={{ cursor: 'pointer' }}

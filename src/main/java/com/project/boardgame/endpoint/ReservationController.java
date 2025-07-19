@@ -63,8 +63,8 @@ public class ReservationController {
     }
 
     @PostMapping("/reserve")
-    public ResponseEntity<? super ReservationResponse> reserveGame(@RequestBody GameReservationRequest request) {
-        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public ResponseEntity<? super ReservationResponse> reserveGame(@RequestBody GameReservationRequest request, Principal principal) {
+        String userId = principal.getName();
         ResponseEntity<? super ReservationResponse> response = reservationService.reserve(userId, request);
         return response;
     }

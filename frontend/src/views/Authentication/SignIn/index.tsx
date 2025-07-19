@@ -29,7 +29,7 @@ export default function SignIn() {
     useEffect(() => {
         if (cookie.accessToken) {
             // 이미 로그인된 사용자이면 홈으로 이동
-            navigate('/');
+            navigate('/', { replace: true });
         }
     }, [cookie, navigate]);
 
@@ -50,7 +50,7 @@ export default function SignIn() {
         const expires = new Date(now + expirationTime);
 
         setCookie('accessToken', token, {expires, path: '/'});
-        navigate('/');
+        navigate('/', { replace: true });
 
     };
 
