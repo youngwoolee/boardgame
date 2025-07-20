@@ -109,10 +109,23 @@
     color: #555;
 }
 
+.my-page-wrapper {
+    overflow: visible;
+    position: relative;
+}
+
+.reservation-filter-tabs-wrapper {
+    position: sticky;
+    top: 48px;
+    z-index: 20;
+    background: white;
+}
+
+/* 예약 필터 탭 스타일 */
 .reservation-filter-tabs {
     display: flex;
     justify-content: space-around;
-    margin: 12px 0;
+    margin-bottom: 12px;
 }
 
 .filter-tab {

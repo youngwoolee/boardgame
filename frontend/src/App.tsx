@@ -9,23 +9,27 @@ import MyReservations from "./views/My/MyReservations";
 import MyReservationDetail from "./views/My/MyReservationDetailModal";
 import AppLayout from "./views/AppLayout";
 import MyPage from "./views/My/MyPage";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 
 function App() {
 
   return (
-    <Routes>
-        <Route path="/" element={<AppLayout />}>
-            <Route index element={<Main />} />
-            <Route path="my" element={<MyPage />} />
-        </Route>
-        {/* 인증 관련 페이지는 공통 레이아웃 없이 별도 처리 */}
-        <Route path="/auth">
-            <Route path="sign-up" element={<SignUp />} />
-            <Route path="sign-in" element={<SignIn />} />
-            <Route path="oauth-response/:token/:expirationTime" element={<OAuth />} />
-            <Route path="additional-info/:token/:expirationTime" element={<AdditionalInfo />} />
-        </Route>
-    </Routes>
+      <>
+        <ScrollToTop />
+        <Routes>
+            <Route path="/" element={<AppLayout />}>
+                <Route index element={<Main />} />
+                <Route path="my" element={<MyPage />} />
+            </Route>
+            {/* 인증 관련 페이지는 공통 레이아웃 없이 별도 처리 */}
+            <Route path="/auth">
+                <Route path="sign-up" element={<SignUp />} />
+                <Route path="sign-in" element={<SignIn />} />
+                <Route path="oauth-response/:token/:expirationTime" element={<OAuth />} />
+                <Route path="additional-info/:token/:expirationTime" element={<AdditionalInfo />} />
+            </Route>
+        </Routes>
+      </>
   );
 }
 

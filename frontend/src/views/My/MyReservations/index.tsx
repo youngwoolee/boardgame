@@ -35,10 +35,12 @@ export default function MyReservations() {
         getMyReservationsRequest().then(handleMyReservationsResponse);
     }, []);
 
-    const filteredReservations = reservations.filter((res) => {
-        if (filter === 'ALL') return true;
-        return res.status === filter;
-    });
+    const filteredReservations = reservations
+        .filter((res) => {
+            if (filter === 'ALL') return true;
+            return res.status === filter;
+        })
+        .sort((a, b) => new Date(b.reservedAt).getTime() - new Date(a.reservedAt).getTime());
 
     // 예약 날짜가 오늘이면 true
     const isTodayReservation = (() => {
@@ -152,19 +154,21 @@ export default function MyReservations() {
     return (
         <>
             <div className="my-reservation-wrapper">
-                <div className="reservation-filter-tabs">
-                    {['ALL', 'RESERVED', 'RETURNED', 'CANCELLED'].map((type) => (
-                        <button
-                            key={type}
-                            className={`filter-tab ${filter === type ? 'active' : ''}`}
-                            onClick={() => setFilter(type as ReservationFilter)}
-                        >
-                            {type === 'ALL' && '전체'}
-                            {type === 'RESERVED' && '예약됨'}
-                            {type === 'RETURNED' && '반납 완료'}
-                            {type === 'CANCELLED' && '취소됨'}
-                        </button>
-                    ))}
+                <div className="reservation-filter-tabs-wrapper">
+                    <div className="reservation-filter-tabs">
+                        {['ALL', 'RESERVED', 'RETURNED', 'CANCELLED'].map((type) => (
+                            <button
+                                key={type}
+                                className={`filter-tab ${filter === type ? 'active' : ''}`}
+                                onClick={() => setFilter(type as ReservationFilter)}
+                            >
+                                {type === 'ALL' && '전체'}
+                                {type === 'RESERVED' && '예약됨'}
+                                {type === 'RETURNED' && '반납 완료'}
+                                {type === 'CANCELLED' && '취소됨'}
+                            </button>
+                        ))}
+                    </div>
                 </div>
                 {filteredReservations.length === 0 ? (
                     <p>현재 조건에 맞는 예약이 없습니다.</p>
