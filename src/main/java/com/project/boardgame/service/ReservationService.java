@@ -66,7 +66,6 @@ public class ReservationService {
         ReservationStatusResponse response = ReservationStatusResponse.builder()
                 .reservationId(master.getId())
                 .status(master.getStatus().name())
-                .message("예약이 취소되었습니다.")
                 .build();
         return response;
     }
@@ -81,6 +80,7 @@ public class ReservationService {
         }
 
         master.setStatus(ReservationStatus.RETURNED);
+        master.setReturnedAt(LocalDateTime.now());
         for (ReservationDetail detail : master.getDetails()) {
             detail.setStatus(ReservationStatus.RETURNED);
             detail.setReturnedAt(LocalDateTime.now());
@@ -88,7 +88,6 @@ public class ReservationService {
         ReservationStatusResponse response = ReservationStatusResponse.builder()
                 .reservationId(master.getId())
                 .status(master.getStatus().name())
-                .message("반납되었습니다.")
                 .build();
 
         return response;
@@ -169,6 +168,7 @@ public class ReservationService {
                                       .id(detail.getGame().getId())
                                       .name(detail.getGame().getName())
                                       .imageUrl(detail.getGame().getImageUrl())
+                                      .barcode(detail.getGame().getBarcode())
                                       .build())
                         .build())
                 .collect(Collectors.toList());

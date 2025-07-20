@@ -110,8 +110,8 @@ export default function BarcodeManualInputModal({ onSubmit, onClose }: Props) {
                     ))}
                 </div>
                 <div className="button-group">
-                    <button className="submit-button" onClick={handleSubmit}>입력</button>
                     <button className="cancel-button" onClick={onClose}>취소</button>
+                    <button className="submit-button" onClick={handleSubmit}>입력</button>
                 </div>
             </div>
         </div>

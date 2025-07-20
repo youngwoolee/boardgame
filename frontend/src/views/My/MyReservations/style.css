@@ -1,5 +1,4 @@
 .my-reservation-wrapper {
-    padding: 16px;
     margin-bottom: 80px;
     font-family: Pretendard, sans-serif;
 }
@@ -104,4 +103,29 @@
     color: #dc3545;
     background-color: #fbeaea;
     border-color: #dc3545;
+}
+
+.reservation-info-row.returned {
+    color: #555;
+}
+
+.reservation-filter-tabs {
+    display: flex;
+    justify-content: space-around;
+    margin: 12px 0;
+}
+
+.filter-tab {
+    padding: 6px 12px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.filter-tab.active {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
 }

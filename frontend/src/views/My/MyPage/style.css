@@ -1,16 +1,23 @@
 .my-page-wrapper {
-    padding: 16px;
+    padding: 64px 16px 16px; /* top, left/right, bottom */
     margin-bottom: 80px;
     font-family: Pretendard, sans-serif;
-    min-height: 100vh; /* ✅ 이 줄 추가 */
+    min-height: 100vh;
     box-sizing: border-box;
 }
 
 .my-page-tab-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    z-index: 100;
     display: flex;
     justify-content: space-around;
-    margin-bottom: 16px;
     border-bottom: 1px solid #eee;
+    padding: 0 16px;
+    height: 48px;
 }
 
 .my-page-tab {

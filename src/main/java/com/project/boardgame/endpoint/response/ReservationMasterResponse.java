@@ -47,6 +47,7 @@ public class ReservationMasterResponse {
                 .nickname(master.getUserNickname())
                 .gameName(gameName)
                 .reservedAt(master.getReservedAt())
+                .returnedAt(master.getReturnedAt())
                 .dueDate(master.getDueDate())
                 .status(master.getStatus()
                                 .name())

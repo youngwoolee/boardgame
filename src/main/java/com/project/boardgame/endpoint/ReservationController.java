@@ -34,14 +34,14 @@ public class ReservationController {
 
 
     @GetMapping("/me")
-    public ResponseEntity<ReservationListResponse> getMyReservations(Principal principal) {
+    public ResponseEntity<? super ReservationListResponse> getMyReservations(Principal principal) {
         String userId = principal.getName();
         List<ReservationMasterResponse> reservations = reservationService.getMyReservations(userId);
         return ResponseEntity.ok(ReservationListResponse.builder().data(reservations).build());
     }
 
     @GetMapping("/{reservationId}")
-    public ResponseEntity<ReservationDetailListResponse> getReservationDetails(@PathVariable("reservationId") Long reservationId) {
+    public ResponseEntity<? super ReservationDetailListResponse> getReservationDetails(@PathVariable("reservationId") Long reservationId) {
         List<ReservationDetailResponse> details = reservationService.getReservationDetails(reservationId);
         return ResponseEntity.ok(new ReservationDetailListResponse(details));
     }
@@ -52,15 +52,15 @@ public class ReservationController {
         return ResponseEntity.ok(reservations);
     }
 
-    @PatchMapping("/{id}/cancel")
-    public ResponseEntity<ReservationStatusResponse> cancelReservation(@PathVariable Long id) {
-        ReservationStatusResponse response = reservationService.cancelReservation(id);
+    @PatchMapping("/{reservationId}/cancel")
+    public ResponseEntity<ReservationStatusResponse> cancelReservation(@PathVariable("reservationId") Long reservationId) {
+        ReservationStatusResponse response = reservationService.cancelReservation(reservationId);
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}/return")
-    public ResponseEntity<ReservationStatusResponse> returnReservation(@PathVariable Long id) {
-        ReservationStatusResponse response = reservationService.returnReservation(id);
+    @PatchMapping("/{reservationId}/return")
+    public ResponseEntity<? super ReservationStatusResponse> returnReservation(@PathVariable("reservationId") Long reservationId) {
+        ReservationStatusResponse response = reservationService.returnReservation(reservationId);
         return ResponseEntity.ok(response);
     }
 

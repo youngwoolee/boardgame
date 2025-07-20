@@ -82,13 +82,39 @@
     padding-top: 16px;
 }
 
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px 12px;
+}
+
+.cancel-button,
 .return-button {
-    width: 100%;
-    background: #007bff;
-    color: white;
-    border: none;
+    flex: 1;
     padding: 12px;
+    border: none;
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
+}
+
+.cancel-button {
+    background-color: #d3d3d3;
+    color: #000;
+}
+
+.return-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.return-button:hover {
+    opacity: 0.95;
+}
+
+.return-button.full {
+    width: 100%;
+    border-radius: 0;
+    padding: 16px;
 }

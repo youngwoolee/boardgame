@@ -9,15 +9,22 @@ interface Props {
     details: ReservationDetailDto[];
     onClose: () => void;
     onReturn: () => void;
+    onCancel: () => void;
+    canCancel: boolean;
 }
 
-export default function MyReservationDetailModal({ details, onClose, onReturn }: Props) {
+export default function MyReservationDetailModal({ details, onClose, onReturn, onCancel,
+                                                     canCancel }: Props) {
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => {
             document.body.style.overflow = 'auto';
         };
     }, []);
+
+    const isCompleted = details.every(
+        (item) => item.status === 'RETURNED' || item.status === 'CANCELLED'
+    );
 
     return (
         <div className="rental-modal-overlay" onClick={onClose}>
@@ -46,9 +53,18 @@ export default function MyReservationDetailModal({ details, onClose, onReturn }:
                     )}
                 </div>
 
-                <div className="rental-modal-footer">
-                    <button className="rent-submit-button" onClick={onReturn}>반납하기</button>
-                </div>
+                {!isCompleted && (
+                    <div className="rental-modal-footer">
+                        {canCancel ? (
+                            <div className="action-buttons">
+                                <button className="cancel-button" onClick={onCancel}>취소하기</button>
+                                <button className="return-button" onClick={onReturn}>반납하기</button>
+                            </div>
+                        ) : (
+                            <button className="return-button full" onClick={onReturn}>반납하기</button>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

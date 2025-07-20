@@ -35,6 +35,7 @@ public class ReservationMaster {
 
     private LocalDateTime reservedAt;
     private LocalDateTime dueDate;
+    private LocalDateTime returnedAt;
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus status; // 예약, 반납, 취소
