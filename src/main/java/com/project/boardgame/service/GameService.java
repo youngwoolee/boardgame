@@ -12,8 +12,6 @@ import com.project.boardgame.endpoint.request.GameRequest;
 import com.project.boardgame.endpoint.response.GameDetailResponse;
 import com.project.boardgame.endpoint.response.GameReservationResponse;
 import com.project.boardgame.endpoint.response.GameResponse;
-import com.project.boardgame.endpoint.response.GameStatusResponse;
-import com.project.boardgame.endpoint.response.ReservationStatusResponse;
 import com.project.boardgame.repository.GameRepository;
 import com.project.boardgame.repository.ReservationDetailRepository;
 import lombok.RequiredArgsConstructor;

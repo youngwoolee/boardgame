@@ -21,6 +21,7 @@ import {
 import {
     ReservationDetailListResponseDto
 } from "./response/reservation/reservation-detail.response.dto";
+import UploadResponseDto from "./response/admin/upload.response.dto";
 
 const responseHandler = <T> (response: AxiosResponse<any, any>) => {
     const responseBody: T = response.data;
@@ -50,6 +51,23 @@ const MY_RESERVATION_DETAIL_URL = (reservationId: number) => `${API_DOMAIN}/rese
 const MY_RESERVATION_RETURN_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}/return`;
 const MY_RESERVATION_CANCEL_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}/cancel`;
 
+const UPLOAD_IMAGE_URL = () => `${API_DOMAIN}/upload/github-image`;
+
+export const uploadImageToGithubRequest = async (imageFile: File) => {
+    const headers = {
+        ...getAccessTokenHeader(), // 인증 필요 시
+        'Content-Type': 'multipart/form-data'
+    };
+
+    const formData = new FormData();
+    formData.append('image', imageFile);
+
+    const result = await axiosInstance.post(UPLOAD_IMAGE_URL(), formData, { headers })
+        .then(responseHandler<UploadResponseDto>)
+        .catch(errorHandler);
+
+    return result;
+};
 
 export const getMyReservationsRequest = async () => {
     const headers = getAccessTokenHeader();

@@ -47,5 +47,9 @@ spring:
 
 secret-key: ThisStatementIsJwtSecretKeyDoNotUseThisStatement
 
-##gmail 설정
 
+github:
+  token: ${GITHUB_TOKEN}
+  owner: youngwoolee
+  repo: boardgame-image
+  branch: main

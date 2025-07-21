@@ -1,8 +1,8 @@
-package com.project.boardgame.endpoint.response;
+package com.project.boardgame.endpoint.response.reservation;
 
 import com.project.boardgame.common.ResponseCode;
 import com.project.boardgame.common.ResponseMessage;
-import com.project.boardgame.endpoint.response.auth.EmailCertificationResponse;
+import com.project.boardgame.endpoint.response.ResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReservationStatusResponse extends ResponseDto{
+public class ReservationStatusResponse extends ResponseDto {
     private Long reservationId;
     private String status;
 

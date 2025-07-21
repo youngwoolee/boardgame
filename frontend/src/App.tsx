@@ -10,6 +10,8 @@ import MyReservationDetail from "./views/My/MyReservationDetailModal";
 import AppLayout from "./views/AppLayout";
 import MyPage from "./views/My/MyPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
+import Admin from "./views/UploadImage";
+import UploadImage from "./views/UploadImage";
 
 function App() {
 
@@ -20,6 +22,7 @@ function App() {
             <Route path="/" element={<AppLayout />}>
                 <Route index element={<Main />} />
                 <Route path="my" element={<MyPage />} />
+                <Route path="upload" element={<UploadImage />} />
             </Route>
             {/* 인증 관련 페이지는 공통 레이아웃 없이 별도 처리 */}
             <Route path="/auth">

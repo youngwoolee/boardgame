@@ -205,26 +205,21 @@ export default function SignUp() {
         }
         const checkedPassword = passwordPattern.test(password);
         if(!checkedPassword) {
-            console.log("onSignUpButtonClickHandler1")
             setPasswordError(true);
             setPasswordMessage("영문, 숫자, 특수기호를 혼용하여 8 ~15자 입력해주세요.");
             return;
         }
 
         if(password !== passwordCheck) {
-            console.log("onSignUpButtonClickHandler2")
             setPasswordCheckError(true);
             setPasswordCheckMessage("비밀번호가 일치하지 않습니다");
             return;
         }
-        console.log("onSignUpButtonClickHandler3")
         if(!isCertificationCheck) {
-            console.log("onSignUpButtonClickHandler4")
             alert('이메일 인증은 필수입니다.');
             return;
         }
 
-        console.log("onSignUpButtonClickHandler5")
         const requestBody: SignUpRequestDto = {id, password, email, certificationNumber};
         console.log(requestBody)
         signUpRequest(requestBody).then(signUpResponse);

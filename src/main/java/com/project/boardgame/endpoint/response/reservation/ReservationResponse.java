@@ -1,14 +1,13 @@
-package com.project.boardgame.endpoint.response;
+package com.project.boardgame.endpoint.response.reservation;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import com.project.boardgame.common.ResponseCode;
-import com.project.boardgame.common.ResponseMessage;
 import com.project.boardgame.domain.ReservationDetail;
 import com.project.boardgame.domain.ReservationMaster;
 import com.project.boardgame.domain.ReservationStatus;
-import com.project.boardgame.endpoint.response.auth.SignInResponse;
+import com.project.boardgame.endpoint.response.ResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationResponse extends ResponseDto{
+public class ReservationResponse extends ResponseDto {
     private Long id;
     private String userId;
     private String nickname;

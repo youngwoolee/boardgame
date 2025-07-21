@@ -1,9 +1,8 @@
-package com.project.boardgame.endpoint.response;
+package com.project.boardgame.endpoint.response.reservation;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.project.boardgame.common.ResponseCode;
 import com.project.boardgame.domain.ReservationDetail;
 import com.project.boardgame.domain.ReservationMaster;
 import com.project.boardgame.domain.ReservationStatus;
@@ -11,8 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 
 @Getter
