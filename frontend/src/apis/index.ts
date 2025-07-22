@@ -22,6 +22,7 @@ import {
     ReservationDetailListResponseDto
 } from "./response/reservation/reservation-detail.response.dto";
 import UploadResponseDto from "./response/admin/upload.response.dto";
+import UploadRequestDto from "./request/admin/upload.request.dto";
 
 const responseHandler = <T> (response: AxiosResponse<any, any>) => {
     const responseBody: T = response.data;
@@ -53,20 +54,30 @@ const MY_RESERVATION_CANCEL_URL = (reservationId: number) => `${API_DOMAIN}/rese
 
 const UPLOAD_IMAGE_URL = () => `${API_DOMAIN}/upload/github-image`;
 
-export const uploadImageToGithubRequest = async (imageFile: File) => {
-    const headers = {
-        ...getAccessTokenHeader(), // 인증 필요 시
-        'Content-Type': 'multipart/form-data'
-    };
+export const createGameRequest = async (
+    imageFile: File,
+    gameData: UploadRequestDto
+) => {
+    try {
+        const headers = {
+            ...getAccessTokenHeader(),
+            'Content-Type': 'multipart/form-data',
+        };
 
-    const formData = new FormData();
-    formData.append('image', imageFile);
+        const formData = new FormData();
+        formData.append('image', imageFile); // 이미지 파일
+        formData.append('game', new Blob([JSON.stringify(gameData)], { type: 'application/json' })); // 게임 정보 JSON
 
-    const result = await axiosInstance.post(UPLOAD_IMAGE_URL(), formData, { headers })
-        .then(responseHandler<UploadResponseDto>)
-        .catch(errorHandler);
+        const response = await axiosInstance.post<UploadResponseDto>(
+            UPLOAD_IMAGE_URL(),
+            formData,
+            { headers }
+        );
 
-    return result;
+        return responseHandler<UploadResponseDto>(response);
+    } catch (error) {
+        return errorHandler(error);
+    }
 };
 
 export const getMyReservationsRequest = async () => {
