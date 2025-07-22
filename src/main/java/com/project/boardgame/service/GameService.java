@@ -9,6 +9,7 @@ import com.project.boardgame.domain.Game;
 import com.project.boardgame.domain.ReservationDetail;
 import com.project.boardgame.domain.ReservationStatus;
 import com.project.boardgame.endpoint.request.GameRequest;
+import com.project.boardgame.endpoint.request.GameUploadRequest;
 import com.project.boardgame.endpoint.response.GameDetailResponse;
 import com.project.boardgame.endpoint.response.GameReservationResponse;
 import com.project.boardgame.endpoint.response.GameResponse;
@@ -39,6 +40,23 @@ public class GameService {
                 .build();
         Game saveGame = gameRepository.save(game);
         return GameResponse.from(saveGame);
+    }
+
+    public void createGame(GameUploadRequest dto, String imageUrl) {
+        Game game = Game.builder()
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .minPlayers(dto.getMinPlayers())
+                .maxPlayers(dto.getMaxPlayers())
+                .age(dto.getAge())
+                .time(dto.getTime())
+                .genre(dto.getGenre())
+                .system(dto.getSystem())
+                .barcode(dto.getBarcode())
+                .imageUrl(imageUrl)
+                .build();
+
+        gameRepository.save(game);
     }
 
     public List<GameResponse> getAllGames() {

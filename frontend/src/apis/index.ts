@@ -66,7 +66,7 @@ export const createGameRequest = async (
 
         const formData = new FormData();
         formData.append('image', imageFile); // 이미지 파일
-        formData.append('game', new Blob([JSON.stringify(gameData)], { type: 'application/json' })); // 게임 정보 JSON
+        formData.append('data', new Blob([JSON.stringify(gameData)], { type: 'application/json' })); // 게임 정보 JSON
 
         const response = await axiosInstance.post<UploadResponseDto>(
             UPLOAD_IMAGE_URL(),
