@@ -51,7 +51,7 @@ const MY_RESERVATION_DETAIL_URL = (reservationId: number) => `${API_DOMAIN}/rese
 const MY_RESERVATION_RETURN_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}/return`;
 const MY_RESERVATION_CANCEL_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}/cancel`;
 
-const UPLOAD_IMAGE_URL = () => `${API_DOMAIN}/upload/github-image`;
+const UPLOAD_IMAGE_URL = () => `${API_DOMAIN}/admin/upload`;
 
 export const uploadImageToGithubRequest = async (imageFile: File) => {
     const headers = {

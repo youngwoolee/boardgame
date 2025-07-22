@@ -13,12 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/upload")
+@RequestMapping("/api/v1/admin")
 public class UploadController {
 
     private final GithubUploadService githubUploadService;
 
-    @PostMapping("/github-image")
+    @PostMapping("/upload")
     public ResponseEntity<? super UploadResponse> uploadToGithub(@RequestParam("image") MultipartFile image) {
         try {
             String url = githubUploadService.uploadImage(image);
