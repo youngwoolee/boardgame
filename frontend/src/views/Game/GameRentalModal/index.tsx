@@ -5,6 +5,7 @@ import ReserveGameRequestDto from "../../../apis/request/game/reserve-game.reque
 import ReserveGameResponseDto from "../../../apis/response/game/reserve-game.response.dto";
 import {ResponseBody} from "../../../types";
 import {ResponseCode} from "../../../types/enums";
+import {useNavigate} from "react-router-dom";
 
 
 interface SelectedGame {
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export default function RentalModal({ list, onClose, onRented }: Props) {
+    const navigate = useNavigate();
     const reserveGameResponse = (responseBody: ResponseBody<ReserveGameResponseDto>) => {
         if(!responseBody) return;
         const { code, message } = responseBody;
@@ -31,6 +33,7 @@ export default function RentalModal({ list, onClose, onRented }: Props) {
         alert('대여가 완료되었습니다.');
         onRented();     // 선택 목록 초기화
         onClose();      // 모달 닫기
+        window.location.href = '/';
     };
 
     const handleSubmit = async () => {

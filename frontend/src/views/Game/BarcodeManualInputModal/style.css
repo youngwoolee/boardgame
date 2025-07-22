@@ -57,33 +57,34 @@
 
 .button-group {
     display: flex;
-    justify-content: center;
-    gap: 16px;
-}
-
-.submit-button,
-.cancel-button {
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+    gap: 12px;
+    margin-top: 24px;
 }
 
 .submit-button {
-    background-color: #007aff;
+    flex: 4;
+    background-color: #007bff;
     color: white;
+    border: none;
+    padding: 12px 0;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.cancel-button {
+    flex: 1; /* 좁게 */
+    background-color: #ddd;
+    color: #000;
+    border: none;
+    padding: 12px 0;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .submit-button:hover {
     background-color: #005ecb;
-}
-
-.cancel-button {
-    background-color: #e0e0e0;
-    color: #333;
 }
 
 .cancel-button:hover {

@@ -1,0 +1,144 @@
+.my-reservation-wrapper {
+    margin-bottom: 80px;
+    font-family: Pretendard, sans-serif;
+}
+
+.my-reservation-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.reservation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.reservation-card {
+    background-color: #fafafa;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+
+.reservation-card:hover {
+    transform: scale(1.03);
+}
+
+.reservation-card-content {
+    padding: 12px 8px;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+}
+
+.reservation-game-name {
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.reservation-info-row {
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.reservation-info-row.due {
+    font-weight: bold;
+    color: #007bff;
+    font-size: 13.5px;
+    margin-top: 4px;
+}
+
+.reservation-label {
+    color: #555;
+    font-weight: 500;
+}
+
+.overdue-text {
+    font-size: 12px;
+    color: red;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.reservation-status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    width: fit-content;
+    margin: 4px auto 0;
+}
+
+.reservation-status-badge[data-status="RESERVED"] {
+    color: #007bff;
+    background-color: #e6f0ff;
+    border-color: #007bff;
+}
+
+.reservation-status-badge[data-status="RETURNED"] {
+    color: #28a745;
+    background-color: #e8f5e9;
+    border-color: #28a745;
+}
+
+.reservation-status-badge[data-status="CANCELLED"] {
+    color: #dc3545;
+    background-color: #fbeaea;
+    border-color: #dc3545;
+}
+
+.reservation-info-row.returned {
+    color: #555;
+}
+
+.my-page-wrapper {
+    overflow: visible;
+    position: relative;
+}
+
+.reservation-filter-tabs-wrapper {
+    position: sticky;
+    top: 48px;
+    z-index: 20;
+    background: white;
+}
+
+/* 예약 필터 탭 스타일 */
+.reservation-filter-tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 12px;
+}
+
+.filter-tab {
+    padding: 6px 12px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.filter-tab.active {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}

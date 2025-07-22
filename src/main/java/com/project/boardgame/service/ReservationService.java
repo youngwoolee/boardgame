@@ -11,10 +11,11 @@ import com.project.boardgame.domain.ReservationDetail;
 import com.project.boardgame.domain.ReservationMaster;
 import com.project.boardgame.domain.ReservationStatus;
 import com.project.boardgame.endpoint.request.GameReservationRequest;
-import com.project.boardgame.endpoint.response.ReservationStatusResponse;
-import com.project.boardgame.endpoint.response.ReservationResponse;
-import com.project.boardgame.endpoint.response.ResponseDto;
-import com.project.boardgame.endpoint.response.auth.IdCheckResponse;
+import com.project.boardgame.endpoint.response.GameResponse;
+import com.project.boardgame.endpoint.response.reservation.ReservationMasterResponse;
+import com.project.boardgame.endpoint.response.reservation.ReservationStatusResponse;
+import com.project.boardgame.endpoint.response.reservation.ReservationResponse;
+import com.project.boardgame.endpoint.response.reservation.ReservationDetailResponse;
 import com.project.boardgame.repository.GameRepository;
 import com.project.boardgame.repository.ReservationDetailRepository;
 import com.project.boardgame.repository.ReservationMasterRepository;
@@ -35,11 +36,14 @@ public class ReservationService {
     private final UserRepository userRepository;
     private static final int RESERVATION_DATE = 4;
 
-    public List<ReservationResponse> getMyReservations(String userId) {
-        List<ReservationMaster> masters = reservationMasterRepository.findByUserId(userId);
-        return masters.stream()
-                .map(ReservationResponse::from)
-                .collect(Collectors.toList());
+    public List<ReservationMasterResponse> getMyReservations(String userId) {
+        List<ReservationMaster> reservationMasterList = reservationMasterRepository.findByUserId(userId);
+        return reservationMasterList.stream().map(ReservationMasterResponse::from).collect(Collectors.toList());
+    }
+
+    public List<ReservationResponse> getReservations(String userId) {
+        List<ReservationMaster> reservationMasterList = reservationMasterRepository.findByUserId(userId);
+        return reservationMasterList.stream().map(ReservationResponse::from).collect(Collectors.toList());
     }
 
     @Transactional
@@ -47,19 +51,18 @@ public class ReservationService {
         ReservationMaster master = reservationMasterRepository.findById(masterId)
                 .orElseThrow(() -> new IllegalArgumentException("예약 마스터 ID를 찾을 수 없습니다."));
 
-        if (!ReservationStatus.예약.equals(master.getStatus())) {
+        if (!ReservationStatus.RESERVED.equals(master.getStatus())) {
             throw new IllegalStateException("이미 취소된 예약입니다.");
         }
 
-        master.setStatus(ReservationStatus.취소);
+        master.setStatus(ReservationStatus.CANCELLED);
         for (ReservationDetail detail : master.getDetails()) {
-            detail.setStatus(ReservationStatus.취소);
+            detail.setStatus(ReservationStatus.CANCELLED);
         }
 
         ReservationStatusResponse response = ReservationStatusResponse.builder()
                 .reservationId(master.getId())
                 .status(master.getStatus().name())
-                .message("예약이 취소되었습니다.")
                 .build();
         return response;
     }
@@ -69,19 +72,19 @@ public class ReservationService {
         ReservationMaster master = reservationMasterRepository.findById(masterId)
                 .orElseThrow(() -> new IllegalArgumentException("예약 마스터 ID를 찾을 수 없습니다."));
 
-        if (!ReservationStatus.예약.equals(master.getStatus())) {
+        if (!ReservationStatus.RESERVED.equals(master.getStatus())) {
             throw new IllegalStateException("이미 반납되었거나 취소된 예약입니다.");
         }
 
-        master.setStatus(ReservationStatus.반납);
+        master.setStatus(ReservationStatus.RETURNED);
+        master.setReturnedAt(LocalDateTime.now());
         for (ReservationDetail detail : master.getDetails()) {
-            detail.setStatus(ReservationStatus.반납);
+            detail.setStatus(ReservationStatus.RETURNED);
             detail.setReturnedAt(LocalDateTime.now());
         }
         ReservationStatusResponse response = ReservationStatusResponse.builder()
                 .reservationId(master.getId())
                 .status(master.getStatus().name())
-                .message("반납되었습니다.")
                 .build();
 
         return response;
@@ -97,7 +100,7 @@ public class ReservationService {
                 .userNickname(member.getName())
                 .reservedAt(now)
                 .dueDate(now.plusDays(RESERVATION_DATE))
-                .status(ReservationStatus.예약)
+                .status(ReservationStatus.RESERVED)
                 .build();
 
         List<ReservationDetail> details = new ArrayList<>();
@@ -107,7 +110,7 @@ public class ReservationService {
                     .orElseThrow(() -> new IllegalArgumentException("해당 바코드 [" + barcode + "] 를 찾을 수 없습니다."));
 
             // ✅ 이미 예약 중인 게임인지 확인
-            boolean alreadyReserved = reservationDetailRepository.existsByGameAndStatus(game, ReservationStatus.예약);
+            boolean alreadyReserved = reservationDetailRepository.existsByGameAndStatus(game, ReservationStatus.RESERVED);
             if (alreadyReserved) {
                 return ReservationResponse.alreadyReservation(game.getName() + "는 이미 대여된 게임입니다");
             }
@@ -115,7 +118,7 @@ public class ReservationService {
             ReservationDetail detail = ReservationDetail.builder()
                     .master(master)
                     .game(game)
-                    .status(ReservationStatus.예약)
+                    .status(ReservationStatus.RESERVED)
                     .build();
 
             details.add(detail);
@@ -147,5 +150,24 @@ public class ReservationService {
         }
 
         return responses;
+    }
+
+    public List<ReservationDetailResponse> getReservationDetails(Long reservationId) {
+        ReservationMaster master = reservationMasterRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
+
+        return master.getDetails().stream()
+                .map(detail -> ReservationDetailResponse.builder()
+                        .id(detail.getId())
+                        .status(detail.getStatus())
+                        .returnedAt(detail.getReturnedAt())
+                        .game(GameResponse.builder()
+                                      .id(detail.getGame().getId())
+                                      .name(detail.getGame().getName())
+                                      .imageUrl(detail.getGame().getImageUrl())
+                                      .barcode(detail.getGame().getBarcode())
+                                      .build())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

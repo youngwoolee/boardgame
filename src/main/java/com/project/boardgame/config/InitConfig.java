@@ -19,15 +19,15 @@ public class InitConfig {
             List<Game> games = new ArrayList<>();
 
             games.addAll(createGames("스플렌더", "보석 상인이 되어 보석을 수집하고, 카드와 귀족을 구매해 점수를 얻는 전략형 보드게임입니다.",
-                                     "/assets/스플렌더.webp", "hot", 2, 4, "만 10세+", "30분 내외",
+                                     "https://raw.githubusercontent.com/youngwoolee/boardgame-image/main/images/b56fa977-695e-47b1-9d5b-f861663f152a.webp", "hot", 2, 4, "만 10세+", "30분 내외",
                                      "전략 게임", "셋 컬렉션, 카드 구매", "SPLEND", 1));
 
             games.addAll(createGames("아발론", "아발론은 선과 악의 세력이 대결하는 정체 은닉 기반의 심리전 게임입니다.",
-                                     "/assets/아발론.webp", "new", 5, 10, "만 14세+", "30~60분",
+                                     "https://raw.githubusercontent.com/youngwoolee/boardgame-image/main/images/3405d1e3-f9c3-4469-b5dc-020efcfb8c4b.webp", "new", 5, 10, "만 14세+", "30~60분",
                                      "추리, 팀플레이", "정체 은닉, 토론", "AVALON", 5));
 
             games.addAll(createGames("티켓 투 라이드", "미국 전역의 기차 노선을 연결하며 점수를 얻는 게임입니다.",
-                                     "/assets/티켓 투 라이드.webp", "new", 2, 5, "만 8세+", "30~60분",
+                                     "https://raw.githubusercontent.com/youngwoolee/boardgame-image/main/images/e069910f-33ce-4a10-8a56-780d9bc92a52.webp", "new", 2, 5, "만 8세+", "30~60분",
                                      "가족 게임", "노선 연결, 셋 컬렉션", "TTRIDE", 2));
 
             games.addAll(createGames("도블", "카드에 그려진 그림을 빠르게 매칭하는 게임입니다.",
