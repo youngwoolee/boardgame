@@ -36,9 +36,9 @@ export default function Main() {
 
     const playerOptions = ['1', '2', '3', '4', '5', '6+'];
 
-    useEffect(() => {
-        console.log("선택된 게임:", selectedGame);
-    }, [selectedGame]);
+    // useEffect(() => {
+    //     console.log("선택된 게임:", selectedGame);
+    // }, [selectedGame]);
 
     useEffect(() => {
         (async () => {
@@ -99,7 +99,11 @@ export default function Main() {
     // 필터링 및 정렬 처리
     const filteredGames = gameList
         .filter(game => game.name.toLowerCase().includes(search.toLowerCase()))
-        .filter(game => genreFilter ? game.genre === genreFilter : true)
+        .filter(game =>
+            genreFilter
+                ? game.genres?.includes(genreFilter)
+                : true
+        )
         .filter(game => {
             if (!playerFilter) return true;
             const selectedCount = playerFilter === '6+' ? 6 : parseInt(playerFilter, 10);
@@ -111,7 +115,11 @@ export default function Main() {
             return true;
         })
         .sort((a, b) => a.name.localeCompare(b.name));
-    const genres = Array.from(new Set(gameList.map(game => game.genre))).sort();
+    const genres = Array.from(
+        new Set(
+            gameList.flatMap(game => game.genres || [])
+        )
+    ).sort();
 
     const uniqueFilteredGames = Array.from(
         new Map(filteredGames.map(game => [game.name, game])).values()

@@ -9,8 +9,8 @@ export default interface GameResponseDto {
     maxPlayers: number;
     age: string;
     time: string;
-    genre: string;
-    system: string;
+    genres: string[];
+    systems: string[];
     barcode: string;
     available: boolean;
 }

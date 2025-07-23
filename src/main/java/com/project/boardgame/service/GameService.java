@@ -6,8 +6,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.project.boardgame.domain.Game;
+import com.project.boardgame.domain.Genre;
 import com.project.boardgame.domain.ReservationDetail;
 import com.project.boardgame.domain.ReservationStatus;
+import com.project.boardgame.domain.SystemType;
 import com.project.boardgame.endpoint.request.GameRequest;
 import com.project.boardgame.endpoint.request.GameUploadRequest;
 import com.project.boardgame.endpoint.response.GameDetailResponse;
@@ -50,8 +52,12 @@ public class GameService {
                 .maxPlayers(dto.getMaxPlayers())
                 .age(dto.getAge())
                 .time(dto.getTime())
-                .genre(dto.getGenre())
-                .system(dto.getSystem())
+                .genres(dto.getGenres().stream()
+                                .map(Genre::valueOf)
+                                .collect(Collectors.toSet()))
+                .systems(dto.getSystems().stream()
+                                 .map(SystemType::valueOf)
+                                 .collect(Collectors.toSet()))
                 .barcode(dto.getBarcode())
                 .imageUrl(imageUrl)
                 .build();

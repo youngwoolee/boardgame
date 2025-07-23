@@ -6,7 +6,7 @@ export default interface UploadRequestDto {
     maxPlayers: number;
     age: string;
     time: string;
-    genre: string;
-    system: string;
+    genres: string[];
+    systems: string[];
     barcode: string;
 }

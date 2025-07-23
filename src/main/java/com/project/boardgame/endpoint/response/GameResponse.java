@@ -1,6 +1,11 @@
 package com.project.boardgame.endpoint.response;
 
+import java.util.List;
+import java.util.Set;
+
 import com.project.boardgame.domain.Game;
+import com.project.boardgame.domain.Genre;
+import com.project.boardgame.domain.SystemType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,8 +28,8 @@ public class GameResponse {
     private int maxPlayers;
     private String age;
     private String time;
-    private String genre;
-    private String system;
+    private Set<Genre> genres;
+    private Set<SystemType> systems;
     private String barcode;
     private boolean available;
 
@@ -39,8 +44,8 @@ public class GameResponse {
                 .maxPlayers(game.getMaxPlayers())
                 .age(game.getAge())
                 .time(game.getTime())
-                .genre(game.getGenre())
-                .system(game.getSystem())
+                .genres(game.getGenres())
+                .systems(game.getSystems())
                 .barcode(game.getBarcode())
                 .build();
     }
@@ -56,8 +61,8 @@ public class GameResponse {
                 .maxPlayers(game.getMaxPlayers())
                 .age(game.getAge())
                 .time(game.getTime())
-                .genre(game.getGenre())
-                .system(game.getSystem())
+                .genres(game.getGenres())
+                .systems(game.getSystems())
                 .barcode(game.getBarcode())
                 .available(available)
                 .build();

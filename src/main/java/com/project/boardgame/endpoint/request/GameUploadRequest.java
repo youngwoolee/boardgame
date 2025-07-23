@@ -1,5 +1,7 @@
 package com.project.boardgame.endpoint.request;
 
+import java.util.Set;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +15,7 @@ public class GameUploadRequest {
     private int maxPlayers;
     private String age;
     private String time;
-    private String genre;
-    private String system;
+    private Set<String> genres;
+    private Set<String> systems;
     private String barcode;
 }

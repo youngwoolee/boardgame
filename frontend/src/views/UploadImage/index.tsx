@@ -8,10 +8,15 @@ import UploadRequestDto from "../../apis/request/admin/upload.request.dto";
 import './style.css'
 import InputBox from "../../components/InputBox";
 import {useNavigate} from "react-router-dom";
+import { genreOptions } from '../../types/genreOptions';
+import { systemOptions } from '../../types/systemOptions';
+import Select from "react-select";
+
 
 export default function UploadImage() {
     const [file, setFile] = useState<File | null>(null);
     const [uploadedUrl, setUploadedUrl] = useState<string>('');
+
 
     const [form, setForm] = useState({
         name: '',
@@ -20,8 +25,8 @@ export default function UploadImage() {
         maxPlayers: 4,
         age: '',
         time: '',
-        genre: '',
-        system: '',
+        genres: [] as string[],
+        systems: [] as string[],
         barcode: ''
     });
 
@@ -29,7 +34,13 @@ export default function UploadImage() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setForm(prev => ({ ...prev, [name]: value }));
+
+        if (name === 'genres' || name === 'systems') {
+            const values = value.split(',').map(v => v.trim());
+            setForm(prev => ({ ...prev, [name]: values }));
+        } else {
+            setForm(prev => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,8 +82,8 @@ export default function UploadImage() {
             maxPlayers: 4,
             age: '',
             time: '',
-            genre: '',
-            system: '',
+            genres: [],
+            systems: [],
             barcode: ''
         });
         setFile(null);
@@ -104,10 +115,36 @@ export default function UploadImage() {
                             <input className="upload-form-input" type="text" name="time" value={form.time} onChange={handleChange} placeholder="예: 30분" />
 
                             <label>장르</label>
-                            <input className="upload-form-input" type="text" name="genre" value={form.genre} onChange={handleChange} placeholder="전략, 파티 등" />
+                            <Select
+                                isMulti
+                                name="genres"
+                                options={genreOptions}
+                                className="react-select-container"
+                                classNamePrefix="select"
+                                value={genreOptions.filter(option => form.genres.includes(option.value))}
+                                onChange={(selected) =>
+                                    setForm(prev => ({
+                                        ...prev,
+                                        genres: selected.map(option => option.value)
+                                    }))
+                                }
+                            />
 
                             <label>게임 시스템</label>
-                            <input className="upload-form-input" type="text" name="system" value={form.system} onChange={handleChange} placeholder="카드 드래프트 등" />
+                            <Select
+                                isMulti
+                                name="systems"
+                                options={systemOptions}
+                                className="react-select-container"
+                                classNamePrefix="select"
+                                value={systemOptions.filter(option => form.systems.includes(option.value))}
+                                onChange={(selected) =>
+                                    setForm(prev => ({
+                                        ...prev,
+                                        systems: selected.map(option => option.value)
+                                    }))
+                                }
+                            />
 
                             <label>바코드</label>
                             <input className="upload-form-input" type="text" name="barcode" value={form.barcode} onChange={handleChange} placeholder="예: CATANA-01" />

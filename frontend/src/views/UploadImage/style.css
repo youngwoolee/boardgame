@@ -97,3 +97,7 @@
     color: #555;
     word-break: break-all;
 }
+
+.react-select-container {
+    margin-bottom: 12px;
+}

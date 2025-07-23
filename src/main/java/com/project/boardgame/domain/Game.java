@@ -2,14 +2,20 @@ package com.project.boardgame.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,9 +52,17 @@ public class Game {
 
     private String time;
 
-    private String genre;
+    @ElementCollection(targetClass = Genre.class)
+    @CollectionTable(name = "game_genres", joinColumns = @JoinColumn(name = "game_id"))
+    @Column(name = "genre")
+    @Enumerated(EnumType.STRING)
+    private Set<Genre> genres;
 
-    private String system;
+    @ElementCollection(targetClass = SystemType.class)
+    @CollectionTable(name = "game_systems", joinColumns = @JoinColumn(name = "game_id"))
+    @Column(name = "system")
+    @Enumerated(EnumType.STRING)
+    private Set<SystemType> systems;
 
     @Column(unique = true, nullable = false)
     private String barcode; // 고유 바코드 (e.g., SPLEND2025-001)

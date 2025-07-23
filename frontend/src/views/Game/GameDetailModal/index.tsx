@@ -17,8 +17,8 @@ type Game = {
     maxPlayers?: number;
     age?: string;
     time?: string;
-    genre?: string;
-    system?: string;
+    genres?: string[];
+    systems?: string[];
     description?: string;
 };
 
@@ -80,14 +80,14 @@ export default function GameDetailModal({ game, onClose }: Props) {
                                 <FiTag className='icon' />
                                 <div>
                                     <div className="label">장르</div>
-                                    <div className="value">{game.genre}</div>
+                                    <div className="value">{game.genres?.length ? game.genres.join(', ') : '정보 없음'}</div>
                                 </div>
                             </div>
                             <div className="attribute">
                                 <FiSettings className='icon' />
                                 <div>
                                     <div className="label">시스템</div>
-                                    <div className="value">{game.system}</div>
+                                    <div className="value">{game.systems?.length ? game.systems.join(', ') : '정보 없음'}</div>
                                 </div>
                             </div>
                         </div>
