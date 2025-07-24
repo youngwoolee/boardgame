@@ -1,17 +1,23 @@
 package com.project.boardgame.domain;
 
-public enum Genre {
-    전략,
-    파티,
-    가족게임,
-    추리,
-    협력,
-    경쟁,
-    심리전,
-    퍼즐,
-    카드게임,
-    어린이,
-    교육,
-    블러핑,
-    협상
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Getter;
+
+@Entity
+@Getter
+public class Genre {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String name;
+
+    public Genre(String name) {
+        this.name = name;
+    }
 }

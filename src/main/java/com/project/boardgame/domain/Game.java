@@ -14,8 +14,11 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +35,7 @@ import lombok.Setter;
 @Builder
 public class Game {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -52,16 +55,21 @@ public class Game {
 
     private String time;
 
-    @ElementCollection(targetClass = Genre.class)
-    @CollectionTable(name = "game_genres", joinColumns = @JoinColumn(name = "game_id"))
-    @Column(name = "genre")
-    @Enumerated(EnumType.STRING)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "game_genres", // 생성될 조인 테이블 이름
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
     private Set<Genre> genres;
 
-    @ElementCollection(targetClass = SystemType.class)
-    @CollectionTable(name = "game_systems", joinColumns = @JoinColumn(name = "game_id"))
-    @Column(name = "system")
-    @Enumerated(EnumType.STRING)
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "game_systems", // 생성될 조인 테이블 이름
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "system_type_id")
+    )
     private Set<SystemType> systems;
 
     @Column(unique = true, nullable = false)

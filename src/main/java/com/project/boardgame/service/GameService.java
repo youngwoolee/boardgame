@@ -3,6 +3,7 @@ package com.project.boardgame.service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.project.boardgame.domain.Game;
@@ -16,7 +17,9 @@ import com.project.boardgame.endpoint.response.GameDetailResponse;
 import com.project.boardgame.endpoint.response.GameReservationResponse;
 import com.project.boardgame.endpoint.response.GameResponse;
 import com.project.boardgame.repository.GameRepository;
+import com.project.boardgame.repository.GenreRepository;
 import com.project.boardgame.repository.ReservationDetailRepository;
+import com.project.boardgame.repository.SystemTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class GameService {
     private final GameRepository gameRepository;
+    private final GenreRepository genreRepository;
+    private final SystemTypeRepository systemTypeRepository;
     private final ReservationDetailRepository reservationDetailRepository;
 
     public List<Game> getAvailableGames() {
@@ -45,6 +50,18 @@ public class GameService {
     }
 
     public void createGame(GameUploadRequest dto, String imageUrl) {
+        // ✅ 이름으로 Genre 엔티티 조회
+        Set<Genre> genres = dto.getGenres().stream()
+                .map(name -> genreRepository.findByName(name)
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 장르입니다: " + name)))
+                .collect(Collectors.toSet());
+
+        // ✅ 이름으로 SystemType 엔티티 조회
+        Set<SystemType> systems = dto.getSystems().stream()
+                .map(name -> systemTypeRepository.findByName(name)
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 시스템입니다: " + name)))
+                .collect(Collectors.toSet());
+
         Game game = Game.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -52,12 +69,8 @@ public class GameService {
                 .maxPlayers(dto.getMaxPlayers())
                 .age(dto.getAge())
                 .time(dto.getTime())
-                .genres(dto.getGenres().stream()
-                                .map(Genre::valueOf)
-                                .collect(Collectors.toSet()))
-                .systems(dto.getSystems().stream()
-                                 .map(SystemType::valueOf)
-                                 .collect(Collectors.toSet()))
+                .genres(genres)
+                .systems(systems)
                 .barcode(dto.getBarcode())
                 .imageUrl(imageUrl)
                 .build();

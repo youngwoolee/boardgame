@@ -68,7 +68,10 @@ public class AuthService {
             boolean isSuccess = emailProvider.sendCertificationMail(email, certificationNumber);
             if(!isSuccess) return EmailCertificationResponse.mailSendFail();
 
-            Certification certification = new Certification(userId, email, certificationNumber);
+            Certification certification = Certification.builder()
+                    .userId(userId)
+                    .email(email)
+                    .certificationNumber(certificationNumber).build();
             certificationRepository.save(certification);
 
         } catch (Exception exception) {
