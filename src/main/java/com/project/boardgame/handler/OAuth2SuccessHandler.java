@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JwtProvider jwtProvider;
 
+    @Value("${cors.allowed-origins}")
+    private String allowedOrigins;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
@@ -30,10 +34,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String token = jwtProvider.create(userId);
 
         if (!oAuth2User.isRegistered()) {
-            response.sendRedirect("http://localhost:3000/auth/additional-info/" + token +"/3600");
+            response.sendRedirect(allowedOrigins + "/auth/additional-info/" + token +"/3600");
         } else {
-            // ✅ 정상 로그인 처리
-            response.sendRedirect("http://localhost:3000/auth/oauth-response/" + token + "/3600");
+            response.sendRedirect(allowedOrigins + "/auth/oauth-response/" + token + "/3600");
         }
     }
 }
