@@ -11,7 +11,7 @@ public class BoardgameApplication {
     public static void main(String[] args) {
         String profile = System.getProperty("spring.profiles.active");
 
-        if ("prod".equals(profile)) {
+        if ("local".equals(profile)) {
             Dotenv dotenv = Dotenv.load();
             System.setProperty("GMAIL_USERNAME", dotenv.get("GMAIL_USERNAME"));
             System.setProperty("GMAIL_PASSWORD", dotenv.get("GMAIL_PASSWORD"));
