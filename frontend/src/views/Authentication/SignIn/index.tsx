@@ -96,7 +96,7 @@ export default function SignIn() {
         <div id={"sign-in-wrapper"}>
             <div className={"sign-in-container"}>
                 <div className={"sign-in-box"}>
-                    <div className={"sign-in-title"}>{"보드게임 대여"}</div>
+                    <div className={"sign-in-title"}>{"아임 더 보스"}</div>
                     <div className={"sign-in-content-box"}>
 
                         <div className={"sign-in-content-input-box"}>

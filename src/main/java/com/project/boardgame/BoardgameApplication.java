@@ -13,6 +13,11 @@ public class BoardgameApplication {
 
         if ("local".equals(profile)) {
             Dotenv dotenv = Dotenv.load();
+            System.setProperty("GMAIL_USERNAME", dotenv.get("GMAIL_USERNAME"));
+            System.setProperty("GMAIL_PASSWORD", dotenv.get("GMAIL_PASSWORD"));
+            System.setProperty("KAKAO_CLIENT_ID", dotenv.get("KAKAO_CLIENT_ID"));
+            System.setProperty("KAKAO_CLIENT_SECRET", dotenv.get("KAKAO_CLIENT_SECRET"));
+            System.setProperty("SECRET_KEY", dotenv.get("SECRET_KEY"));
             System.setProperty("GITHUB_TOKEN", dotenv.get("GITHUB_TOKEN"));
         }
 

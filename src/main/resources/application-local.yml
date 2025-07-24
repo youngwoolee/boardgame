@@ -1,0 +1,17 @@
+spring:
+  # 개발용 H2 DB 설정
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update # 개발 중에는 스키마 자동 변경 허용
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+cors:
+  allowed-origins: http://localhost:3000

@@ -35,7 +35,7 @@ const errorHandler = (error: any) => {
     return responseBody;
 }
 
-const DOMAIN = 'http://localhost:8080';
+const DOMAIN = process.env.REACT_APP_API_URL;
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 
 const ID_CHECK_URL = () => `${API_DOMAIN}/auth/id-check`;
