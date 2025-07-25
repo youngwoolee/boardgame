@@ -1,6 +1,6 @@
 # --- 1. 빌드 단계: GraalVM 환경에서 네이티브 이미지 생성 ---
 # GraalVM 공식 이미지를 빌드 환경으로 사용합니다. (Java 17 기준)
-FROM ghcr.io/graalvm/graalvm-ce:java17-22.3.3 as builder
+FROM ghcr.io/graalvm/graalvm-ce:ol7-java17-22.3.3 as builder
 
 # 작업 디렉토리 설정
 WORKDIR /app
