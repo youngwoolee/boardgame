@@ -6,7 +6,7 @@ FROM ghcr.io/graalvm/graalvm-ce:ol7-java17-22.3.3 as builder
 WORKDIR /app
 
 # 빌드에 필요한 파일들만 먼저 복사하여 Gradle 캐시 활용
-COPY build.gradle.kts settings.gradle.kts gradlew ./
+COPY build.gradle settings.gradle.kts gradlew ./
 COPY gradle ./gradle
 
 # 의존성 다운로드 (선택사항이지만 빌드 속도 향상에 도움)
