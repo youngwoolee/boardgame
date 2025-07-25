@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.0'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.graalvm.buildtools.native' version '0.10.2'
 }
 
 group = 'com.project'
@@ -12,10 +11,6 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
-}
-
-graalvmNative {
-    toolchainDetection = false
 }
 
 configurations {
@@ -55,9 +50,4 @@ dependencies {
 
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
-}
-
-tasks.named('bootBuildImage') {
-    builder = 'paketobuildpacks/builder:tiny'
-    environment = ['BP_NATIVE_IMAGE': 'true']
 }
