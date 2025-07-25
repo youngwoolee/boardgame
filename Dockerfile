@@ -21,7 +21,7 @@ RUN ./gradlew nativeCompile
 
 # --- 2. 실행 단계: 가벼운 환경에서 실행 파일만 실행 ---
 # 매우 가벼운 리눅스 이미지로 변경하여 최종 이미지 크기를 줄입니다.
-FROM gcr.io/distroless/cc-debian12
+FROM debian:12-slim
 
 # 작업 디렉토리 설정
 WORKDIR /app
