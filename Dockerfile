@@ -1,15 +1,18 @@
 FROM alpine:latest
 
-# 필수 패키지 설치
-RUN apk --no-cache add libstdc++
+# 필요한 라이브러리 설치
+RUN apk --no-cache add libstdc++ ca-certificates && update-ca-certificates
 
-# 앱 실행 디렉토리
+# 앱 실행 디렉토리 생성
 WORKDIR /app
 
-# Native Binary 복사 (로컬에서 빌드한 것)
+# 실행 파일 복사 (host 경로 확인 필수)
 COPY build/native/nativeCompile/boardgame .
 
-# 실행 포트
+# 실행 권한 부여 (권한 없으면 Error)
+RUN chmod +x ./boardgame
+
+# 포트 개방
 EXPOSE 8080
 
 # 실행 명령
