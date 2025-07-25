@@ -115,11 +115,9 @@ export default function Main() {
             return true;
         })
         .sort((a, b) => a.name.localeCompare(b.name));
-    const genres = Array.from(
-        new Set(
-            gameList.flatMap(game => game.genres || [])
-        )
-    ).sort();
+
+    const allGenres = gameList.flatMap(game => game.genres || []);
+    const uniqueGenres = Array.from(new Set(allGenres)).sort();
 
     const uniqueFilteredGames = Array.from(
         new Map(filteredGames.map(game => [game.name, game])).values()
@@ -154,8 +152,10 @@ export default function Main() {
 
                     <select value={genreFilter} onChange={(e) => setGenreFilter(e.target.value)}>
                         <option value=''>전체 장르</option>
-                        {genres.map(genre => (
-                            <option key={genre} value={genre}>{genre}</option>
+                        {uniqueGenres.map(genre => (
+                            <option key={genre} value={genre}>
+                                {genre}
+                            </option>
                         ))}
                     </select>
 

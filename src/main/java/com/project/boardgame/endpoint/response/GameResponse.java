@@ -2,6 +2,7 @@ package com.project.boardgame.endpoint.response;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.project.boardgame.domain.Game;
 import com.project.boardgame.domain.Genre;
@@ -28,8 +29,8 @@ public class GameResponse {
     private int maxPlayers;
     private String age;
     private String time;
-    private Set<Genre> genres;
-    private Set<SystemType> systems;
+    private Set<String> genres;
+    private Set<String> systems;
     private String barcode;
     private boolean available;
 
@@ -44,8 +45,8 @@ public class GameResponse {
                 .maxPlayers(game.getMaxPlayers())
                 .age(game.getAge())
                 .time(game.getTime())
-                .genres(game.getGenres())
-                .systems(game.getSystems())
+                .genres(game.getGenres().stream().map(Genre::getName).collect(Collectors.toSet()))
+                .systems(game.getSystems().stream().map(SystemType::getName).collect(Collectors.toSet()))
                 .barcode(game.getBarcode())
                 .build();
     }
@@ -61,8 +62,8 @@ public class GameResponse {
                 .maxPlayers(game.getMaxPlayers())
                 .age(game.getAge())
                 .time(game.getTime())
-                .genres(game.getGenres())
-                .systems(game.getSystems())
+                .genres(game.getGenres().stream().map(Genre::getName).collect(Collectors.toSet()))
+                .systems(game.getSystems().stream().map(SystemType::getName).collect(Collectors.toSet()))
                 .barcode(game.getBarcode())
                 .available(available)
                 .build();
