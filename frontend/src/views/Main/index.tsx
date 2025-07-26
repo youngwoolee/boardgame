@@ -11,6 +11,7 @@ import {ResponseBody} from "../../types";
 import BarcodeManualInputModal from "../Game/BarcodeManualInputModal";
 import {useNavigate} from "react-router-dom";
 import BottomNavigation from "../../components/BottomNavigation";
+import {ClipLoader} from "react-spinners";
 
 
 interface SelectedGame {
@@ -36,14 +37,14 @@ export default function Main() {
 
     const playerOptions = ['1', '2', '3', '4', '5', '6+'];
 
-    // useEffect(() => {
-    //     console.log("선택된 게임:", selectedGame);
-    // }, [selectedGame]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
+            setLoading(true);
             const response = await getGameListRequest();
             gameListResponseHandler(response, setGameList);
+            setLoading(false);
         })();
     }, []);
 
@@ -168,54 +169,79 @@ export default function Main() {
             </div>
 
 
-
             {/* 게임 목록 */}
-            <div className="main-grid">
-                {uniqueFilteredGames.map((game) => {
+            {loading ? (
+                <div className="loading-indicator">
+                    <ClipLoader color="#007bff" loading={loading} cssOverride={{
+                        borderWidth: '5px'
+                    }} size={40} />
+                </div>
+            ) : (
+                <div className="main-grid">
+                    {uniqueFilteredGames.length > 0 ? (
+                        uniqueFilteredGames.map((game) => {
                     const isSelected = selectedList.some(g => g.name === game.name);
                     return (
                         <div
-                            className={`main-card ${isSelected ? 'selected' : ''}`}
+                            className={`main-card`} // 'selected' 클래스는 더 이상 카드 자체에 필요 없습니다.
                             key={game.name}
-                            onClick={() => setSelectedGame(game)}
+                            onClick={() => {
+                                // ✅ 선택되지 않았을 때만 상세 모달이 열리도록 조건 추가
+                                if (!isSelected) {
+                                    setSelectedGame(game);
+                                }
+                            }}
                         >
                             <div className="main-card-image-wrapper">
-                                <img src={game.imageUrl} alt={game.name} className="main-card-image" />
+                                <img src={game.imageUrl} alt={game.name} className="main-card-image"
+                                     onError={(e) => {
+                                         e.currentTarget.style.display = 'none';
+                                     }}/>
+                                {game.tag && (
+                                    <span className={`main-tag ${game.tag.toLowerCase()}`}>{game.tag}</span>
+                                )}
+
+                                {isSelected && (
+                                    <button
+                                        className="selection-overlay"
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // 카드 전체 클릭(상세보기) 방지
+                                            toggleSelectByGame(game.name);
+                                        }}
+                                    >
+                                        <span>선택됨</span>
+                                    </button>
+                                )}
                             </div>
                             <div className="main-card-footer">
                                 <div className="main-card-title">
                                     {game.name}
-                                    {game.tag && (
-                                        <span className={`main-tag ${game.tag.toLowerCase()}`}>{game.tag}</span>
-                                    )}
                                 </div>
-                                {isSelected && (
-                                    <button
-                                        className="rent-button"
-                                        onClick={(e) => {
-                                            e.stopPropagation(); // 클릭 이벤트 전파 중지
-                                            toggleSelectByGame(game.name);
-                                        }}
-                                    >
-                                        선택됨
-                                    </button>
-                                )}
                             </div>
                         </div>
                     );
-                })}
+                })
+                    ) : (
+                        <div className="no-results">
+                            검색 결과가 없습니다.
+                        </div>
+                    )}
             </div>
+            )}
 
             {/* 하단 내비게이션 */}
             <BottomNavigation />
 
+
             {/* 플로팅 버튼 */}
+            {!showRentalModal && (
             <div className="floating-button" onClick={() => setShowRentalModal(true)}>
                 <FiShoppingCart />
                 {selectedList.length > 0 && (
                     <div className="badge">{selectedList.length}</div>
                 )}
             </div>
+            )}
 
             {/* 상세 모달 */}
             {selectedGame && (
@@ -230,6 +256,7 @@ export default function Main() {
                 onRented={() => setSelectedList([])}  // 예: 대여 후 목록 초기화
                 />
             )}
+
 
             {/* 바코드 스캐너 */}
             {showScanner && (
