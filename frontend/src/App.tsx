@@ -12,6 +12,8 @@ import MyPage from "./views/My/MyPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import Admin from "./views/UploadImage";
 import UploadImage from "./views/UploadImage";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
@@ -32,6 +34,18 @@ function App() {
                 <Route path="additional-info/:token/:expirationTime" element={<AdditionalInfo />} />
             </Route>
         </Routes>
+          <ToastContainer
+              position="bottom-center" // 알림 위치
+              autoClose={2000}     // 자동으로 닫히는 시간 (2초)
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+          />
       </>
   );
 }

@@ -21,6 +21,8 @@ import {
     ReservationDetailDto, ReservationDetailListResponseDto
 } from "../../../apis/response/reservation/reservation-detail.response.dto";
 import {formatDate} from "../../../utils/date";
+import {ClipLoader} from "react-spinners";
+import { toast } from 'react-toastify';
 
 export default function MyReservations() {
     const [reservations, setReservations] = useState<ReservationMasterResponseDto[]>([]);
@@ -30,9 +32,15 @@ export default function MyReservations() {
     const [selectedReservationDate, setSelectedReservationDate] = useState<string | null>(null);
     type ReservationFilter = 'ALL' | 'RESERVED' | 'RETURNED' | 'CANCELLED';
     const [filter, setFilter] = useState<ReservationFilter>('RESERVED');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getMyReservationsRequest().then(handleMyReservationsResponse);
+        setLoading(true); // 데이터 요청 시작 시 로딩 상태로 설정
+        getMyReservationsRequest()
+            .then(handleMyReservationsResponse)
+            .finally(() => {
+                setLoading(false); // 요청 완료 시 (성공/실패 무관) 로딩 상태 해제
+            });
     }, []);
 
     const filteredReservations = reservations
@@ -113,12 +121,23 @@ export default function MyReservations() {
             return;
         }
 
-        alert("반납이 완료되었습니다.");
+        toast.success("반납이 완료되었습니다.");
 
         // 새로고침
         getMyReservationsRequest().then(handleMyReservationsResponse);
         setSelectedReservationDetails(null);
     };
+
+    if (loading) {
+        return (
+            <div className="loading-indicator">
+                <ClipLoader color="#007bff" loading={loading} cssOverride={{
+                    borderWidth: '5px'
+                }} size={40} />
+            </div>
+        );
+    }
+
 
     const handleCancel = async () => {
         if (!selectedReservationId) return;
@@ -144,7 +163,7 @@ export default function MyReservations() {
             return;
         }
 
-        alert("예약이 취소되었습니다.");
+        toast.success("예약이 취소되었습니다.");
 
         // 새로고침
         getMyReservationsRequest().then(handleMyReservationsResponse);
@@ -171,7 +190,9 @@ export default function MyReservations() {
                     </div>
                 </div>
                 {filteredReservations.length === 0 ? (
-                    <p>현재 조건에 맞는 예약이 없습니다.</p>
+                    <div className="reservations-no-results">
+                        <p>현재 조건에 맞는 예약이 없습니다.</p>
+                    </div>
                 ) : (
                     <div className="reservation-grid">
                         {filteredReservations.map((res) => (

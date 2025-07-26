@@ -12,6 +12,7 @@ import BarcodeManualInputModal from "../Game/BarcodeManualInputModal";
 import {useNavigate} from "react-router-dom";
 import BottomNavigation from "../../components/BottomNavigation";
 import {ClipLoader} from "react-spinners";
+import { toast } from 'react-toastify';
 
 
 interface SelectedGame {
@@ -67,14 +68,14 @@ export default function Main() {
     const handleBarcodeScanned = (scannedCode: string) => {
         const isAlreadySelected = selectedList.some(game => game.barcode === scannedCode);
         if (isAlreadySelected) {
-            alert('이미 대여 목록에 추가된 보드게임입니다.');
+            toast.warn('이미 대여 목록에 추가된 보드게임입니다.');
             setShowScanner(false);
             return;
         }
 
         const matched = gameList.find(g => scannedCode === g.barcode);
         if (!matched) {
-            alert('일치하는 보드게임을 찾을 수 없습니다.');
+            toast.error('일치하는 보드게임을 찾을 수 없습니다.');
             setShowScanner(false);
             return;
         }
@@ -87,7 +88,7 @@ export default function Main() {
         };
 
         setSelectedList(prev => [...prev, newEntry]);
-        alert(`'${matched.name}'이(가) 대여 목록에 추가되었습니다.`);
+        toast.success(`'${matched.name}'이(가) 대여 목록에 추가되었습니다.`);
         setShowScanner(false);
     };
 
@@ -276,14 +277,14 @@ export default function Main() {
                     onSubmit={(code: string) => {
                         const isAlreadySelected = selectedList.some(game => game.barcode === code);
                         if (isAlreadySelected) {
-                            alert('이미 대여 목록에 추가된 보드게임입니다.');
+                            toast.warn('이미 대여 목록에 추가된 보드게임입니다.');
                             setShowManualInput(false);
                             return;
                         }
 
                         const matched = gameList.find(g => g.barcode === code);
                         if (!matched) {
-                            alert('일치하는 보드게임을 찾을 수 없습니다.');
+                            toast.error('일치하는 보드게임을 찾을 수 없습니다.');
                             setShowManualInput(false);
                             return;
                         }
@@ -296,7 +297,7 @@ export default function Main() {
                         };
 
                         setSelectedList(prev => [...prev, newEntry]);
-                        alert(`'${matched.name}'이(가) 대여 목록에 추가되었습니다.`);
+                        toast.success(`'${matched.name}'이(가) 대여 목록에 추가되었습니다.`);
                         setShowManualInput(false);
                     }}
                     onClose={() => setShowManualInput(false)}
