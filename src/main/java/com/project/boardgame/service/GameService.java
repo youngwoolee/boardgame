@@ -79,10 +79,13 @@ public class GameService {
     }
 
     public List<GameResponse> getAllGames() {
-        List<Game> games = gameRepository.findAll();
+        List<Game> games = gameRepository.findAllFetchJoin();
+
+        Set<Long> reservedGameIds = reservationDetailRepository.findReservedGameIdsByGameIn(games);
+
         return games.stream()
                 .map(game -> {
-                    boolean isReserved = reservationDetailRepository.existsByGameAndStatus(game, ReservationStatus.RESERVED);
+                    boolean isReserved = reservedGameIds.contains(game.getId());
                     boolean isAvailable = !isReserved;
                     return GameResponse.from(game, isAvailable);
                 })
@@ -119,7 +122,7 @@ public class GameService {
     }
 
     public List<GameDetailResponse> getAllGamesDetail() {
-        List<Game> games = gameRepository.findAll();
+        List<Game> games = gameRepository.findAllFetchJoin();
         List<GameDetailResponse> response = games.stream()
                 .map(GameDetailResponse::from)
                 .collect(Collectors.toList());

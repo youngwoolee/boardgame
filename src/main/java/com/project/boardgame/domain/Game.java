@@ -55,7 +55,7 @@ public class Game {
 
     private String time;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "game_genres", // 생성될 조인 테이블 이름
             joinColumns = @JoinColumn(name = "game_id"),
@@ -64,7 +64,7 @@ public class Game {
     private Set<Genre> genres;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "game_systems", // 생성될 조인 테이블 이름
             joinColumns = @JoinColumn(name = "game_id"),
