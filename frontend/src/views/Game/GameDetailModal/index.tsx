@@ -46,7 +46,11 @@ export default function GameDetailModal({ game, onClose }: Props) {
 
                 <div className="modal-body">
                     <div className="modal-info">
-                        <img src={game.imageUrl} alt={game.name} className="modal-thumbnail" />
+                        <img src={game.imageUrl} alt={game.name}
+                             className="modal-thumbnail"
+                             onError={(e) => {
+                                 e.currentTarget.style.display = 'none';
+                             }}/>
                         <div className="modal-attributes">
                             <div className="attribute">
                                 <FiUsers className='icon' />

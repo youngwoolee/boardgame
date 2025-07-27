@@ -1,5 +1,5 @@
 import './App.css';
-import {Routes, Route} from "react-router-dom";
+import {Routes, Route, Navigate} from "react-router-dom";
 import SignUp from "./views/Authentication/SignUp";
 import SignIn from "./views/Authentication/SignIn";
 import OAuth from "./views/Authentication/OAuth";
@@ -33,6 +33,7 @@ function App() {
                 <Route path="oauth-response/:token/:expirationTime" element={<OAuth />} />
                 <Route path="additional-info/:token/:expirationTime" element={<AdditionalInfo />} />
             </Route>
+            <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
           <ToastContainer
               position="bottom-center" // 알림 위치
@@ -42,8 +43,6 @@ function App() {
               closeOnClick
               rtl={false}
               pauseOnFocusLoss
-              draggable
-              pauseOnHover
               theme="light"
           />
       </>
