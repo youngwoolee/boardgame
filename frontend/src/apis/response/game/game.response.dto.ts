@@ -7,7 +7,7 @@ export default interface GameResponseDto {
     tag: string | null;
     minPlayers: number;
     maxPlayers: number;
-    age: string;
+    age: number;
     time: string;
     genres: string[];
     systems: string[];

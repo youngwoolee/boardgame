@@ -24,6 +24,8 @@ import {
 import UploadResponseDto from "./response/admin/upload.response.dto";
 import UploadRequestDto from "./request/admin/upload.request.dto";
 import {UserResponseDto} from "./response/user";
+import GeneratedGameInfoResponseDto from "./response/admin/generated-game-info.response.dto";
+
 
 const responseHandler = <T> (response: AxiosResponse<any, any>) => {
     const responseBody: T = response.data;
@@ -54,11 +56,21 @@ const MY_RESERVATION_RETURN_URL = (reservationId: number) => `${API_DOMAIN}/rese
 const MY_RESERVATION_CANCEL_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}/cancel`;
 const MY_PROFILE_URL = () => `${API_DOMAIN}/user/me`;
 const UPLOAD_IMAGE_URL = () => `${API_DOMAIN}/admin/upload`;
+const GENERATE_GAME_INFO_URL = () => `${API_DOMAIN}/admin/generate-info`;
 
+
+export const generateGameInfoRequest = async (boardGameName: string) => {
+    const requestBody = { boardGameName };
+    const headers = getAccessTokenHeader();
+    const result = await axiosInstance.post(GENERATE_GAME_INFO_URL(), requestBody, { headers })
+        .then(responseHandler<GeneratedGameInfoResponseDto>)
+        .catch(errorHandler);
+    return result;
+};
 
 export const getMyProfileRequest = async () => {
     const headers = getAccessTokenHeader();
-    const result = await axios.get(MY_PROFILE_URL(), { headers })
+    const result = await axiosInstance.get(MY_PROFILE_URL(), { headers })
         .then(responseHandler<UserResponseDto>)
         .catch(errorHandler);
     return result;

@@ -13,7 +13,7 @@ public class GameUploadRequest {
     private String description;
     private int minPlayers;
     private int maxPlayers;
-    private String age;
+    private int age;
     private String time;
     private Set<String> genres;
     private Set<String> systems;

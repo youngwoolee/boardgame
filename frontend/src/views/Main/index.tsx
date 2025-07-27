@@ -55,7 +55,7 @@ export default function Main() {
     ) => {
         if(!responseBody) return;
         const { code } = responseBody;
-        if( code === ResponseCode.DATABASE_ERROR) alert('데이터베이스 오류입니다');
+        if( code === ResponseCode.DATABASE_ERROR) toast.error('데이터베이스 오류입니다');
         if( code !== ResponseCode.SUCCESS) return;
 
         const {data} = responseBody as GameListResponseDto;

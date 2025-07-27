@@ -15,7 +15,7 @@ type Game = {
     tag?: string | null;
     minPlayers?: number;
     maxPlayers?: number;
-    age?: string;
+    age?: number;
     time?: string;
     genres?: string[];
     systems?: string[];
@@ -70,7 +70,7 @@ export default function GameDetailModal({ game, onClose }: Props) {
 
                                 <div>
                                     <div className="label">연령</div>
-                                    <div className="value">{game.age}</div>
+                                    <div className="value">만 {game.age}세+</div>
                                 </div>
                             </div>
                             <div className="attribute">

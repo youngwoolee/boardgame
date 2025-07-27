@@ -51,7 +51,7 @@ public class Game {
 
     private int maxPlayers;
 
-    private String age;
+    private int age;
 
     private String time;
 

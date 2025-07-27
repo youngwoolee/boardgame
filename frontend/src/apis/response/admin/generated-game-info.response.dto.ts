@@ -1,12 +1,11 @@
-export default interface UploadRequestDto {
-    name: string;
+import ResponseDto from "../response.dto";
+
+export default interface GeneratedGameInfoResponseDto extends ResponseDto {
     description: string;
-    imageUrl: string;
     minPlayers: number;
     maxPlayers: number;
     age: number;
     time: number;
     genres: string[];
     systems: string[];
-    barcode: string;
 }
