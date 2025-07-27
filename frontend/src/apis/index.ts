@@ -23,6 +23,7 @@ import {
 } from "./response/reservation/reservation-detail.response.dto";
 import UploadResponseDto from "./response/admin/upload.response.dto";
 import UploadRequestDto from "./request/admin/upload.request.dto";
+import {UserResponseDto} from "./response/user";
 
 const responseHandler = <T> (response: AxiosResponse<any, any>) => {
     const responseBody: T = response.data;
@@ -51,8 +52,17 @@ const MY_RESERVATION_URL = () => `${API_DOMAIN}/reservations/me`;
 const MY_RESERVATION_DETAIL_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}`;
 const MY_RESERVATION_RETURN_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}/return`;
 const MY_RESERVATION_CANCEL_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}/cancel`;
-
+const MY_PROFILE_URL = () => `${API_DOMAIN}/user/me`;
 const UPLOAD_IMAGE_URL = () => `${API_DOMAIN}/admin/upload`;
+
+
+export const getMyProfileRequest = async () => {
+    const headers = getAccessTokenHeader();
+    const result = await axios.get(MY_PROFILE_URL(), { headers })
+        .then(responseHandler<UserResponseDto>)
+        .catch(errorHandler);
+    return result;
+};
 
 export const createGameRequest = async (
     imageFile: File,

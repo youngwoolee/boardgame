@@ -13,7 +13,7 @@ export default function useTokenHandler() {
         const expires = new Date(now + Number(expirationTime) * 1000); // expirationTime은 초 단위로 가정
 
         setCookie('accessToken', token, { expires, path: '/' });
-        navigate('/');
+        navigate('/', { replace: true });
     };
 
     return handleTokenAndRedirect;

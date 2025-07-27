@@ -1,0 +1,41 @@
+.my-profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px 16px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile-label {
+    font-size: 14px;
+    color: #888;
+}
+
+.profile-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.logout-button {
+    margin-top: 24px;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #dc3545;
+    background-color: #fbeaea;
+    border: 1px solid #dc3545;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+    background-color: #f8d7da;
+}
