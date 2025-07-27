@@ -6,6 +6,7 @@ import com.project.boardgame.domain.CustomOAuth2User;
 import com.project.boardgame.provider.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +32,22 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
         String userId = oAuth2User.getName();
-        String token = jwtProvider.create(userId);
+        // ✅ Access Token과 Refresh Token 생성
+        String accessToken = jwtProvider.createAccessToken(userId);
+        String refreshToken = jwtProvider.createRefreshToken(userId);
+
+        // ✅ Refresh Token을 HttpOnly 쿠키에 설정
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true); // HTTPS 환경에서만 전송
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60); // 7일
+        response.addCookie(refreshTokenCookie);
 
         if (!oAuth2User.isRegistered()) {
-            response.sendRedirect(allowedOrigins + "/auth/additional-info/" + token +"/3600");
+            response.sendRedirect(allowedOrigins + "/auth/additional-info/" + accessToken +"/10");
         } else {
-            response.sendRedirect(allowedOrigins + "/auth/oauth-response/" + token + "/3600");
+            response.sendRedirect(allowedOrigins + "/auth/oauth-response/" + accessToken + "/10");
         }
     }
 }

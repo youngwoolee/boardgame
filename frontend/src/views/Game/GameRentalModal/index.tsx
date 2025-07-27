@@ -6,6 +6,7 @@ import ReserveGameResponseDto from "../../../apis/response/game/reserve-game.res
 import {ResponseBody} from "../../../types";
 import {ResponseCode} from "../../../types/enums";
 import {useNavigate} from "react-router-dom";
+import { toast } from 'react-toastify';
 
 
 interface SelectedGame {
@@ -29,8 +30,7 @@ export default function RentalModal({ list, onClose, onRented }: Props) {
         if( code === ResponseCode.DATABASE_ERROR) alert('데이터베이스 오류입니다');
         if( code === ResponseCode.ALREADY_RESERVATION) alert(message);
         if( code !== ResponseCode.SUCCESS) return;
-
-        alert('대여가 완료되었습니다.');
+        toast.success('대여가 완료되었습니다.');
         onRented();     // 선택 목록 초기화
         onClose();      // 모달 닫기
         window.location.href = '/';
@@ -38,14 +38,14 @@ export default function RentalModal({ list, onClose, onRented }: Props) {
 
     const handleSubmit = async () => {
         if (list.length === 0) {
-            alert('대여할 보드게임이 없습니다.');
+
+            toast.warn('대여할 보드게임이 없습니다.');
             return;
         }
 
         const barcodes = list.map((game) => game.barcode);
 
         const requestBody: ReserveGameRequestDto = {barcodes};
-        console.log(requestBody);
         reserveGamesRequest(requestBody).then(reserveGameResponse);
     };
 

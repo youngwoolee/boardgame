@@ -20,16 +20,30 @@ public class JwtProvider {
     @Value("${secret-key}")
     private String secretKey;
 
-    public String create(String userId) {
+    //(유효기간: 1시간)
+    public String createAccessToken(String userId) {
         Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
         Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
 
-        String jwt = Jwts.builder()
+        return Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
-                .setSubject(userId).setIssuedAt(new Date()).setExpiration(expiredDate)
+                .setSubject(userId)
+                .setIssuedAt(new Date())
+                .setExpiration(expiredDate)
                 .compact();
+    }
 
-        return jwt;
+    // (유효기간: 7일)
+    public String createRefreshToken(String userId) {
+        Date expiredDate = Date.from(Instant.now().plus(7, ChronoUnit.DAYS)); // 7일
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.builder()
+                .signWith(key, SignatureAlgorithm.HS256)
+                .setSubject(userId)
+                .setIssuedAt(new Date())
+                .setExpiration(expiredDate)
+                .compact();
     }
 
     public String validate(String jwt) {

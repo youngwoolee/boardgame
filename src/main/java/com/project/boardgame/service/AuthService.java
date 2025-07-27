@@ -21,6 +21,8 @@ import com.project.boardgame.provider.EmailProvider;
 import com.project.boardgame.provider.JwtProvider;
 import com.project.boardgame.repository.CertificationRepository;
 import com.project.boardgame.repository.UserRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -133,8 +135,8 @@ public class AuthService {
         return SignUpResponse.success();
     }
 
-    public ResponseEntity<? super SignInResponse> signIn(SignInRequest request) {
-        String token = null;
+    public ResponseEntity<? super SignInResponse> signIn(SignInRequest request, HttpServletResponse response) {
+        String accessToken = null;
         try {
 
             String userId = request.getId();
@@ -148,13 +150,22 @@ public class AuthService {
             boolean isMatched = passwordEncoder.matches(password, encodedPassword);
             if(!isMatched) return SignInResponse.signInFail();
 
-            token = jwtProvider.create(userId);
+            accessToken = jwtProvider.createAccessToken(userId);
+            String refreshToken = jwtProvider.createRefreshToken(userId);
+
+            //Refresh Token을 HttpOnly 쿠키에 설정
+            Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+            refreshTokenCookie.setHttpOnly(true);
+            refreshTokenCookie.setSecure(false); // HTTPS 환경에서만 전송
+            refreshTokenCookie.setPath("/");
+            refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60); // 7일
+            response.addCookie(refreshTokenCookie);
 
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return SignInResponse.success(token);
+        return SignInResponse.success(accessToken);
     }
 
     @Transactional
