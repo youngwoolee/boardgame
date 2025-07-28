@@ -8,6 +8,7 @@ import com.project.boardgame.endpoint.response.admin.UploadResponse;
 import com.project.boardgame.service.AiService;
 import com.project.boardgame.service.GameService;
 import com.project.boardgame.service.GithubUploadService;
+import com.project.boardgame.service.dto.GameGeneratedDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,17 +30,10 @@ public class AdminController {
     private final AiService aiService;
 
     @PostMapping("/generate-info")
-    public Mono<ResponseEntity<?>> generateGameInfo(@RequestBody GenerateInfoRequest request) {
+    public ResponseEntity<? super GameGeneratedDto> generate(@RequestBody GenerateInfoRequest request) {
 
-        Mono<ResponseEntity<?>> successMono = aiService.generateGameInfo(request.getBoardGameName())
-                .map(ResponseEntity::ok);
-
-        return successMono
-                .onErrorResume(error -> {
-                    error.printStackTrace();
-                    return Mono.just(ResponseDto.databaseError());
-                })
-                .defaultIfEmpty(ResponseDto.databaseError());
+        GameGeneratedDto dto = aiService.generate(request.getBoardGameName());
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/upload")

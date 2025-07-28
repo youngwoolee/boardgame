@@ -23,6 +23,7 @@ public class BoardgameApplication {
             System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
             System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
             System.setProperty("FRONTEND_URL", dotenv.get("FRONTEND_URL"));
+            System.setProperty("OPENAI_API_KEY", dotenv.get("OPENAI_API_KEY"));
         }
 
         SpringApplication.run(BoardgameApplication.class, args);
