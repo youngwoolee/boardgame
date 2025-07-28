@@ -56,6 +56,7 @@ const MY_RESERVATION_RETURN_URL = (reservationId: number) => `${API_DOMAIN}/rese
 const MY_RESERVATION_CANCEL_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}/cancel`;
 const MY_PROFILE_URL = () => `${API_DOMAIN}/user/me`;
 const UPLOAD_IMAGE_URL = () => `${API_DOMAIN}/admin/upload`;
+const UPLOAD_BY_URL_IMAGE_URL = () => `${API_DOMAIN}/admin/upload-by-url`;
 const GENERATE_GAME_INFO_URL = () => `${API_DOMAIN}/admin/generate-info`;
 
 
@@ -93,6 +94,27 @@ export const createGameRequest = async (
         const response = await axiosInstance.post<UploadResponseDto>(
             UPLOAD_IMAGE_URL(),
             formData,
+            { headers }
+        );
+
+        return responseHandler<UploadResponseDto>(response);
+    } catch (error) {
+        return errorHandler(error);
+    }
+};
+
+export const createGameByUrlRequest = async (
+    gameData: UploadRequestDto
+) => {
+    try {
+        const headers = {
+            ...getAccessTokenHeader(),
+            'Content-Type': 'application/json',
+        };
+
+        const response = await axiosInstance.post<UploadResponseDto>(
+            UPLOAD_BY_URL_IMAGE_URL(),
+            gameData,
             { headers }
         );
 

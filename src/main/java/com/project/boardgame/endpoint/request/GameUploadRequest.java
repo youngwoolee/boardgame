@@ -18,4 +18,5 @@ public class GameUploadRequest {
     private Set<String> genres;
     private Set<String> systems;
     private String barcode;
+    private String imageUrl;
 }

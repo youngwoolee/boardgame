@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {createGameRequest, generateGameInfoRequest} from "../../apis";
+import {createGameByUrlRequest, createGameRequest, generateGameInfoRequest} from "../../apis";
 import {ResponseCode} from "../../types/enums";
 import {GameListResponseDto} from "../../apis/response/game";
 import UploadResponseDto from "../../apis/response/admin/upload.response.dto";
@@ -18,7 +18,7 @@ import GeneratedGameInfoResponseDto
 
 type SelectOption = { value: string, label: string };
 
-export default function UploadImage() {
+export default function UploadGame() {
     const [file, setFile] = useState<File | null>(null);
     const [uploadedUrl, setUploadedUrl] = useState<string>('');
     const [boardGameName, setBoardGameName] = useState('');
@@ -33,10 +33,12 @@ export default function UploadImage() {
         time: 0,
         genres: [] as SelectOption[],
         systems: [] as SelectOption[],
-        barcode: ''
+        barcode: '',
+        imageUrl: ''
     });
 
     const navigate = useNavigate();
+
 
     const handleGenerateClick = async () => {
         if (!boardGameName.trim()) {
@@ -63,7 +65,9 @@ export default function UploadImage() {
             time: data.time,
             genres: data.genres.map(g => ({ value: g, label: g })),
             systems: data.systems.map(s => ({ value: s, label: s })),
+            imageUrl: data.imageUrl
         });
+        setUploadedUrl(data.imageUrl);
         toast.success("AI가 정보를 자동으로 채웠습니다!");
     };
 
@@ -85,10 +89,7 @@ export default function UploadImage() {
     };
 
     const handleSubmit = async () => {
-        if (!file) {
-            alert("이미지를 선택해주세요.");
-            return;
-        }
+        let result;
 
         const gameData: UploadRequestDto = {
             name: form.name,
@@ -100,36 +101,31 @@ export default function UploadImage() {
             genres: form.genres.map(option => option.value),
             systems: form.systems.map(option => option.value),
             barcode: form.barcode,
-            imageUrl: '',
+            imageUrl: form.imageUrl, // AI URL 있는 경우만 의미 있음
         };
 
-        const result = await createGameRequest(file, gameData);
+        if (file) {
+            // 파일 업로드 API
+            result = await createGameRequest(file, gameData);
+        } else if (form.imageUrl) {
+            // URL 기반 업로드 API
+            result = await createGameByUrlRequest(gameData);
+        } else {
+            alert("이미지를 선택하거나 AI로 생성해주세요.");
+            return;
+        }
+
         if (!result || result.code !== ResponseCode.SUCCESS) {
             alert(result?.message || '업로드 실패');
             return;
         }
 
-        const uploadResult = result as UploadResponseDto;
-
-        if (uploadResult.url) {
-            setUploadedUrl(uploadResult.url);
-            alert("보드게임 등록 성공!");
-        } else {
-            alert("이미지 URL을 받지 못했습니다.");
-        }
-
-        setForm({
-            name: '',
-            description: '',
-            minPlayers: 2,
-            maxPlayers: 4,
-            age: 0,
-            time: 0,
-            genres: [],
-            systems: [],
-            barcode: ''
-        });
+        alert("보드게임 등록 성공!");
+        setForm({ name: '', description: '', minPlayers: 2, maxPlayers: 4, age: 0, time: 0, genres: [], systems: [], barcode: '', imageUrl: '' });
         setFile(null);
+        setUploadedUrl('');
+
+
     };
 
     return (
@@ -199,6 +195,16 @@ export default function UploadImage() {
                             <input className="upload-form-input" type="text" name="barcode" value={form.barcode} onChange={handleChange} placeholder="예: CATANA-01" disabled={isGenerating} />
                             <label>이미지 업로드</label>
                             <input type="file" onChange={handleFileChange} accept="image/*" className="upload-form-input" disabled={isGenerating} />
+                            {form.imageUrl && (
+                                <div style={{ marginTop: '12px' }}>
+                                    <label>미리보기</label>
+                                    <img
+                                        src={form.imageUrl}
+                                        alt="AI 이미지 미리보기"
+                                        style={{ width: '100%', maxWidth: 200, borderRadius: 8, marginTop: 8 }}
+                                    />
+                                </div>
+                            )}
                         </div>
                         <div className="upload-game-content-button-box">
                             <div className={`primary-button-lg full-width ${isGenerating ? 'disabled' : ''}`} onClick={handleSubmit}>등록하기</div>

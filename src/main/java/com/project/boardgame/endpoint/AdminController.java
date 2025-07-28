@@ -2,13 +2,12 @@ package com.project.boardgame.endpoint;
 
 import com.project.boardgame.endpoint.request.GameUploadRequest;
 import com.project.boardgame.endpoint.request.GenerateInfoRequest;
-import com.project.boardgame.endpoint.response.ResponseDto;
 import com.project.boardgame.endpoint.response.admin.GeneratedGameInfoResponse;
 import com.project.boardgame.endpoint.response.admin.UploadResponse;
 import com.project.boardgame.service.AiService;
 import com.project.boardgame.service.GameService;
 import com.project.boardgame.service.GithubUploadService;
-import com.project.boardgame.service.dto.GameGeneratedDto;
+import com.project.boardgame.service.dto.GeneratedGameDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import reactor.core.publisher.Mono;
 
 
 @RestController
@@ -30,10 +28,10 @@ public class AdminController {
     private final AiService aiService;
 
     @PostMapping("/generate-info")
-    public ResponseEntity<? super GameGeneratedDto> generate(@RequestBody GenerateInfoRequest request) {
+    public ResponseEntity<? super GeneratedGameInfoResponse> generate(@RequestBody GenerateInfoRequest request) {
 
-        GameGeneratedDto dto = aiService.generate(request.getBoardGameName());
-        return ResponseEntity.ok(dto);
+        GeneratedGameDto dto = aiService.generate(request.getBoardGameName());
+        return GeneratedGameInfoResponse.success(dto);
     }
 
     @PostMapping("/upload")
@@ -42,13 +40,26 @@ public class AdminController {
             @RequestPart("data") GameUploadRequest request
     ) {
         try {
-            // ✅ 1. 이미지 GitHub 업로드
             String imageUrl = githubUploadService.uploadImage(image);
 
-            // ✅ 2. 게임 정보 저장
             gameService.createGame(request, imageUrl);
 
             return UploadResponse.success(imageUrl);
+        } catch (Exception e) {
+            return UploadResponse.fail();
+        }
+    }
+
+    @PostMapping("/upload-by-url")
+    public ResponseEntity<? super UploadResponse> createGameByUrl(@RequestBody GameUploadRequest request) {
+        try {
+            MultipartFile downloadedImage = githubUploadService.downloadImageFromUrl(request.getImageUrl());
+
+            String uploadedImageUrl = githubUploadService.uploadImage(downloadedImage);
+
+            gameService.createGame(request, uploadedImageUrl);
+
+            return UploadResponse.success(uploadedImageUrl);
         } catch (Exception e) {
             return UploadResponse.fail();
         }

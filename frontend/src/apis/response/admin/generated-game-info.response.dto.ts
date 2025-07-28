@@ -8,4 +8,5 @@ export default interface GeneratedGameInfoResponseDto extends ResponseDto {
     time: number;
     genres: string[];
     systems: string[];
+    imageUrl: string;
 }

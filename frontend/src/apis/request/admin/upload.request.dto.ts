@@ -1,7 +1,6 @@
 export default interface UploadRequestDto {
     name: string;
     description: string;
-    imageUrl: string;
     minPlayers: number;
     maxPlayers: number;
     age: number;
@@ -9,4 +8,5 @@ export default interface UploadRequestDto {
     genres: string[];
     systems: string[];
     barcode: string;
+    imageUrl: string;
 }

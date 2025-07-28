@@ -1,6 +1,10 @@
 package com.project.boardgame.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -12,6 +16,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.boardgame.service.dto.UrlMultipartFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -75,5 +80,37 @@ public class GithubUploadService {
 
         JsonNode jsonNode = objectMapper.readTree(response.body());
         return jsonNode.get("content").get("download_url").asText();
+    }
+
+    public MultipartFile downloadImageFromUrl(String imageUrl) throws Exception {
+        URL url = new URL(imageUrl);
+        URLConnection connection = url.openConnection();
+        String contentType = connection.getContentType(); // ex. image/png, image/jpeg
+
+        try (InputStream in = connection.getInputStream()) {
+            // InputStream -> byte[]
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            byte[] data = new byte[8192];
+            int bytesRead;
+            while ((bytesRead = in.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, bytesRead);
+            }
+            byte[] imageBytes = buffer.toByteArray();
+
+            // 확장자 추출
+            String extension = contentType != null && contentType.contains("/")
+                    ? "." + contentType.substring(contentType.indexOf("/") + 1)
+                    : ".jpg";
+            String filename = UUID.randomUUID().toString() + extension;
+
+            return new UrlMultipartFile(
+                    imageBytes,
+                    "image",         // name
+                    filename,        // originalFilename
+                    contentType      // contentType
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("이미지 다운로드 실패: " + imageUrl, e);
+        }
     }
 }
