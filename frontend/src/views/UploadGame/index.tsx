@@ -133,7 +133,14 @@ export default function UploadGame() {
             <div className="upload-game-container">
                 <div className="upload-game-box">
                     <div className="upload-game-title">보드게임 등록</div>
-                    <div className="upload-game-content-box">
+
+                    {isGenerating && (
+                        <div className="loading-overlay">
+                            <ClipLoader size={50} color="#007bff" />
+                        </div>
+                    )}
+
+                    <fieldset disabled={isGenerating} className="upload-game-content-box">
                         <div className="upload-game-content-input-box">
                             <label>보드게임 이름 (AI 생성용)</label>
                             <div className="ai-generate-group">
@@ -143,32 +150,77 @@ export default function UploadGame() {
                                     value={boardGameName}
                                     onChange={(e) => setBoardGameName(e.target.value)}
                                     placeholder="예: 카탄"
-                                    disabled={isGenerating} // ✅ 비활성화 추가
                                 />
-                                <button onClick={handleGenerateClick} disabled={isGenerating} className="ai-generate-button">
-                                    {isGenerating ? <ClipLoader size={20} color="#fff" /> : 'AI로 생성'}
+                                <button onClick={handleGenerateClick} className="ai-generate-button">
+                                    AI로 생성
                                 </button>
                             </div>
+
                             <hr className="divider" />
+
                             <label>이름</label>
-                            <input className="upload-form-input" type="text" name="name" value={form.name} onChange={handleChange} disabled={isGenerating} />
+                            <input
+                                className="upload-form-input"
+                                type="text"
+                                name="name"
+                                value={form.name}
+                                onChange={handleChange}
+                            />
+
                             <label>설명</label>
-                            <textarea name="description" placeholder="설명" value={form.description} onChange={handleChange} className="upload-form-textarea" disabled={isGenerating} />
+                            <textarea
+                                name="description"
+                                placeholder="설명"
+                                value={form.description}
+                                onChange={handleChange}
+                                className="upload-form-textarea"
+                            />
+
                             <label>최소 인원</label>
-                            <input className="upload-form-input" type="number" name="minPlayers" value={form.minPlayers} onChange={handleChange} disabled={isGenerating} />
+                            <input
+                                className="upload-form-input"
+                                type="number"
+                                name="minPlayers"
+                                value={form.minPlayers}
+                                onChange={handleChange}
+                            />
+
                             <label>최대 인원</label>
-                            <input className="upload-form-input" type="number" name="maxPlayers" value={form.maxPlayers} onChange={handleChange} disabled={isGenerating} />
+                            <input
+                                className="upload-form-input"
+                                type="number"
+                                name="maxPlayers"
+                                value={form.maxPlayers}
+                                onChange={handleChange}
+                            />
+
                             <label>권장 연령</label>
                             <div className="upload-form-input-group">
                                 <span>만</span>
-                                <input className="upload-form-input" type="number" name="age" value={form.age} onChange={handleChange} placeholder="10" disabled={isGenerating} />
+                                <input
+                                    className="upload-form-input"
+                                    type="number"
+                                    name="age"
+                                    value={form.age}
+                                    onChange={handleChange}
+                                    placeholder="10"
+                                />
                                 <span>세 이상</span>
                             </div>
+
                             <label>플레이 시간</label>
                             <div className="upload-form-input-group">
-                                <input className="upload-form-input" type="number" name="time" value={form.time} onChange={handleChange} placeholder="30" disabled={isGenerating} />
+                                <input
+                                    className="upload-form-input"
+                                    type="number"
+                                    name="time"
+                                    value={form.time}
+                                    onChange={handleChange}
+                                    placeholder="30"
+                                />
                                 <span>분</span>
                             </div>
+
                             <label>장르</label>
                             <Select
                                 isMulti
@@ -177,9 +229,11 @@ export default function UploadGame() {
                                 className="react-select-container"
                                 classNamePrefix="select"
                                 value={form.genres}
-                                onChange={(selected) => setForm(prev => ({ ...prev, genres: selected as SelectOption[] }))}
-                                isDisabled={isGenerating} // ✅ Select 컴포넌트는 isDisabled prop 사용
+                                onChange={(selected) =>
+                                    setForm((prev) => ({ ...prev, genres: selected as SelectOption[] }))
+                                }
                             />
+
                             <label>게임 시스템</label>
                             <Select
                                 isMulti
@@ -188,29 +242,55 @@ export default function UploadGame() {
                                 className="react-select-container"
                                 classNamePrefix="select"
                                 value={form.systems}
-                                onChange={(selected) => setForm(prev => ({ ...prev, systems: selected as SelectOption[] }))}
-                                isDisabled={isGenerating} // ✅ Select 컴포넌트는 isDisabled prop 사용
+                                onChange={(selected) =>
+                                    setForm((prev) => ({ ...prev, systems: selected as SelectOption[] }))
+                                }
                             />
+
                             <label>바코드</label>
-                            <input className="upload-form-input" type="text" name="barcode" value={form.barcode} onChange={handleChange} placeholder="예: CATANA-01" disabled={isGenerating} />
+                            <input
+                                className="upload-form-input"
+                                type="text"
+                                name="barcode"
+                                value={form.barcode}
+                                onChange={handleChange}
+                                placeholder="예: CATANA-01"
+                            />
+
                             <label>이미지 업로드</label>
-                            <input type="file" onChange={handleFileChange} accept="image/*" className="upload-form-input" disabled={isGenerating} />
+                            <input
+                                type="file"
+                                onChange={handleFileChange}
+                                accept="image/*"
+                                className="upload-form-input"
+                            />
+
                             {form.imageUrl && (
                                 <div style={{ marginTop: '12px' }}>
                                     <label>미리보기</label>
                                     <img
                                         src={form.imageUrl}
                                         alt="AI 이미지 미리보기"
-                                        style={{ width: '100%', maxWidth: 200, borderRadius: 8, marginTop: 8 }}
+                                        style={{
+                                            width: '100%',
+                                            maxWidth: 200,
+                                            borderRadius: 8,
+                                            marginTop: 8,
+                                        }}
                                     />
                                 </div>
                             )}
                         </div>
+
                         <div className="upload-game-content-button-box">
-                            <div className={`primary-button-lg full-width ${isGenerating ? 'disabled' : ''}`} onClick={handleSubmit}>등록하기</div>
-                            <div className={`text-link-lg full-width ${isGenerating ? 'disabled' : ''}`} onClick={() => !isGenerating && navigate('/')}>메인으로</div>
+                            <div className="primary-button-lg full-width" onClick={handleSubmit}>
+                                등록하기
+                            </div>
+                            <div className="text-link-lg full-width" onClick={() => navigate('/')}>
+                                메인으로
+                            </div>
                         </div>
-                    </div>
+                    </fieldset>
                 </div>
             </div>
         </div>

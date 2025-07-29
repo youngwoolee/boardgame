@@ -1,125 +1,170 @@
+/* 전체 배경 및 중앙 정렬 */
 #upload-game-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+}
+
+/* 중앙 컨테이너 */
+.upload-game-container {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 40px 16px;
-    font-family: 'Pretendard', sans-serif;
+    padding: 24px;
+    box-sizing: border-box;
 }
 
-.upload-game-container {
+/* 보드게임 박스 */
+.upload-game-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    max-width: 500px;
+    max-width: 480px;
     background-color: #ffffff;
     border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
+    padding: 32px 24px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    gap: 24px;
 }
 
-.upload-game-box {
-    padding: 24px;
-}
-
+/* 제목 */
 .upload-game-title {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 24px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #222;
     text-align: center;
 }
 
+/* 입력 섹션 전체 */
 .upload-game-content-box {
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
 
+/* 입력 필드 묶음 */
 .upload-game-content-input-box {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-.upload-form-input {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+/* 각 라벨 */
+.upload-game-content-input-box label {
+    font-weight: 600;
     font-size: 14px;
-    transition: border-color 0.2s;
+    color: #333;
 }
 
-.upload-form-input:focus {
+/* 기본 input, textarea 스타일 */
+.upload-form-input,
+.upload-form-textarea {
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
     outline: none;
-    border-color: #007bff;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .upload-form-textarea {
-    width: 100%;
-    min-height: 80px;
-    padding: 10px 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 14px;
     resize: vertical;
+    min-height: 80px;
 }
 
-/* '만', '세 이상', '분' 텍스트와 input을 묶는 그룹 스타일 */
+/* 입력 그룹: 나이, 시간 등 */
 .upload-form-input-group {
     display: flex;
     align-items: center;
     gap: 8px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 0 12px;
-    transition: border-color 0.2s;
-}
-
-.upload-form-input-group:focus-within {
-    border-color: #007bff;
 }
 
 .upload-form-input-group span {
-    color: #555;
     font-size: 14px;
-    white-space: nowrap;
+    color: #555;
 }
 
-/* 그룹 안의 input은 테두리를 없애 깔끔하게 보이도록 함 */
-.upload-form-input-group .upload-form-input {
-    border: none;
-    padding: 10px 0;
-    flex: 1;
-    width: 100%;
-    text-align: right; /* ✅ 텍스트 오른쪽 정렬 추가 */
+/* react-select 스타일 */
+.react-select-container {
+    font-size: 14px;
 }
 
-.upload-form-input-group .upload-form-input:focus {
-    border-color: transparent;
+.select__control {
+    border-radius: 8px;
+    border-color: #ccc;
 }
 
-/* 숫자 입력 필드의 기본 화살표(스피너) 제거 */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type=number] {
-    -moz-appearance: textfield;
-}
-
-
+/* 버튼 박스 */
 .upload-game-content-button-box {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-top: 12px;
 }
 
+/* 로딩 오버레이 */
+.loading-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    border-radius: 16px;
+}
+
+/* AI 생성 버튼 포함 그룹 */
+.ai-generate-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* AI 생성 버튼 */
+.ai-generate-button {
+    padding: 10px 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.ai-generate-button:hover {
+    background-color: #0056b3;
+}
+
+.ai-generate-button:disabled {
+    background-color: #a3c6f1;
+    cursor: not-allowed;
+}
+
+/* 구분선 */
+.divider {
+    border: none;
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 16px 0;
+}
+
+/* 기본 버튼 스타일 */
 .primary-button-lg {
     background-color: #007bff;
     color: white;
-    font-weight: bold;
     padding: 12px;
     border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px;
     text-align: center;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -129,21 +174,19 @@ input[type=number] {
     background-color: #0056b3;
 }
 
+.full-width {
+    width: 100%;
+}
+
 .text-link-lg {
-    color: #007bff;
+    color: #555;
+    font-size: 14px;
     text-align: center;
     cursor: pointer;
-    font-size: 14px;
     text-decoration: underline;
+    padding: 8px;
 }
 
-.upload-url {
-    font-size: 13px;
-    margin-top: 12px;
-    color: #555;
-    word-break: break-all;
-}
-
-.react-select-container {
-    margin-bottom: 12px;
+.text-link-lg:hover {
+    color: #000;
 }
