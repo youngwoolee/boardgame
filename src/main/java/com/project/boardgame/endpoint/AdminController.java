@@ -9,6 +9,7 @@ import com.project.boardgame.service.GameService;
 import com.project.boardgame.service.GithubUploadService;
 import com.project.boardgame.service.dto.GeneratedGameDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin")
+@Slf4j
 public class AdminController {
 
     private final GithubUploadService githubUploadService;
@@ -29,7 +31,7 @@ public class AdminController {
 
     @PostMapping("/generate-info")
     public ResponseEntity<? super GeneratedGameInfoResponse> generate(@RequestBody GenerateInfoRequest request) {
-
+        log.info("[log] generate : {}", request.toString());
         GeneratedGameDto dto = aiService.generate(request.getBoardGameName());
         return GeneratedGameInfoResponse.success(dto);
     }
@@ -40,6 +42,7 @@ public class AdminController {
             @RequestPart("data") GameUploadRequest request
     ) {
         try {
+            log.info("[log] createGame : {}", request.toString());
             String imageUrl = githubUploadService.uploadImage(image);
 
             gameService.createGame(request, imageUrl);
@@ -53,6 +56,7 @@ public class AdminController {
     @PostMapping("/upload-by-url")
     public ResponseEntity<? super UploadResponse> createGameByUrl(@RequestBody GameUploadRequest request) {
         try {
+            log.info("[log] createGameByUrl : {}", request.toString());
             MultipartFile downloadedImage = githubUploadService.downloadImageFromUrl(request.getImageUrl());
 
             String uploadedImageUrl = githubUploadService.uploadImage(downloadedImage);

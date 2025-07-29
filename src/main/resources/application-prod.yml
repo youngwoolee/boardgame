@@ -17,3 +17,10 @@ cors:
 
 server:
   forward-headers-strategy: native
+
+logging:
+  level:
+    root: INFO
+    com.project.boardgame: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
