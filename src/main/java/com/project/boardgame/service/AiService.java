@@ -43,7 +43,7 @@ public class AiService {
 
         OpenAiChatOptions options = OpenAiChatOptions.builder()
                 .model("gpt-4.1-mini")
-                .temperature(0.7)
+                .temperature(0.1)
                 .build();
 
         Prompt prompt = new Prompt(List.of(systemMessage, userMessage, assistantMessage), options);
@@ -55,6 +55,65 @@ public class AiService {
 
         return result;
     }
+
+//    private void fetchBoardGameDetailInfo(String gameName, GeneratedGameDto dto) {
+//        try {
+//            // 1. 검색 페이지 접속
+//            String searchUrl = "https://boardgamegeek.com/search/boardgame?q=" + URLEncoder.encode(gameName, StandardCharsets.UTF_8);
+//            Document searchDoc = Jsoup.connect(searchUrl)
+//                    .userAgent("Mozilla/5.0")
+//                    .get();
+//
+//            // 2. 첫 번째 검색 결과 링크 추출
+//            Element firstLink = searchDoc.selectFirst("a.primary");
+//            if (firstLink == null) return;
+//
+//            String detailPageUrl = "https://boardgamegeek.com" + firstLink.attr("href");
+//
+//            // 3. 상세 페이지 접속
+//            Document detailDoc = Jsoup.connect(detailPageUrl)
+//                    .userAgent("Mozilla/5.0")
+//                    .get();
+//
+//            // 썸네일
+//            Elements preloadLinks = detailDoc.select("link[rel=preload][as=image]");
+//            if (!preloadLinks.isEmpty()) {
+//                String imageUrl = preloadLinks.size() >= 2 ? preloadLinks.get(1).attr("href") : preloadLinks.get(0).attr("href");
+//                dto.setImageUrl(imageUrl);
+//            }
+//
+//            // 인원 수
+//            Element minPlayersMeta = detailDoc.selectFirst("meta[itemprop=minValue]");
+//            Element maxPlayersMeta = detailDoc.selectFirst("meta[itemprop=maxValue]");
+//            if (minPlayersMeta != null) {
+//                dto.setMinPlayers(Integer.parseInt(minPlayersMeta.attr("content")));
+//            }
+//            if (maxPlayersMeta != null) {
+//                dto.setMaxPlayers(Integer.parseInt(maxPlayersMeta.attr("content")));
+//            }
+//
+//            // 나이
+//            Element ageElement = detailDoc.selectFirst("span[itemprop=suggestedMinAge]");
+//            if (ageElement != null) {
+//                dto.setAge(Integer.parseInt(ageElement.text().replaceAll("[^\\d]", "")));
+//            }
+//
+//            // 플레이 시간
+//            Element playTimeMin = detailDoc.select("li.gameplay-item:has(h3:contains(Play Time)) span[min]").first();
+//            if (playTimeMin != null) {
+//                String playTimeText = playTimeMin.text(); // e.g., "60–120"
+//                String[] parts = playTimeText.split("–");
+//                if (parts.length == 2) {
+//                    dto.setTime(Integer.parseInt(parts[1].trim())); // 최대 시간 기준
+//                } else {
+//                    dto.setTime(Integer.parseInt(parts[0].trim()));
+//                }
+//            }
+//
+//        } catch (Exception e) {
+//            System.err.println("게임 상세정보 추출 실패: " + e.getMessage());
+//        }
+//    }
 
     private String fetchBoardGameImageUrl(String gameName) {
         try {
