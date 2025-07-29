@@ -10,6 +10,7 @@ import com.project.boardgame.service.GithubUploadService;
 import com.project.boardgame.service.dto.GeneratedGameDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ public class AdminController {
     private final GithubUploadService githubUploadService;
     private final GameService gameService;
     private final AiService aiService;
+    private final CacheManager cacheManager;
 
     @PostMapping("/generate-info")
     public ResponseEntity<? super GeneratedGameInfoResponse> generate(@RequestBody GenerateInfoRequest request) {
@@ -67,5 +69,16 @@ public class AdminController {
         } catch (Exception e) {
             return UploadResponse.fail();
         }
+    }
+
+    @PostMapping("/cache/evict-all")
+    public ResponseEntity<?> evictAllCaches() {
+        cacheManager.getCacheNames().forEach(name -> {
+            if (cacheManager.getCache(name) != null) {
+                cacheManager.getCache(name).clear();
+                log.info("[log] evictAllCaches");
+            }
+        });
+        return ResponseEntity.ok("모든 캐시 초기화 완료");
     }
 }

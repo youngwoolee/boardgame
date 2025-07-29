@@ -22,6 +22,8 @@ import com.project.boardgame.repository.ReservationDetailRepository;
 import com.project.boardgame.repository.SystemTypeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,7 @@ public class GameService {
         return Collections.emptyList();
     }
 
+    @CacheEvict(value = "games", allEntries = true)
     public GameResponse addGame(GameRequest request) {
         Game game = Game.builder()
                 .name(request.getName())
@@ -81,7 +84,9 @@ public class GameService {
         gameRepository.save(game);
     }
 
+    @Cacheable(value = "games")
     public List<GameResponse> getAllGames() {
+        log.info("[log] fetching games from DB");
         List<Game> games = gameRepository.findAllFetchJoin();
 
         Set<Long> reservedGameIds = reservationDetailRepository.findReservedGameIdsByGameIn(games);

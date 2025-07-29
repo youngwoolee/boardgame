@@ -90,7 +90,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
         String[] excludedPaths = {
-                "/h2-console/**"
+                "/h2-console/**",
+                "/api/v1/admin/cache/evict-all"
         };
 
         for (String excludedPath : excludedPaths) {

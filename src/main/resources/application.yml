@@ -10,6 +10,12 @@ spring:
           auth: true
           starttls:
             enable: true
+  cache:
+    type: caffeine
+    cache-names: games
+    caffeine:
+      spec: maximumSize=200,expireAfterWrite=30m
+
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}

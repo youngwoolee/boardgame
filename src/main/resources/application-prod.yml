@@ -12,11 +12,13 @@ spring:
   h2:
     console:
       enabled: false
+
 cors:
   allowed-origins: ${FRONTEND_URL}
 
 server:
   forward-headers-strategy: native
+
 
 logging:
   level:
