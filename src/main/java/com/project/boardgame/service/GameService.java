@@ -21,12 +21,14 @@ import com.project.boardgame.repository.GenreRepository;
 import com.project.boardgame.repository.ReservationDetailRepository;
 import com.project.boardgame.repository.SystemTypeRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GameService {
     private final GameRepository gameRepository;
     private final GenreRepository genreRepository;
@@ -50,18 +52,19 @@ public class GameService {
     }
 
     public void createGame(GameUploadRequest dto, String imageUrl) {
-        // ✅ 이름으로 Genre 엔티티 조회
+        log.info("[log] createGame : {}, {}", dto.toString(), imageUrl);
         Set<Genre> genres = dto.getGenres().stream()
                 .map(name -> genreRepository.findByName(name)
                         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 장르입니다: " + name)))
                 .collect(Collectors.toSet());
 
+        log.info("[log] createGame : {}", genres);
         // ✅ 이름으로 SystemType 엔티티 조회
         Set<SystemType> systems = dto.getSystems().stream()
                 .map(name -> systemTypeRepository.findByName(name)
                         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 시스템입니다: " + name)))
                 .collect(Collectors.toSet());
-
+        log.info("[log] createGame : {}", systems);
         Game game = Game.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
