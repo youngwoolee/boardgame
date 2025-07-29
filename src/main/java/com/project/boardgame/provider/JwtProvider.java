@@ -20,13 +20,15 @@ public class JwtProvider {
     @Value("${secret-key}")
     private String secretKey;
 
-    public String create(String userId) {
+    public String create(String userId, String role) {
         Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
         Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
 
         String jwt = Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
-                .setSubject(userId).setIssuedAt(new Date()).setExpiration(expiredDate)
+                .setSubject(userId).setIssuedAt(new Date())
+                .setExpiration(expiredDate)
+                .claim("role", role)
                 .compact();
 
         return jwt;

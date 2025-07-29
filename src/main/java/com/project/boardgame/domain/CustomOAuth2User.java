@@ -18,6 +18,7 @@ public class CustomOAuth2User implements OAuth2User {
 
     private String userId;
     private boolean isRegistered;
+    private String role;
 
     @Override
     public Map<String, Object> getAttributes() {

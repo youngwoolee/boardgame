@@ -14,6 +14,7 @@ import Admin from "./views/UploadGame";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UploadGame from "./views/UploadGame";
+import AdminRoute from "./components/AdminRoute";
 
 function App() {
 
@@ -24,7 +25,11 @@ function App() {
             <Route path="/" element={<AppLayout />}>
                 <Route index element={<Main />} />
                 <Route path="my" element={<MyPage />} />
-                <Route path="upload" element={<UploadGame />} />
+                <Route path="upload" element={
+                    <AdminRoute>
+                        <UploadGame />
+                    </AdminRoute>
+                } />
             </Route>
             {/* 인증 관련 페이지는 공통 레이아웃 없이 별도 처리 */}
             <Route path="/auth">

@@ -56,32 +56,20 @@ public class InitConfig {
                                      Arrays.asList("가족게임", "전략"), Arrays.asList("노선연결", "셋컬렉션"), "TTRIDE", 2, genreRepository, systemTypeRepository));
 
             games.addAll(createGames("도블", "카드에 그려진 그림을 빠르게 매칭하는 게임입니다.",
-                                     "/assets/dobble.jpg", null, 2, 8, 6, "15분 내외",
+                                     "https://raw.githubusercontent.com/youngwoolee/boardgame-image/main/images/f31fbb2d-6e43-468b-97ef-b378fe8b9005.png", null, 2, 8, 6, "15분 내외",
                                      Arrays.asList("파티"), Arrays.asList("반응속도", "관찰력"), "DOBBLE", 4, genreRepository, systemTypeRepository));
 
-            games.addAll(createGames("루미큐브", "숫자 타일을 이용해 조합을 만드는 전략 퍼즐 게임입니다.",
-                                     "/assets/rummikub.jpg", "hot", 2, 4, 7, "30분 내외",
-                                     Arrays.asList("전략", "퍼즐"), Arrays.asList("타일조합", "순발력"), "RUMIKU", 3, genreRepository, systemTypeRepository));
-
             games.addAll(createGames("한밤의 늑대인간", "정체를 숨기고 토론을 통해 적을 찾아내는 정체 은닉 게임입니다.",
-                                     "/assets/werewolf.jpg", "new", 3, 10, 10, "10~15분",
+                                     "https://raw.githubusercontent.com/youngwoolee/boardgame-image/main/images/aa3b8d2b-c9f7-4a03-a983-c459e8f25302.png", "new", 3, 10, 10, "10~15분",
                                      Arrays.asList("파티"), Arrays.asList("정체은닉", "토론"), "WEREWO", 4, genreRepository, systemTypeRepository));
 
             games.addAll(createGames("스컬킹", "카드를 예측해 베팅하고 점수를 얻는 트릭테이킹 카드 게임입니다.",
-                                     "/assets/skullking.jpg", null, 2, 6, 10, "30분 내외",
+                                     "https://raw.githubusercontent.com/youngwoolee/boardgame-image/main/images/ef27caf3-c84f-42f3-89a4-5d14d1cbc3fa.jpeg", null, 2, 6, 10, "30분 내외",
                                      Arrays.asList("카드게임"), Arrays.asList("트릭테이킹", "예측"), "SKULLK", 2, genreRepository, systemTypeRepository));
 
             games.addAll(createGames("사보타지", "광부와 사보타지 팀이 대결하는 협력 및 방해 게임입니다.",
-                                     "/assets/sabotage.jpg", "hot", 3, 10, 8, "30분 내외",
+                                     "https://raw.githubusercontent.com/youngwoolee/boardgame-image/main/images/01d7d24a-b7d9-43a4-8a90-ea85fbe93e87.jpeg", "hot", 3, 10, 8, "30분 내외",
                                      Arrays.asList("전략", "팀플레이"), Arrays.asList("협력플레이", "정체은닉"), "SABOTA", 3, genreRepository, systemTypeRepository));
-
-            games.addAll(createGames("부루마블", "부동산 거래로 자산을 모아 경쟁하는 전통 보드게임입니다.",
-                                     "/assets/blue-marble.jpg", null, 2, 6, 6, "60분 이상",
-                                     Arrays.asList("가족게임"), Arrays.asList("자산관리", "주사위굴리기"), "BLUMAR", 5, genreRepository, systemTypeRepository));
-
-            games.addAll(createGames("스파이폴", "한 명의 스파이를 찾기 위한 질문 게임입니다.",
-                                     "/assets/spyfall.jpg", "new", 3, 8, 12, "10~15분",
-                                     Arrays.asList("추리", "파티"), Arrays.asList("정체은닉", "질문추론"), "SPYFAL", 3, genreRepository, systemTypeRepository));
 
             gameRepository.saveAll(games);
         };

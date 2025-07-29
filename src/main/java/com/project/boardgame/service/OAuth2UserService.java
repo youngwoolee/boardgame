@@ -37,7 +37,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
         // ✅ 이미 등록된 회원이면 그대로 리턴
         if (member != null && member.isRegistered()) {
-            return new CustomOAuth2User(userId, true); // registered=true
+            return new CustomOAuth2User(userId, true, member.getRole()); // registered=true
         }
 
         // ✅ 신규 사용자면 임시 객체 리턴
@@ -47,6 +47,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
             userRepository.save(member); // 임시로 저장
         }
 
-        return new CustomOAuth2User(userId, false); // registered=false
+        return new CustomOAuth2User(userId, false, member.getRole()); // registered=false
     }
 }

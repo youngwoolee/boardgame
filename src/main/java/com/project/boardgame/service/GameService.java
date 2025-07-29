@@ -54,6 +54,7 @@ public class GameService {
         return GameResponse.from(saveGame);
     }
 
+    @CacheEvict(value = "games", allEntries = true)
     public void createGame(GameUploadRequest dto, String imageUrl) {
         log.info("[log] createGame : {}, {}", dto.toString(), imageUrl);
         Set<Genre> genres = dto.getGenres().stream()

@@ -148,7 +148,7 @@ public class AuthService {
             boolean isMatched = passwordEncoder.matches(password, encodedPassword);
             if(!isMatched) return SignInResponse.signInFail();
 
-            token = jwtProvider.create(userId);
+            token = jwtProvider.create(userId, member.getRole());
 
         } catch (Exception exception) {
             exception.printStackTrace();

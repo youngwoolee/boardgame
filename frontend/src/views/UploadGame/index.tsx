@@ -89,7 +89,17 @@ export default function UploadGame() {
     };
 
     const handleSubmit = async () => {
-        let result;
+
+        if (!form.name.trim()) return toast.warn("게임 이름을 입력해주세요.");
+        if (!form.description.trim()) return toast.warn("게임 설명을 입력해주세요.");
+        if (!form.minPlayers || form.minPlayers < 1) return toast.warn("최소 인원을 올바르게 입력해주세요.");
+        if (!form.maxPlayers || form.maxPlayers < form.minPlayers) return toast.warn("최대 인원은 최소 인원보다 작을 수 없습니다.");
+        if (form.age <= 0) return toast.warn("권장 연령을 입력해주세요.");
+        if (form.time <= 0) return toast.warn("플레이 시간을 입력해주세요.");
+        if (!form.genres || form.genres.length === 0) return toast.warn("장르를 하나 이상 선택해주세요.");
+        if (!form.systems || form.systems.length === 0) return toast.warn("게임 시스템을 하나 이상 선택해주세요.");
+        if (!form.barcode.trim()) return toast.warn("바코드를 입력해주세요.");
+        if (!file && !form.imageUrl) return toast.warn("이미지를 업로드하거나 AI 생성 이미지가 있어야 합니다.");
 
         const gameData: UploadRequestDto = {
             name: form.name,
@@ -103,6 +113,8 @@ export default function UploadGame() {
             barcode: form.barcode,
             imageUrl: form.imageUrl, // AI URL 있는 경우만 의미 있음
         };
+
+        let result;
 
         if (file) {
             // 파일 업로드 API
