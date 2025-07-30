@@ -16,6 +16,7 @@ import com.project.boardgame.endpoint.request.GameUploadRequest;
 import com.project.boardgame.endpoint.response.GameDetailResponse;
 import com.project.boardgame.endpoint.response.GameReservationResponse;
 import com.project.boardgame.endpoint.response.GameResponse;
+import com.project.boardgame.provider.BarcodeGenerator;
 import com.project.boardgame.repository.GameRepository;
 import com.project.boardgame.repository.GenreRepository;
 import com.project.boardgame.repository.ReservationDetailRepository;
@@ -36,6 +37,7 @@ public class GameService {
     private final GenreRepository genreRepository;
     private final SystemTypeRepository systemTypeRepository;
     private final ReservationDetailRepository reservationDetailRepository;
+    private final BarcodeGenerator barcodeGenerator;
 
     public List<Game> getAvailableGames() {
 //        return gameRepository.findAll().stream()
@@ -69,20 +71,25 @@ public class GameService {
                         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 시스템입니다: " + name)))
                 .collect(Collectors.toSet());
         log.info("[log] createGame : {}", systems);
-        Game game = Game.builder()
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .minPlayers(dto.getMinPlayers())
-                .maxPlayers(dto.getMaxPlayers())
-                .age(dto.getAge())
-                .time(dto.getTime())
-                .genres(genres)
-                .systems(systems)
-                .barcode(dto.getBarcode())
-                .imageUrl(imageUrl)
-                .build();
 
-        gameRepository.save(game);
+        List<String> barcodes = barcodeGenerator.generateUniqueBarcodes(dto.getQuantity());
+
+        for (String barcode : barcodes) {
+            Game game = Game.builder()
+                            .name(dto.getName())
+                            .description(dto.getDescription())
+                            .minPlayers(dto.getMinPlayers())
+                            .maxPlayers(dto.getMaxPlayers())
+                            .age(dto.getAge())
+                            .time(dto.getTime())
+                            .genres(genres)
+                            .systems(systems)
+                            .barcode(barcode)
+                            .imageUrl(imageUrl)
+                            .build();
+
+            gameRepository.save(game);
+        }
     }
 
     @Cacheable(value = "games")

@@ -7,6 +7,6 @@ export default interface UploadRequestDto {
     time: number;
     genres: string[];
     systems: string[];
-    barcode: string;
     imageUrl: string;
+    quantity: number;
 }

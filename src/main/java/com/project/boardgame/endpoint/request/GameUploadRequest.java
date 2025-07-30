@@ -19,6 +19,6 @@ public class GameUploadRequest {
     private String time;
     private Set<String> genres;
     private Set<String> systems;
-    private String barcode;
     private String imageUrl;
+    private int quantity;
 }

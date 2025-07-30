@@ -14,4 +14,7 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     @Query("SELECT DISTINCT g FROM Game g LEFT JOIN FETCH g.genres LEFT JOIN FETCH g.systems")
     List<Game> findAllFetchJoin();
+
+    boolean existsByBarcode(String code);
+
 }
