@@ -2,6 +2,7 @@ package com.project.boardgame.endpoint.response.reservation;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.project.boardgame.common.ResponseCode;
 import com.project.boardgame.domain.ReservationDetail;
@@ -24,7 +25,7 @@ public class ReservationResponse extends ResponseDto {
     private Long id;
     private String userId;
     private String nickname;
-    private String gameName;
+    private List<String> gameNames;
     private LocalDateTime reservedAt;
     private LocalDateTime dueDate;
     private LocalDateTime returnedAt;
@@ -33,20 +34,14 @@ public class ReservationResponse extends ResponseDto {
 
     public static ReservationResponse from(ReservationMaster master) {
         List<ReservationDetail> details = master.getDetails();
-        String firstGameName = details.get(0)
-                .getGame()
-                .getName();
-        int count = details.size();
-
-        String gameName = (count == 1)
-                ? firstGameName
-                : firstGameName + " 외 " + (count - 1) + "개";
+        List<String> gameNames = details.stream().map(detail -> detail.getGame().getName())
+                .collect(Collectors.toList());
 
         return ReservationResponse.builder()
                 .id(master.getId())
                 .userId(master.getUserId())
                 .nickname(master.getUserNickname())
-                .gameName(gameName)
+                .gameNames(gameNames)
                 .reservedAt(master.getReservedAt())
                 .dueDate(master.getDueDate())
                 .status(master.getStatus()

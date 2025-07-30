@@ -129,29 +129,6 @@ public class ReservationService {
         return ReservationResponse.success(saved);
     }
 
-    public List<ReservationResponse> getUserReservationDetail(String userId) {
-        List<ReservationMaster> masters = reservationMasterRepository.findByUserId(userId);
-        List<ReservationResponse> responses = new ArrayList<>();
-
-        for (ReservationMaster master : masters) {
-            for (ReservationDetail detail : master.getDetails()) {
-                responses.add(ReservationResponse.builder()
-                                      .id(detail.getId())
-                                      .userId(master.getUserId())
-                                      .nickname(master.getUserNickname())
-                                      .gameName(detail.getGame().getName())
-                                      .reservedAt(master.getReservedAt())
-                                      .dueDate(master.getDueDate())
-                                      .returnedAt(detail.getReturnedAt())
-                                      .status(detail.getStatus().name())
-                                      .overdue(detail.getReturnedAt() == null && master.getDueDate().isBefore(LocalDateTime.now()))
-                                      .build());
-            }
-        }
-
-        return responses;
-    }
-
     public List<ReservationDetailResponse> getReservationDetails(Long reservationId) {
         ReservationMaster master = reservationMasterRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));

@@ -7,6 +7,7 @@ import {ResponseBody} from "../../../types";
 import {ResponseCode} from "../../../types/enums";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import {SignInResponseDto} from "../../../apis/response/auth";
 
 
 interface SelectedGame {
@@ -24,14 +25,41 @@ interface Props {
 
 export default function RentalModal({ list, onClose, onRented }: Props) {
     const navigate = useNavigate();
+
+    const copyRentalMessage = (data: ReserveGameResponseDto) => {
+        const gameNames = data.gameNames.join(', ');
+        const rentalDate = data.reservedAt.split('T')[0];
+        const dueDate = data.dueDate.split('T')[0];
+
+        const message = `
+🔔 [보드게임 대여 알림]
+
+ - 게임명: ${gameNames}
+ - 대여자: ${data.nickname}
+ - 대여일: ${rentalDate}
+ - 반납예정일: ${dueDate}
+        `.trim();
+
+        navigator.clipboard.writeText(message)
+            .then(() => {
+                console.log("알림 메시지가 복사되었습니다. 카카오톡에서 붙여넣어 보내세요!");
+            })
+            .catch((err) => {
+                console.error("클립보드 복사 실패:", err);
+            });
+    };
+
     const reserveGameResponse = (responseBody: ResponseBody<ReserveGameResponseDto>) => {
         if(!responseBody) return;
-        const { code, message } = responseBody;
+        const { code, message} = responseBody;
         if( code === ResponseCode.DATABASE_ERROR) alert('데이터베이스 오류입니다');
         if( code === ResponseCode.ALREADY_RESERVATION) alert(message);
         if( code !== ResponseCode.SUCCESS) return;
 
-        toast.success('대여가 완료되었습니다.');
+        const data = responseBody as ReserveGameResponseDto;
+
+        copyRentalMessage(data); // ✅ 복사 메시지 추가
+        toast.success('대여가 완료되었습니다. 알림 복사 완료!');
         setTimeout(() => {
             onRented();     // 선택 목록 초기화
             onClose();      // 모달 닫기

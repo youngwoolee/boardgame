@@ -64,6 +64,23 @@ export default function MyReservations() {
         );
     })();
 
+
+
+    const generateReturnMessage = (details: ReservationDetailDto[] | null) => {
+        if(!details) return;
+
+        const gameNames = details.map((item) => item.game.name).join(', ');
+        const today = new Date().toISOString().split('T')[0];
+
+        return `
+📦 [보드게임 반납 알림]
+
+ - 게임명: ${gameNames}
+ - 반납일: ${today}
+  `.trim();
+    };
+
+
     const handleMyReservationsResponse = (
         responseBody: ResponseBody<ReservationMasterListResponseDto>
     ) => {
@@ -103,6 +120,18 @@ export default function MyReservations() {
         const confirmed = window.confirm("이 예약의 모든 게임을 반납하시겠습니까?");
         if (!confirmed) return;
 
+        //TODO: 반납 API호출 복사하고싶지만 실패
+        const message = generateReturnMessage(selectedReservationDetails);
+        if (message) {
+            try {
+                await navigator.clipboard.writeText(message);
+                toast.success("반납 메시지 복사 완료!");
+            } catch (e) {
+                toast.error("복사 실패 😥");
+                console.error(e);
+            }
+        }
+
         const response = await returnReservationRequest(selectedReservationId);
         if (!response) {
             alert("서버 응답이 없습니다.");
@@ -122,10 +151,9 @@ export default function MyReservations() {
         }
 
         toast.success("반납이 완료되었습니다.");
-
-        // 새로고침
-        getMyReservationsRequest().then(handleMyReservationsResponse);
+        await getMyReservationsRequest().then(handleMyReservationsResponse);
         setSelectedReservationDetails(null);
+
     };
 
     if (loading) {

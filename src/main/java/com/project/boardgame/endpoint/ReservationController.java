@@ -61,12 +61,6 @@ public class ReservationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{userId}/detail")
-    public ResponseEntity<List<ReservationResponse>> getUserReservationDetail(@PathVariable String userId) {
-        List<ReservationResponse> responses = reservationService.getUserReservationDetail(userId);
-        return ResponseEntity.ok(responses);
-    }
-
     @PostMapping("/reserve")
     public ResponseEntity<? super ReservationResponse> reserveGame(@RequestBody GameReservationRequest request, Principal principal) {
         String userId = principal.getName();
