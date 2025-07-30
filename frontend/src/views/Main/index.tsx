@@ -278,14 +278,12 @@ export default function Main() {
                         const isAlreadySelected = selectedList.some(game => game.barcode === code);
                         if (isAlreadySelected) {
                             toast.warn('이미 대여 목록에 추가된 보드게임입니다.');
-                            setShowManualInput(false);
                             return;
                         }
 
                         const matched = gameList.find(g => g.barcode === code);
                         if (!matched) {
                             toast.error('일치하는 보드게임을 찾을 수 없습니다.');
-                            setShowManualInput(false);
                             return;
                         }
 
