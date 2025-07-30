@@ -23,6 +23,7 @@ export default function UploadGame() {
     const [uploadedUrl, setUploadedUrl] = useState<string>('');
     const [boardGameName, setBoardGameName] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
+    const [quantity, setQuantity] = useState(1);
 
     const [form, setForm] = useState({
         name: '',
@@ -33,8 +34,8 @@ export default function UploadGame() {
         time: 0,
         genres: [] as SelectOption[],
         systems: [] as SelectOption[],
-        barcode: '',
-        imageUrl: ''
+        imageUrl: '',
+        quantity: 1
     });
 
     const navigate = useNavigate();
@@ -98,7 +99,7 @@ export default function UploadGame() {
         if (form.time <= 0) return toast.warn("플레이 시간을 입력해주세요.");
         if (!form.genres || form.genres.length === 0) return toast.warn("장르를 하나 이상 선택해주세요.");
         if (!form.systems || form.systems.length === 0) return toast.warn("게임 시스템을 하나 이상 선택해주세요.");
-        if (!form.barcode.trim()) return toast.warn("바코드를 입력해주세요.");
+        if (form.quantity <= 0) return toast.warn("수량을 입력해주세요.");
         if (!file && !form.imageUrl) return toast.warn("이미지를 업로드하거나 AI 생성 이미지가 있어야 합니다.");
 
         const gameData: UploadRequestDto = {
@@ -110,8 +111,8 @@ export default function UploadGame() {
             time: form.time,
             genres: form.genres.map(option => option.value),
             systems: form.systems.map(option => option.value),
-            barcode: form.barcode,
             imageUrl: form.imageUrl, // AI URL 있는 경우만 의미 있음
+            quantity: form.quantity
         };
 
         let result;
@@ -133,7 +134,7 @@ export default function UploadGame() {
         }
 
         alert("보드게임 등록 성공!");
-        setForm({ name: '', description: '', minPlayers: 2, maxPlayers: 4, age: 0, time: 0, genres: [], systems: [], barcode: '', imageUrl: '' });
+        setForm({ name: '', description: '', minPlayers: 2, maxPlayers: 4, age: 0, time: 0, genres: [], systems: [], imageUrl: '', quantity: 1 });
         setFile(null);
         setUploadedUrl('');
 
@@ -259,14 +260,14 @@ export default function UploadGame() {
                                 }
                             />
 
-                            <label>바코드</label>
+                            <label>수량</label>
                             <input
                                 className="upload-form-input"
-                                type="text"
-                                name="barcode"
-                                value={form.barcode}
-                                onChange={handleChange}
-                                placeholder="예: CATANA-01"
+                                type="number"
+                                value={form.quantity}
+                                name="quantity"
+                                min={1}
+                                onChange={(e) => setQuantity(Number(e.target.value))}
                             />
 
                             <label>이미지 업로드</label>
