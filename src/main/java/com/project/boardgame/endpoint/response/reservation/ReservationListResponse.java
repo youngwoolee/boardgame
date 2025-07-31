@@ -16,17 +16,17 @@ import org.springframework.http.ResponseEntity;
 @Builder
 @NoArgsConstructor
 public class ReservationListResponse extends ResponseDto {
-    private List<ReservationMasterResponse> data;
+    private List<ReservationResponse> data;
 
     @Builder
-    public ReservationListResponse(List<ReservationMasterResponse> data) {
+    public ReservationListResponse(List<ReservationResponse> data) {
         super();
         this.data = data;
     }
 
     public static ResponseEntity<ReservationListResponse> success(List<ReservationMaster> response) {
-        List<ReservationMasterResponse> reservationResponseList = response.stream()
-                .map(ReservationMasterResponse::from)
+        List<ReservationResponse> reservationResponseList = response.stream()
+                .map(ReservationResponse::from)
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(new ReservationListResponse(reservationResponseList));
     }

@@ -48,13 +48,17 @@ const SIGN_UP_URL = () => `${API_DOMAIN}/auth/sign-up`;
 const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`;
 const COMPLETE_SIGN_UP_URL = () => `${API_DOMAIN}/auth/complete-signup`;
 export const SNS_SIGN_IN_URL = (type: 'kakao' | 'naver') => `${API_DOMAIN}/auth/oauth2/${type}`;
+
 const GAME_LIST_URL = () => `${API_DOMAIN}/games`;
+
 const RESERVE_GAME_URL = () => `${API_DOMAIN}/reservations/reserve`;
 const MY_RESERVATION_URL = () => `${API_DOMAIN}/reservations/me`;
 const MY_RESERVATION_DETAIL_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}`;
 const MY_RESERVATION_RETURN_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}/return`;
 const MY_RESERVATION_CANCEL_URL = (reservationId: number) => `${API_DOMAIN}/reservations/${reservationId}/cancel`;
+
 const MY_PROFILE_URL = () => `${API_DOMAIN}/user/me`;
+
 const UPLOAD_IMAGE_URL = () => `${API_DOMAIN}/admin/upload`;
 const UPLOAD_BY_URL_IMAGE_URL = () => `${API_DOMAIN}/admin/upload-by-url`;
 const GENERATE_GAME_INFO_URL = () => `${API_DOMAIN}/admin/generate-info`;

@@ -1,8 +1,14 @@
 package com.project.boardgame.endpoint.response;
 
+import java.util.List;
+
 import com.project.boardgame.domain.Member;
+import com.project.boardgame.endpoint.response.reservation.ReservationDetailListResponse;
+import com.project.boardgame.endpoint.response.reservation.ReservationDetailResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 
 @Getter
@@ -12,7 +18,15 @@ public class UserResponse extends ResponseDto{
     private String name;
     private String email;
 
-    public static UserResponse from(Member member) {
-        return new UserResponse(member.getUserId(), member.getName(), member.getEmail());
+    public UserResponse(Member member) {
+        super();
+        this.userId = member.getUserId();
+        this.name = member.getName();
+        this.email= member.getEmail();
+    }
+
+    public static ResponseEntity<UserResponse> success(Member member) {
+        UserResponse responseBody = new UserResponse(member);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 }

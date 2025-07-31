@@ -1,8 +1,7 @@
 package com.project.boardgame.endpoint;
 
-import java.util.Map;
-
 import com.project.boardgame.endpoint.request.auth.CheckCertificationRequest;
+import com.project.boardgame.endpoint.request.auth.CompleteSignUpRequest;
 import com.project.boardgame.endpoint.request.auth.EmailCertificationRequest;
 import com.project.boardgame.endpoint.request.auth.IdCheckRequest;
 import com.project.boardgame.endpoint.request.auth.SignInRequest;
@@ -61,7 +60,7 @@ public class AuthController {
     }
 
     @PostMapping("/complete-signup")
-    public ResponseEntity<ResponseDto> completeSignup(@RequestBody Map<String, String> body) {
-        return authService.completeSignUp(body.get("realName"));
+    public ResponseEntity<ResponseDto> completeSignup(@RequestBody @Valid CompleteSignUpRequest request) {
+        return authService.completeSignUp(request.getRealName());
     }
 }

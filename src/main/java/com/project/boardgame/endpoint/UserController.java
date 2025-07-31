@@ -1,5 +1,7 @@
 package com.project.boardgame.endpoint;
 
+import java.security.Principal;
+
 import com.project.boardgame.domain.Member;
 import com.project.boardgame.endpoint.response.UserResponse;
 import com.project.boardgame.repository.UserRepository;
@@ -20,14 +22,13 @@ public class UserController {
     private final UserRepository userRepository;
 
     @GetMapping("/me")
-    public ResponseEntity<? super UserResponse> getMyProfile() {
-        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+    public ResponseEntity<? super UserResponse> getMyProfile(Principal principal) {
+        String userId = principal.getName();
         Member member = userRepository.findByUserId(userId);
         if (member == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        return ResponseEntity.ok(UserResponse.from(member));
+        return UserResponse.success(member);
     }
 }

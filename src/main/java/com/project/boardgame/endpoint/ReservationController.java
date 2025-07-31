@@ -3,9 +3,9 @@ package com.project.boardgame.endpoint;
 import java.security.Principal;
 import java.util.List;
 
+import com.project.boardgame.domain.ReservationMaster;
 import com.project.boardgame.endpoint.request.GameReservationRequest;
 import com.project.boardgame.endpoint.response.reservation.ReservationListResponse;
-import com.project.boardgame.endpoint.response.reservation.ReservationMasterResponse;
 import com.project.boardgame.endpoint.response.reservation.ReservationStatusResponse;
 import com.project.boardgame.endpoint.response.reservation.ReservationResponse;
 import com.project.boardgame.endpoint.response.reservation.ReservationDetailListResponse;
@@ -33,26 +33,19 @@ public class ReservationController {
     @GetMapping("/me")
     public ResponseEntity<? super ReservationListResponse> getMyReservations(Principal principal) {
         String userId = principal.getName();
-        List<ReservationMasterResponse> reservations = reservationService.getMyReservations(userId);
-        return ResponseEntity.ok(ReservationListResponse.builder().data(reservations).build());
+        List<ReservationMaster> reservations = reservationService.getMyReservations(userId);
+        return ReservationListResponse.success(reservations);
     }
 
     @GetMapping("/{reservationId}")
     public ResponseEntity<? super ReservationDetailListResponse> getReservationDetails(@PathVariable("reservationId") Long reservationId) {
         List<ReservationDetailResponse> details = reservationService.getReservationDetails(reservationId);
-        return ResponseEntity.ok(new ReservationDetailListResponse(details));
-    }
-
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ReservationResponse>> getReservations(@PathVariable String userId) {
-        List<ReservationResponse> reservations = reservationService.getReservations(userId);
-        return ResponseEntity.ok(reservations);
+        return ReservationDetailListResponse.success(details);
     }
 
     @PatchMapping("/{reservationId}/cancel")
-    public ResponseEntity<ReservationStatusResponse> cancelReservation(@PathVariable("reservationId") Long reservationId) {
-        ReservationStatusResponse response = reservationService.cancelReservation(reservationId);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<? super ReservationStatusResponse> cancelReservation(@PathVariable("reservationId") Long reservationId) {
+        return reservationService.cancelReservation(reservationId);
     }
 
     @PatchMapping("/{reservationId}/return")

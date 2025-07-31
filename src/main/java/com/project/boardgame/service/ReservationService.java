@@ -12,7 +12,6 @@ import com.project.boardgame.domain.ReservationMaster;
 import com.project.boardgame.domain.ReservationStatus;
 import com.project.boardgame.endpoint.request.GameReservationRequest;
 import com.project.boardgame.endpoint.response.GameResponse;
-import com.project.boardgame.endpoint.response.reservation.ReservationMasterResponse;
 import com.project.boardgame.endpoint.response.reservation.ReservationStatusResponse;
 import com.project.boardgame.endpoint.response.reservation.ReservationResponse;
 import com.project.boardgame.endpoint.response.reservation.ReservationDetailResponse;
@@ -36,9 +35,9 @@ public class ReservationService {
     private final UserRepository userRepository;
     private static final int RESERVATION_DATE = 4;
 
-    public List<ReservationMasterResponse> getMyReservations(String userId) {
+    public List<ReservationMaster> getMyReservations(String userId) {
         List<ReservationMaster> reservationMasterList = reservationMasterRepository.findByUserId(userId);
-        return reservationMasterList.stream().map(ReservationMasterResponse::from).collect(Collectors.toList());
+        return reservationMasterList;
     }
 
     public List<ReservationResponse> getReservations(String userId) {
@@ -47,7 +46,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public ReservationStatusResponse cancelReservation(Long masterId) {
+    public ResponseEntity<ReservationStatusResponse> cancelReservation(Long masterId) {
         ReservationMaster master = reservationMasterRepository.findById(masterId)
                 .orElseThrow(() -> new IllegalArgumentException("예약 마스터 ID를 찾을 수 없습니다."));
 
@@ -60,11 +59,7 @@ public class ReservationService {
             detail.setStatus(ReservationStatus.CANCELLED);
         }
 
-        ReservationStatusResponse response = ReservationStatusResponse.builder()
-                .reservationId(master.getId())
-                .status(master.getStatus().name())
-                .build();
-        return response;
+        return ReservationStatusResponse.success(masterId, master.getStatus().name());
     }
 
     @Transactional
