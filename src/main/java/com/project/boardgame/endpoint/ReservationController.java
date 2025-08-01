@@ -50,15 +50,13 @@ public class ReservationController {
 
     @PatchMapping("/{reservationId}/return")
     public ResponseEntity<? super ReservationStatusResponse> returnReservation(@PathVariable("reservationId") Long reservationId) {
-        ReservationStatusResponse response = reservationService.returnReservation(reservationId);
-        return ResponseEntity.ok(response);
+        return reservationService.returnReservation(reservationId);
     }
 
     @PostMapping("/reserve")
     public ResponseEntity<? super ReservationResponse> reserveGame(@RequestBody GameReservationRequest request, Principal principal) {
         String userId = principal.getName();
-        ResponseEntity<? super ReservationResponse> response = reservationService.reserve(userId, request);
-        return response;
+        return reservationService.reserve(userId, request);
     }
 
 }

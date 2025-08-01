@@ -43,6 +43,7 @@ public class ReservationResponse extends ResponseDto {
                 .nickname(master.getUserNickname())
                 .gameNames(gameNames)
                 .reservedAt(master.getReservedAt())
+                .returnedAt(master.getReturnedAt())
                 .dueDate(master.getDueDate())
                 .status(master.getStatus()
                                 .name())

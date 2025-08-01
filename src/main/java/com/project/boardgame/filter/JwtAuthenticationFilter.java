@@ -91,12 +91,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         String[] excludedPaths = {
                 "/h2-console/**",
-                "/api/v1/admin/cache/evict-all"
+                "/api/v1/admin/cache/evict-all",
+                "/api/v1/auth/id-check",
+                "/api/v1/auth/email-certification",
+                "/api/v1/auth/check-certification",
+                "/api/v1/auth/sign-up",
+                "/api/v1/auth/sign-in"
         };
 
         for (String excludedPath : excludedPaths) {
             if (pathMatcher.match(excludedPath, path)) {
-                return true; // true를 반환하면 이 필터는 실행되지 않습니다.
+                return true;
             }
         }
 

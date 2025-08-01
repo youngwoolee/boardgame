@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CertificationRepository extends JpaRepository<Certification, String> {
 
-    Certification findByUserId(String userId);
+    Optional<Certification> findByUserId(String userId);
 
     @Transactional
     void deleteByUserId(String userId);

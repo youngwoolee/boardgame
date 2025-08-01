@@ -7,6 +7,7 @@ import java.util.List;
 import com.project.boardgame.endpoint.response.admin.GeneratedGameInfoResponse;
 import com.project.boardgame.service.dto.GeneratedGameDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,6 +24,7 @@ import reactor.core.publisher.Mono;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AiService {
 
@@ -146,7 +148,7 @@ public class AiService {
             }
 
         } catch (Exception e) {
-            System.err.println("썸네일 추출 실패: " + e.getMessage());
+            log.error("썸네일 추출 실패: " + e.getMessage());
         }
 
         return null;

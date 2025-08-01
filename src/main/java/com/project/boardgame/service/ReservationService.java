@@ -63,7 +63,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public ReservationStatusResponse returnReservation(Long masterId) {
+    public ResponseEntity<ReservationStatusResponse> returnReservation(Long masterId) {
         ReservationMaster master = reservationMasterRepository.findById(masterId)
                 .orElseThrow(() -> new IllegalArgumentException("예약 마스터 ID를 찾을 수 없습니다."));
 
@@ -77,12 +77,8 @@ public class ReservationService {
             detail.setStatus(ReservationStatus.RETURNED);
             detail.setReturnedAt(LocalDateTime.now());
         }
-        ReservationStatusResponse response = ReservationStatusResponse.builder()
-                .reservationId(master.getId())
-                .status(master.getStatus().name())
-                .build();
 
-        return response;
+        return ReservationStatusResponse.success(master.getId(), master.getStatus().name());
     }
 
     @Transactional

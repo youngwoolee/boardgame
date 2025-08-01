@@ -93,9 +93,13 @@ public class GameService {
     }
 
     @Cacheable(value = "games")
-    public List<GameResponse> getAllGames() {
+    public List<Game> getAllGamesRaw() {
         log.info("[log] fetching games from DB");
-        List<Game> games = gameRepository.findAllFetchJoin();
+        return gameRepository.findAllFetchJoin();
+    }
+
+    public List<GameResponse> getAllGames() {
+        List<Game> games = getAllGamesRaw();
 
         Set<Long> reservedGameIds = reservationDetailRepository.findReservedGameIdsByGameIn(games);
 

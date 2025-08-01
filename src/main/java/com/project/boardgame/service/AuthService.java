@@ -23,6 +23,7 @@ import com.project.boardgame.repository.CertificationRepository;
 import com.project.boardgame.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthService {
     private final UserRepository userRepository;
@@ -49,7 +51,7 @@ public class AuthService {
             if(isExistId) return IdCheckResponse.duplicateId();
 
         } catch(Exception exception) {
-            exception.printStackTrace();
+            log.error("[log] id check error : {}", exception);
             return ResponseDto.databaseError();
         }
 
@@ -68,14 +70,24 @@ public class AuthService {
             boolean isSuccess = emailProvider.sendCertificationMail(email, certificationNumber);
             if(!isSuccess) return EmailCertificationResponse.mailSendFail();
 
-            Certification certification = Certification.builder()
-                    .userId(userId)
-                    .email(email)
-                    .certificationNumber(certificationNumber).build();
+            Optional<Certification> optional = certificationRepository.findByUserId(userId);
+
+            Certification certification;
+            if (optional.isPresent()) {
+                certification = optional.get();
+                certification.setEmail(email);
+                certification.setCertificationNumber(certificationNumber);
+            } else {
+                certification = Certification.builder()
+                        .userId(userId)
+                        .email(email)
+                        .certificationNumber(certificationNumber)
+                        .build();
+            }
             certificationRepository.save(certification);
 
         } catch (Exception exception) {
-            exception.printStackTrace();
+            log.error("[log] email certification error : {}", exception);
             return ResponseDto.databaseError();
         }
         return EmailCertificationResponse.success();
@@ -87,14 +99,15 @@ public class AuthService {
             String email = request.getEmail();
             String certificationNumber = request.getCertificationNumber();
 
-            Certification certification = certificationRepository.findByUserId(userId);
-            if(certification == null) return CheckCertificationResponse.certificationFail();
+            Optional<Certification> optional = certificationRepository.findByUserId(userId);
 
+            if(optional.isEmpty()) return CheckCertificationResponse.certificationFail();
+            Certification certification = optional.get();
             boolean isMatched = certification.getEmail().equals(email) && certification.getCertificationNumber().equals(certificationNumber);
             if(!isMatched) return CheckCertificationResponse.certificationFail();
 
         } catch (Exception exception) {
-            exception.printStackTrace();
+            log.error("[log] certification number error : {}", exception);
             return ResponseDto.databaseError();
         }
         return CheckCertificationResponse.success();
@@ -111,8 +124,10 @@ public class AuthService {
             String email = request.getEmail();
             String certificationNumber = request.getCertificationNumber();
 
-            Certification certification = certificationRepository.findByUserId(userId);
+            Optional<Certification> optional = certificationRepository.findByUserId(userId);
+            if(optional.isEmpty()) return SignUpResponse.certificationFail();
 
+            Certification certification = optional.get();
             boolean isMatched = certification.getEmail().equals(email) &&
                     certification.getCertificationNumber().equals(certificationNumber);
             if(!isMatched) return SignUpResponse.certificationFail();
@@ -127,7 +142,7 @@ public class AuthService {
             certificationRepository.deleteByUserId(userId);
 
         } catch (Exception exception) {
-            exception.printStackTrace();
+            log.error("[log] sign up error : {}", exception);
             return ResponseDto.databaseError();
         }
         return SignUpResponse.success();
@@ -151,7 +166,7 @@ public class AuthService {
             token = jwtProvider.create(userId, member.getRole());
 
         } catch (Exception exception) {
-            exception.printStackTrace();
+            log.error("[log] sign in error : {}", exception);
             return ResponseDto.databaseError();
         }
         return SignInResponse.success(token);
@@ -173,7 +188,7 @@ public class AuthService {
             return ResponseEntity.ok()
                     .body(new ResponseDto(ResponseCode.SUCCESS, "가입 완료"));
         } catch (Exception exception) {
-            exception.printStackTrace();
+            log.error("[log] complete sign up error : {}", exception);
             return ResponseDto.databaseError();
         }
     }

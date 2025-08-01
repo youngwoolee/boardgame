@@ -37,6 +37,7 @@ public class Member {
         this.userId = request.getId();
         this.password = request.getPassword();
         this.email = request.getEmail();
+        this.name = request.getRealName();
         this.type = "app";
         this.role = "ROLE_USER";
     }

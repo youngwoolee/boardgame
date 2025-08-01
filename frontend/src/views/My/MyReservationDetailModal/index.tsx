@@ -45,7 +45,12 @@ export default function MyReservationDetailModal({ details, onClose, onReturn, o
                                     <div className="detail-info">
                                         <span>{item.game.name}</span>
                                         <span className="barcode">{item.game.barcode}</span>
-                                        <span className="status">상태: {item.status}</span>
+                                        <span className="status">
+                                            {item.status === 'RESERVED' && '예약됨'}
+                                            {item.status === 'RETURNED' && '반납 완료'}
+                                            {item.status === 'CANCELLED' && '취소됨'}
+                                        </span>
+
                                     </div>
                                 </li>
                             ))}

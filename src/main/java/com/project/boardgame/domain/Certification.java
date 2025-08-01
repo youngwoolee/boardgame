@@ -26,4 +26,11 @@ public class Certification {
     private String email;
     private String certificationNumber;
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setCertificationNumber(String certificationNumber) {
+        this.certificationNumber = certificationNumber;
+    }
 }
