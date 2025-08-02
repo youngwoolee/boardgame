@@ -90,3 +90,14 @@
   display: flex;
   flex-direction: column;
 }
+
+/* 모든 input, select, textarea의 폰트 크기를 16px로 설정하여 자동 확대 방지 */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+textarea,
+select {
+  font-size: 16px !important; /* 다른 스타일에 덮어씌워지지 않도록 !important 사용 */
+}

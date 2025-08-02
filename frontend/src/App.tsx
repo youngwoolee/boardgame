@@ -1,19 +1,16 @@
 import './App.css';
-import {Routes, Route, Navigate} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import SignUp from "./views/Authentication/SignUp";
 import SignIn from "./views/Authentication/SignIn";
 import OAuth from "./views/Authentication/OAuth";
 import Main from "./views/Main";
 import AdditionalInfo from "./views/Authentication/AdditionalInfo";
-import MyReservations from "./views/My/MyReservations";
-import MyReservationDetail from "./views/My/MyReservationDetailModal";
 import AppLayout from "./views/AppLayout";
 import MyPage from "./views/My/MyPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
-import Admin from "./views/UploadGame";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import UploadGame from "./views/UploadGame";
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import AdminRoute from "./components/AdminRoute";
 
 function App() {

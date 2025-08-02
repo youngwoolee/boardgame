@@ -239,21 +239,24 @@ export default function MyReservations() {
                                         {res.status === 'CANCELLED' && '취소됨'}
                                     </div>
                                     <div className="reservation-game-name">{res.gameName}</div>
-                                    <div className="reservation-info-row">
-                                        <span className="reservation-label">예약일:</span>
-                                        <span>{formatDate(res.reservedAt.split('T')[0])}</span>
-                                    </div>
-                                    {res.status === 'RETURNED' ? (
+                                    <div className="reservation-bottom-info">
                                         <div className="reservation-info-row">
-                                            <span className="reservation-label">반납일:</span>
-                                            <span>{formatDate(res.returnedAt?.split('T')[0])}</span>
+                                            <span className="reservation-label">예약일:</span>
+                                            <span>{formatDate(res.reservedAt.split('T')[0])}</span>
                                         </div>
-                                    ) : (
-                                        <div className="reservation-info-row due">
-                                            <span className="reservation-label">반납 예정일:</span>
-                                            <span>{formatDate(res.dueDate.split('T')[0])}</span>
-                                        </div>
-                                    )}
+                                        {res.status === 'RETURNED' ? (
+                                            <div className="reservation-info-row">
+                                                <span className="reservation-label">반납일:</span>
+                                                <span>{formatDate(res.returnedAt?.split('T')[0])}</span>
+                                            </div>
+                                        ) : (
+                                            <div className="reservation-info-row due">
+                                                <span className="reservation-label">반납 예정일:</span>
+                                                <span>{formatDate(res.dueDate.split('T')[0])}</span>
+                                            </div>
+                                        )}
+                                    </div>
+
                                     {res.overdue && <div className="overdue-text">⚠ 연체됨</div>}
                                 </div>
                             </div>

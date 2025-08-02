@@ -31,7 +31,7 @@ export default function MyReservationDetailModal({ details, onClose, onReturn, o
             <div className="rental-modal" onClick={e => e.stopPropagation()}>
                 <div className="rental-modal-header">
                     예약 상세
-                    <button className="close-button" onClick={onClose}>×</button>
+                    <button className="modal-close" onClick={onClose}>×</button>
                 </div>
 
                 <div className="rental-modal-body">

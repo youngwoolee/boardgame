@@ -57,12 +57,19 @@
     -webkit-box-orient: vertical;
 }
 
+.reservation-bottom-info {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
 .reservation-info-row {
     font-size: 13px;
     display: flex;
     justify-content: center;
     gap: 6px;
-    margin-top: auto;
+    margin-top: 4px;
 }
 
 .reservation-info-row.due {

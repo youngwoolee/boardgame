@@ -42,7 +42,7 @@ export default function MyProfile() {
     return (
         <div className="my-profile-wrapper">
             <div className="profile-info">
-                <div className="profile-label">닉네임</div>
+                <div className="profile-label">이름</div>
                 <div className="profile-value">{profile.name || '미설정'}</div>
             </div>
             <div className="profile-info">

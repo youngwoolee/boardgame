@@ -85,7 +85,7 @@ export default function RentalModal({ list, onClose, onRented }: Props) {
             <div className="rental-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="rental-modal-header">
                     대여 목록
-                    <button className="close-button" onClick={onClose}>×</button>
+                    <button className="modal-close" onClick={onClose}>×</button>
                 </div>
 
                 <div className="rental-modal-body">
