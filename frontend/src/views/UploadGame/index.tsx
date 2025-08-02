@@ -24,6 +24,7 @@ export default function UploadGame() {
     const [boardGameName, setBoardGameName] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
     const [quantity, setQuantity] = useState(1);
+    const [isSubmitting, setIsSubmitting] = useState(false); // ✅ 등록 진행 상태 추가
 
     const [form, setForm] = useState({
         name: '',
@@ -102,6 +103,8 @@ export default function UploadGame() {
         if (form.quantity <= 0) return toast.warn("수량을 입력해주세요.");
         if (!file && !form.imageUrl) return toast.warn("이미지를 업로드하거나 AI 생성 이미지가 있어야 합니다.");
 
+        setIsSubmitting(true);
+
         const gameData: UploadRequestDto = {
             name: form.name,
             description: form.description,
@@ -128,6 +131,8 @@ export default function UploadGame() {
             return;
         }
 
+        setIsSubmitting(false);
+
         if (!result || result.code !== ResponseCode.SUCCESS) {
             alert(result?.message || '업로드 실패');
             return;
@@ -141,19 +146,22 @@ export default function UploadGame() {
 
     };
 
+    // ✅ AI 생성 중이거나 최종 등록 중일 때 폼 전체를 비활성화
+    const isFormDisabled = isGenerating || isSubmitting;
+
     return (
         <div id="upload-game-wrapper">
             <div className="upload-game-container">
                 <div className="upload-game-box">
                     <div className="upload-game-title">보드게임 등록</div>
 
-                    {isGenerating && (
+                    {(isGenerating || isSubmitting) && (
                         <div className="loading-overlay">
                             <ClipLoader size={50} color="#007bff" />
                         </div>
                     )}
 
-                    <fieldset disabled={isGenerating} className="upload-game-content-box">
+                    <fieldset disabled={isFormDisabled} className="upload-game-content-box">
                         <div className="upload-game-content-input-box">
                             <label>보드게임 이름 (AI 생성용)</label>
                             <div className="ai-generate-group">
@@ -296,9 +304,9 @@ export default function UploadGame() {
                         </div>
 
                         <div className="upload-game-content-button-box">
-                            <div className="primary-button-lg full-width" onClick={handleSubmit}>
-                                등록하기
-                            </div>
+                            <button className="primary-button-lg full-width" onClick={handleSubmit} disabled={isFormDisabled}>
+                                {isSubmitting ? <ClipLoader size={20} color="#fff" /> : '등록하기'}
+                            </button>
                             <div className="text-link-lg full-width" onClick={() => navigate('/')}>
                                 메인으로
                             </div>
