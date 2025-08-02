@@ -27,8 +27,11 @@ public class GameResponse {
     private String tag;
     private int minPlayers;
     private int maxPlayers;
+    private int bestPlayers;
     private int age;
-    private String time;
+    private double weight;
+    private int minPlayTime;
+    private int maxPlayTime;
     private Set<String> genres;
     private Set<String> systems;
     private String barcode;
@@ -43,8 +46,11 @@ public class GameResponse {
                 .tag(game.getTag())
                 .minPlayers(game.getMinPlayers())
                 .maxPlayers(game.getMaxPlayers())
+                .bestPlayers(game.getBestPlayers())
                 .age(game.getAge())
-                .time(game.getTime())
+                .minPlayTime(game.getMinPlayTime())
+                .maxPlayTime(game.getMaxPlayTime())
+                .weight(game.getWeight())
                 .genres(game.getGenres().stream().map(Genre::getName).collect(Collectors.toSet()))
                 .systems(game.getSystems().stream().map(SystemType::getName).collect(Collectors.toSet()))
                 .barcode(game.getBarcode())
@@ -60,8 +66,11 @@ public class GameResponse {
                 .tag(game.getTag())
                 .minPlayers(game.getMinPlayers())
                 .maxPlayers(game.getMaxPlayers())
+                .bestPlayers(game.getBestPlayers())
                 .age(game.getAge())
-                .time(game.getTime())
+                .minPlayTime(game.getMinPlayTime())
+                .maxPlayTime(game.getMaxPlayTime())
+                .weight(game.getWeight())
                 .genres(game.getGenres().stream().map(Genre::getName).collect(Collectors.toSet()))
                 .systems(game.getSystems().stream().map(SystemType::getName).collect(Collectors.toSet()))
                 .barcode(game.getBarcode())

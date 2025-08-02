@@ -50,10 +50,14 @@ public class Game extends BaseEntity{
     private int minPlayers;
 
     private int maxPlayers;
+    private int bestPlayers;
 
     private int age;
 
-    private String time;
+    private int minPlayTime;
+    private int maxPlayTime;
+
+    private double weight;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

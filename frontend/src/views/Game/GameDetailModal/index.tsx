@@ -5,7 +5,7 @@ import {
     FiHeart,
     FiClock,
     FiTag,
-    FiSettings
+    FiSettings, FiStar, FiTrendingUp
 } from 'react-icons/fi';
 
 type Game = {
@@ -15,8 +15,11 @@ type Game = {
     tag?: string | null;
     minPlayers?: number;
     maxPlayers?: number;
+    bestPlayers?: number;
     age?: number;
-    time?: string;
+    minPlayTime?: number;
+    maxPlayTime?: number;
+    weight?: number;
     genres?: string[];
     systems?: string[];
     description?: string;
@@ -35,6 +38,12 @@ export default function GameDetailModal({ game, onClose }: Props) {
             document.body.style.overflow = 'auto';
         };
     }, []);
+
+    const formatPlayTime = (min?: number, max?: number) => {
+        if (!min || !max) return '정보 없음';
+        if (min === max) return `${min}분 이내`;
+        return `${min} ~ ${max}분`;
+    };
 
     return (
         <div className="modal-overlay" onClick={onClose}>
@@ -58,26 +67,37 @@ export default function GameDetailModal({ game, onClose }: Props) {
                                     <div className="label">인원</div>
                                     <div className="value">
                                         {game.minPlayers && game.maxPlayers
-                                            ? game.minPlayers === game.maxPlayers
-                                                ? `${game.minPlayers}명`
-                                                : `${game.minPlayers} ~ ${game.maxPlayers}명`
+                                            ? `${game.minPlayers} ~ ${game.maxPlayers}명`
                                             : '정보 없음'}
                                     </div>
                                 </div>
                             </div>
                             <div className="attribute">
+                                <FiStar className='icon' />
+                                <div>
+                                    <div className="label">베스트 인원</div>
+                                    <div className="value">{game.bestPlayers ? `${game.bestPlayers}명` : '정보 없음'}</div>
+                                </div>
+                            </div>
+                            <div className="attribute">
                                 <FiHeart className='icon' />
-
                                 <div>
                                     <div className="label">연령</div>
-                                    <div className="value">만 {game.age}세+</div>
+                                    <div className="value">만 {game.age}세 이상</div>
                                 </div>
                             </div>
                             <div className="attribute">
                                 <FiClock className='icon' />
                                 <div>
                                     <div className="label">소요시간</div>
-                                    <div className="value">{game.time}</div>
+                                    <div className="value">{formatPlayTime(game.minPlayTime, game.maxPlayTime)}</div>
+                                </div>
+                            </div>
+                            <div className="attribute">
+                                <FiTrendingUp className='icon' />
+                                <div>
+                                    <div className="label">난이도</div>
+                                    <div className="value">{game.weight ? `${game.weight.toFixed(1)} / 5.0` : '정보 없음'}</div>
                                 </div>
                             </div>
                             <div className="attribute">
@@ -105,3 +125,4 @@ export default function GameDetailModal({ game, onClose }: Props) {
         </div>
     );
 }
+

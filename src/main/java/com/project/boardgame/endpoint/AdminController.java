@@ -34,7 +34,7 @@ public class AdminController {
     @PostMapping("/generate-info")
     public ResponseEntity<? super GeneratedGameInfoResponse> generate(@RequestBody GenerateInfoRequest request) {
         log.info("[log] generate : {}", request.toString());
-        GeneratedGameDto dto = aiService.generate(request.getBoardGameName());
+        GeneratedGameDto dto = aiService.getGameData(request.getBoardGameName());
         return GeneratedGameInfoResponse.success(dto);
     }
 

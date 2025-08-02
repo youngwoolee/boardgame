@@ -16,8 +16,11 @@ public class GeneratedGameDto {
     private String description;
     private int minPlayers;
     private int maxPlayers;
+    private int bestPlayers;
     private int age;
-    private int time;
+    private int minPlayTime;
+    private int maxPlayTime;
+    private double weight;
     private List<String> genres;
     private List<String> systems;
     private String imageUrl;

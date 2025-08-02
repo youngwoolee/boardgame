@@ -4,8 +4,11 @@ export default interface GeneratedGameInfoResponseDto extends ResponseDto {
     description: string;
     minPlayers: number;
     maxPlayers: number;
+    bestPlayers: number;
     age: number;
-    time: number;
+    minPlayTime: number;
+    maxPlayTime: number;
+    weight: number;
     genres: string[];
     systems: string[];
     imageUrl: string;

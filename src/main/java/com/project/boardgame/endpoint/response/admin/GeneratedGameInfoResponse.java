@@ -22,8 +22,11 @@ public class GeneratedGameInfoResponse extends ResponseDto {
     private String description;
     private int minPlayers;
     private int maxPlayers;
+    private int bestPlayers;
     private int age;
-    private int time;
+    private int minPlayTime;
+    private int maxPlayTime;
+    private double weight;
     private List<String> genres;
     private List<String> systems;
     private String imageUrl;
@@ -33,8 +36,11 @@ public class GeneratedGameInfoResponse extends ResponseDto {
                 .description(dto.getDescription())
                 .minPlayers(dto.getMinPlayers())
                 .maxPlayers(dto.getMaxPlayers())
+                .bestPlayers(dto.getBestPlayers())
                 .age(dto.getAge())
-                .time(dto.getTime())
+                .minPlayTime(dto.getMinPlayTime())
+                .maxPlayTime(dto.getMaxPlayTime())
+                .weight(dto.getWeight())
                 .genres(dto.getGenres())
                 .systems(dto.getSystems())
                 .imageUrl(dto.getImageUrl())

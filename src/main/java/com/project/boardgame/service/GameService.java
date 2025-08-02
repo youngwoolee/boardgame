@@ -65,7 +65,7 @@ public class GameService {
                 .collect(Collectors.toSet());
 
         log.info("[log] createGame : {}", genres);
-        // ✅ 이름으로 SystemType 엔티티 조회
+        //이름으로 SystemType 엔티티 조회
         Set<SystemType> systems = dto.getSystems().stream()
                 .map(name -> systemTypeRepository.findByName(name)
                         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 시스템입니다: " + name)))
@@ -81,7 +81,10 @@ public class GameService {
                             .minPlayers(dto.getMinPlayers())
                             .maxPlayers(dto.getMaxPlayers())
                             .age(dto.getAge())
-                            .time(dto.getTime())
+                            .bestPlayers(dto.getBestPlayers())
+                            .minPlayTime(dto.getMinPlayTime())
+                            .maxPlayTime(dto.getMaxPlayTime())
+                            .weight(Math.round(dto.getWeight() * 10.0) / 10.0)
                             .genres(genres)
                             .systems(systems)
                             .barcode(barcode)
