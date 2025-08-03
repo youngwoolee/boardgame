@@ -35,6 +35,7 @@ export default function Main() {
     const [genreFilter, setGenreFilter] = useState<string>('');
     const [playerFilter, setPlayerFilter] = useState<string>('');
     const [rentalStatusFilter, setRentalStatusFilter] = useState<string>('');
+    const [sortFilter, setSortFilter] = useState<string>('name');
 
     const playerOptions = ['1', '2', '3', '4', '5', '6+'];
 
@@ -116,7 +117,12 @@ export default function Main() {
             if (rentalStatusFilter === 'rented') return !game.available;
             return true;
         })
-        .sort((a, b) => a.name.localeCompare(b.name));
+        .sort((a, b) => {
+            if (sortFilter === 'weight') {
+                return (a.weight || 0) - (b.weight || 0); // 난이도 오름차순
+            }
+            return a.name.localeCompare(b.name); // 기본값: 이름 오름차순
+        });
 
     const allGenres = gameList.flatMap(game => game.genres || []);
     const uniqueGenres = Array.from(new Set(allGenres)).sort();
@@ -165,6 +171,11 @@ export default function Main() {
                         <option value=''>전체</option>
                         <option value='available'>대여 가능</option>
                         <option value='rented'>대여 중</option>
+                    </select>
+
+                    <select value={sortFilter} onChange={(e) => setSortFilter(e.target.value)}>
+                        <option value='name'>이름순</option>
+                        <option value='weight'>난이도순</option>
                     </select>
                 </div>
             </div>

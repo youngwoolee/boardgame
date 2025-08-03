@@ -187,7 +187,7 @@ export const getGameListRequest = async () => {
         .then(responseHandler<GameListResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
 
 export const signInRequest = async (requestBody: SignInRequestDto) => {
 
@@ -195,7 +195,7 @@ export const signInRequest = async (requestBody: SignInRequestDto) => {
         .then(responseHandler<SignInResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
 
 export const signUpRequest = async (requestBody: SignUpRequestDto) => {
 
@@ -203,7 +203,7 @@ export const signUpRequest = async (requestBody: SignUpRequestDto) => {
         .then(responseHandler<SignUpResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
 
 export const idCheckRequest = async (requestBody: IdCheckRequestDto) => {
 
@@ -211,7 +211,7 @@ export const idCheckRequest = async (requestBody: IdCheckRequestDto) => {
         .then(responseHandler<IdCheckResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
 
 export const emailCertificationRequest = async (requestBody: EmailCertificationRequestDto) => {
 
@@ -219,7 +219,7 @@ export const emailCertificationRequest = async (requestBody: EmailCertificationR
         .then(responseHandler<EmailCertificationResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
 
 export const checkCertificationRequest = async (requestBody: CheckCertificationRequestDto) => {
 
@@ -227,4 +227,4 @@ export const checkCertificationRequest = async (requestBody: CheckCertificationR
         .then(responseHandler<CheckCertificationResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
