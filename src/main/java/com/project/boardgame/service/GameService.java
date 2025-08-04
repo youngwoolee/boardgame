@@ -1,7 +1,9 @@
 package com.project.boardgame.service;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,6 +18,8 @@ import com.project.boardgame.endpoint.request.GameUploadRequest;
 import com.project.boardgame.endpoint.response.GameDetailResponse;
 import com.project.boardgame.endpoint.response.GameReservationResponse;
 import com.project.boardgame.endpoint.response.GameResponse;
+import com.project.boardgame.endpoint.response.ResponseDto;
+import com.project.boardgame.endpoint.response.admin.AdminGameResponse;
 import com.project.boardgame.provider.BarcodeGenerator;
 import com.project.boardgame.repository.GameRepository;
 import com.project.boardgame.repository.GenreRepository;
@@ -25,8 +29,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
@@ -38,6 +44,7 @@ public class GameService {
     private final SystemTypeRepository systemTypeRepository;
     private final ReservationDetailRepository reservationDetailRepository;
     private final BarcodeGenerator barcodeGenerator;
+    private final ImageService imageService;
 
     public List<Game> getAvailableGames() {
 //        return gameRepository.findAll().stream()
@@ -134,14 +141,44 @@ public class GameService {
     }
 
     @Transactional
-    public GameResponse updateGame(Long id, GameRequest request) {
-        Game game = gameRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게임이 존재하지 않습니다."));
+    @CacheEvict(value = "games", allEntries = true)
+    public String updateGame(String barcode, GameUploadRequest dto, MultipartFile image) throws Exception {
+        Game game = gameRepository.findByBarcode(barcode)
+                .orElseThrow(() -> new NoSuchElementException("Game not found with barcode: " + barcode));
 
-        game.setName(request.getName());
-        game.setDescription(request.getDescription());
+        String newImageUrl = game.getImageUrl();
+        if (image != null && !image.isEmpty()) {
+            newImageUrl = imageService.uploadImage(image);
+        } else if (dto.getImageUrl() != null && !dto.getImageUrl().isEmpty()) {
+            newImageUrl = dto.getImageUrl();
+        }
 
-        return GameResponse.from(game);
+        Set<Genre> genres = dto.getGenres().stream()
+                .map(name -> genreRepository.findByName(name).orElseThrow(/* ... */))
+                .collect(Collectors.toSet());
+
+        Set<SystemType> systems = dto.getSystems().stream()
+                .map(name -> systemTypeRepository.findByName(name).orElseThrow(/* ... */))
+                .collect(Collectors.toSet());
+
+        double roundedWeight = Math.round(dto.getWeight() * 10.0) / 10.0;
+
+        // Update the existing game entity
+        game.setName(dto.getName());
+        game.setDescription(dto.getDescription());
+        game.setMinPlayers(dto.getMinPlayers());
+        game.setMaxPlayers(dto.getMaxPlayers());
+        game.setBestPlayers(dto.getBestPlayers());
+        game.setAge(dto.getAge());
+        game.setMinPlayTime(dto.getMinPlayTime());
+        game.setMaxPlayTime(dto.getMaxPlayTime());
+        game.setWeight(roundedWeight);
+        game.setGenres(genres);
+        game.setSystems(systems);
+        game.setImageUrl(newImageUrl);
+
+        gameRepository.save(game);
+        return newImageUrl;
     }
 
     public List<GameDetailResponse> getAllGamesDetail() {
@@ -151,4 +188,13 @@ public class GameService {
                 .collect(Collectors.toList());
         return response;
     }
+
+    public ResponseEntity<? super AdminGameResponse> getGameByBarcode(String barcode) {
+        Optional<Game> game = gameRepository.findByBarcode(barcode);
+        if(game.isEmpty()) {
+            return ResponseDto.validationFail();
+        }
+        return AdminGameResponse.success(game.get());
+    }
+
 }

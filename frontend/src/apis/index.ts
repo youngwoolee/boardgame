@@ -1,17 +1,22 @@
 import {
-    CheckCertificationRequestDto, CompleteSignupRequestDto,
+    CheckCertificationRequestDto,
+    CompleteSignupRequestDto,
     EmailCertificationRequestDto,
-    IdCheckRequestDto, SignInRequestDto, SignUpRequestDto
+    IdCheckRequestDto,
+    SignInRequestDto,
+    SignUpRequestDto
 } from "./request/auth";
 import axios, {AxiosResponse} from "axios";
 import {
     CheckCertificationResponseDto,
     EmailCertificationResponseDto,
-    IdCheckResponseDto, SignInResponseDto, SignUpResponseDto
+    IdCheckResponseDto,
+    SignInResponseDto,
+    SignUpResponseDto
 } from "./response/auth";
 import {ResponseDto} from "./response";
 import {GameListResponseDto} from "./response/game";
-import { getAccessTokenHeader } from '../utils/token';
+import {getAccessTokenHeader} from '../utils/token';
 import ReserveGameRequestDto from "./request/game/reserve-game.request.dto";
 import ReserveGameResponseDto from "./response/game/reserve-game.response.dto";
 import axiosInstance from "../utils/axiosInstance";
@@ -25,6 +30,7 @@ import UploadResponseDto from "./response/admin/upload.response.dto";
 import UploadRequestDto from "./request/admin/upload.request.dto";
 import {UserResponseDto} from "./response/user";
 import GeneratedGameInfoResponseDto from "./response/admin/generated-game-info.response.dto";
+import AdminGameResponseDto from "./response/admin/admin-game.response.dto";
 
 
 const responseHandler = <T> (response: AxiosResponse<any, any>) => {
@@ -62,7 +68,40 @@ const MY_PROFILE_URL = () => `${API_DOMAIN}/user/me`;
 const UPLOAD_IMAGE_URL = () => `${API_DOMAIN}/admin/upload`;
 const UPLOAD_BY_URL_IMAGE_URL = () => `${API_DOMAIN}/admin/upload-by-url`;
 const GENERATE_GAME_INFO_URL = () => `${API_DOMAIN}/admin/generate-info`;
+const GAME_BY_BARCODE_URL = (barcode: string) => `${API_DOMAIN}/admin/by-barcode/${barcode}`;
+const UPDATE_GAME_URL = (barcode: string) => `${API_DOMAIN}/admin/games/${barcode}`;
 
+export const updateGameRequest = async (
+    barcode: string,
+    imageFile: File | null,
+    gameData: UploadRequestDto
+) => {
+        const headers = {
+            ...getAccessTokenHeader(),
+            'Content-Type': 'multipart/form-data',
+        };
+
+        const formData = new FormData();
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
+        formData.append('data', new Blob([JSON.stringify(gameData)], { type: 'application/json' }));
+
+        const result = await axiosInstance.put(UPDATE_GAME_URL(barcode),
+            formData, { headers })
+            .then(responseHandler<UploadResponseDto>)
+            .catch(errorHandler)
+
+        return result;
+};
+
+export const getGameByBarcodeRequest = async (barcode: string) => {
+    const headers = getAccessTokenHeader();
+    const result = await axiosInstance.get(GAME_BY_BARCODE_URL(barcode), { headers })
+        .then(responseHandler<AdminGameResponseDto>)
+        .catch(errorHandler);
+    return result;
+};
 
 export const generateGameInfoRequest = async (boardGameName: string) => {
     const requestBody = { boardGameName };
@@ -187,7 +226,7 @@ export const getGameListRequest = async () => {
         .then(responseHandler<GameListResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
 
 export const signInRequest = async (requestBody: SignInRequestDto) => {
 
@@ -195,7 +234,7 @@ export const signInRequest = async (requestBody: SignInRequestDto) => {
         .then(responseHandler<SignInResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
 
 export const signUpRequest = async (requestBody: SignUpRequestDto) => {
 
@@ -203,7 +242,7 @@ export const signUpRequest = async (requestBody: SignUpRequestDto) => {
         .then(responseHandler<SignUpResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
 
 export const idCheckRequest = async (requestBody: IdCheckRequestDto) => {
 
@@ -211,7 +250,7 @@ export const idCheckRequest = async (requestBody: IdCheckRequestDto) => {
         .then(responseHandler<IdCheckResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
 
 export const emailCertificationRequest = async (requestBody: EmailCertificationRequestDto) => {
 
@@ -219,7 +258,7 @@ export const emailCertificationRequest = async (requestBody: EmailCertificationR
         .then(responseHandler<EmailCertificationResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
 
 export const checkCertificationRequest = async (requestBody: CheckCertificationRequestDto) => {
 
@@ -227,4 +266,5 @@ export const checkCertificationRequest = async (requestBody: CheckCertificationR
         .then(responseHandler<CheckCertificationResponseDto>)
         .catch(errorHandler);
     return result;
-}
+};
+

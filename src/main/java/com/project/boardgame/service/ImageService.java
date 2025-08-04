@@ -5,12 +5,9 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.text.Normalizer;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -27,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class GithubUploadService {
+public class ImageService {
 
     @Value("${github.token}")
     private String token;
