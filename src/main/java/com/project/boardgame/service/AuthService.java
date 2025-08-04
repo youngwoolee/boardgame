@@ -157,6 +157,10 @@ public class AuthService {
             Member member = userRepository.findByUserId(userId);
             if(member == null) return SignInResponse.signInFail();
 
+            if ("ROLE_PENDING".equals(member.getRole())) {
+                return SignInResponse.pendingApproval(); // Return a new specific error
+            }
+
             String password = request.getPassword();
             String encodedPassword = member.getPassword();
 

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -53,10 +54,16 @@ public class WebSecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/api/v1/auth/**", "/oauth2/**","/h2-console/**").permitAll()
-                        .requestMatchers("/api/v1/admin/cache/evict-all").permitAll()
-                        .requestMatchers("/", "/api/v1/user/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/", "/api/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(
+                                "/api/v1/auth/**",
+                                "/oauth2/**",
+                                "/h2-console/**"
+
+                        ).permitAll()
+                        .requestMatchers("/api/v1/auth/complete-signup").hasRole("PENDING")
+                        .requestMatchers( "/", "/api/v1/user/**", "/api/v1/games/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2

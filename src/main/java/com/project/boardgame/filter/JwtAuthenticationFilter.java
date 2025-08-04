@@ -8,6 +8,7 @@ import java.util.List;
 import com.project.boardgame.domain.Member;
 import com.project.boardgame.provider.JwtProvider;
 import com.project.boardgame.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,14 +47,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing token");
                 return;
             }
-            String userId = jwtProvider.validate(token);
-            if(userId == null) {
-                log.warn("[log] token is not validated");
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "token is not validated");
+
+            Claims claims = jwtProvider.validate(token);
+            if(claims == null) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token validation failed");
                 return;
             }
-            Member member = userRepository.findByUserId(userId);
-            String role = member.getRole();
+
+            String userId = claims.getSubject();
+            String role = claims.get("role", String.class); // Get role from claims
+
+            if (userId == null || role == null) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token content");
+                return;
+            }
+
+            if ("ROLE_PENDING".equals(role)) {
+                String requestPath = request.getRequestURI();
+                if (!"/api/v1/auth/complete-signup".equals(requestPath)) {
+                    log.warn("Access denied for PENDING user '{}' attempting to access '{}'", userId, requestPath);
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 에러 반환
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"code\": \"NA\", \"message\": \"Not Approved.\"}");
+                    return;
+                }
+            }
 
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(role));
@@ -67,7 +85,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         }catch (Exception exception) {
             log.error("[log] exception : {}", exception.getMessage());
-            exception.printStackTrace();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication error");
+            return;
         }
         filterChain.doFilter(request, response);
     }

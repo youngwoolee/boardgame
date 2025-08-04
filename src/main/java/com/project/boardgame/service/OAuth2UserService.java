@@ -43,7 +43,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         // ✅ 신규 사용자면 임시 객체 리턴
         if (member == null) {
             member = Member.builder().userId(userId).email(email).type(oauthClientName).isRegistered(false)
-                    .role("ROLE_ADMIN").build(); // isRegistered=false
+                    .role("ROLE_PENDING").build(); // isRegistered=false
             userRepository.save(member); // 임시로 저장
         }
 

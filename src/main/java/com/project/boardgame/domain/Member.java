@@ -39,7 +39,7 @@ public class Member extends BaseEntity{
         this.email = request.getEmail();
         this.name = request.getRealName();
         this.type = "app";
-        this.role = "ROLE_USER";
+        this.role = "ROLE_PENDING";
     }
 
     public Member(String userId, String email, String type) {

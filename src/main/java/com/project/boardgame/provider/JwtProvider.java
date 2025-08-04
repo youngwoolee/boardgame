@@ -34,23 +34,37 @@ public class JwtProvider {
         return jwt;
     }
 
-    public String validate(String jwt) {
+//    public String validate(String jwt) {
+//
+//        String subject = null;
+//        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+//        try {
+//            subject = Jwts.parserBuilder()
+//                    .setSigningKey(key)
+//                    .build()
+//                    .parseClaimsJws(jwt)
+//                    .getBody()
+//                    .getSubject();
+//
+//        }catch (Exception exception){
+//            exception.printStackTrace();
+//            return null;
+//        }
+//
+//        return subject;
+//    }
 
-        String subject = null;
+    public Claims validate(String jwt) {
         Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         try {
-            subject = Jwts.parserBuilder()
+            return Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(jwt)
-                    .getBody()
-                    .getSubject();
-
-        }catch (Exception exception){
+                    .getBody();
+        } catch (Exception exception) {
             exception.printStackTrace();
             return null;
         }
-
-        return subject;
     }
 }

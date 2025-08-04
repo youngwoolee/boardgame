@@ -30,5 +30,10 @@ public class SignInResponse extends ResponseDto {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
 
+    public static ResponseEntity<ResponseDto> pendingApproval() {
+        ResponseDto responseBody = new ResponseDto("PA", "Pending Approval.");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+    }
+
 
 }
