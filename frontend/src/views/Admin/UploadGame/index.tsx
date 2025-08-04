@@ -170,14 +170,17 @@ export default function UploadGame() {
                             <ClipLoader size={50} color="#007bff" />
                         </div>
                     )}
+                    <div className="upload-game-section">
+                        <label>보드게임 이름 (AI 생성용)</label>
+                        <div className="ai-generate-group">
+                            <input className="upload-form-input" type="text" value={boardGameName} onChange={(e) => setBoardGameName(e.target.value)} placeholder="예: 카탄"/>
+                            <button onClick={handleGenerateClick} className="ai-generate-button">AI로 생성</button>
+                        </div>
+                    </div>
+                    <hr className="divider" />
                     <fieldset disabled={isFormDisabled} className="upload-game-content-box">
                         <div className="upload-game-content-input-box">
-                            <label>보드게임 이름 (AI 생성용)</label>
-                            <div className="ai-generate-group">
-                                <input className="upload-form-input" type="text" value={boardGameName} onChange={(e) => setBoardGameName(e.target.value)} placeholder="예: 카탄"/>
-                                <button onClick={handleGenerateClick} className="ai-generate-button">AI로 생성</button>
-                            </div>
-                            <hr className="divider" />
+
                             <label>이름</label>
                             <input className="upload-form-input" type="text" name="name" value={form.name} onChange={handleChange}/>
                             <label>설명</label>

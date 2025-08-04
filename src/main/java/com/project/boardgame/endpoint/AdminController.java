@@ -1,13 +1,18 @@
 package com.project.boardgame.endpoint;
 
+import java.util.List;
+
 import com.project.boardgame.endpoint.request.GameUploadRequest;
 import com.project.boardgame.endpoint.request.GenerateInfoRequest;
 import com.project.boardgame.endpoint.response.admin.AdminGameResponse;
+import com.project.boardgame.endpoint.response.admin.AdminUserResponse;
 import com.project.boardgame.endpoint.response.admin.GeneratedGameInfoResponse;
 import com.project.boardgame.endpoint.response.admin.UploadResponse;
+import com.project.boardgame.endpoint.response.admin.AdminUserListResponse;
 import com.project.boardgame.service.AiService;
 import com.project.boardgame.service.GameService;
 import com.project.boardgame.service.ImageService;
+import com.project.boardgame.service.UserService;
 import com.project.boardgame.service.dto.GeneratedGameDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +37,7 @@ public class AdminController {
 
     private final ImageService imageService;
     private final GameService gameService;
+    private final UserService userService;
     private final AiService aiService;
     private final CacheManager cacheManager;
 
@@ -104,5 +110,11 @@ public class AdminController {
             // Consider more specific error handling
             return UploadResponse.fail();
         }
+    }
+
+    @GetMapping("/pending-users")
+    public ResponseEntity<? super AdminUserListResponse> getPendingUsers() {
+        List<AdminUserResponse> pendingUsers = userService.getPendingUsers();
+        return AdminUserListResponse.success(pendingUsers);
     }
 }

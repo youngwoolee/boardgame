@@ -1,10 +1,6 @@
 package com.project.boardgame.endpoint.response;
 
-import java.util.List;
-
 import com.project.boardgame.domain.Member;
-import com.project.boardgame.endpoint.response.reservation.ReservationDetailListResponse;
-import com.project.boardgame.endpoint.response.reservation.ReservationDetailResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
