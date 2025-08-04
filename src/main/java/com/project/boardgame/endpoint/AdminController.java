@@ -2,17 +2,21 @@ package com.project.boardgame.endpoint;
 
 import com.project.boardgame.endpoint.request.GameUploadRequest;
 import com.project.boardgame.endpoint.request.GenerateInfoRequest;
+import com.project.boardgame.endpoint.response.admin.AdminGameResponse;
 import com.project.boardgame.endpoint.response.admin.GeneratedGameInfoResponse;
 import com.project.boardgame.endpoint.response.admin.UploadResponse;
 import com.project.boardgame.service.AiService;
 import com.project.boardgame.service.GameService;
-import com.project.boardgame.service.GithubUploadService;
+import com.project.boardgame.service.ImageService;
 import com.project.boardgame.service.dto.GeneratedGameDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -26,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class AdminController {
 
-    private final GithubUploadService githubUploadService;
+    private final ImageService imageService;
     private final GameService gameService;
     private final AiService aiService;
     private final CacheManager cacheManager;
@@ -45,7 +49,7 @@ public class AdminController {
     ) {
         try {
             log.info("[log] createGame : {}", request.toString());
-            String imageUrl = githubUploadService.uploadImage(image);
+            String imageUrl = imageService.uploadImage(image);
 
             gameService.createGame(request, imageUrl);
 
@@ -59,9 +63,9 @@ public class AdminController {
     public ResponseEntity<? super UploadResponse> createGameByUrl(@RequestBody GameUploadRequest request) {
         try {
             log.info("[log] createGameByUrl : {}", request.toString());
-            MultipartFile downloadedImage = githubUploadService.downloadImageFromUrl(request.getImageUrl());
+            MultipartFile downloadedImage = imageService.downloadImageFromUrl(request.getImageUrl());
 
-            String uploadedImageUrl = githubUploadService.uploadImage(downloadedImage);
+            String uploadedImageUrl = imageService.uploadImage(downloadedImage);
 
             gameService.createGame(request, uploadedImageUrl);
 
@@ -80,5 +84,25 @@ public class AdminController {
             }
         });
         return ResponseEntity.ok("모든 캐시 초기화 완료");
+    }
+
+    @GetMapping("/by-barcode/{barcode}")
+    public ResponseEntity<? super AdminGameResponse> getGameByBarcode(@PathVariable("barcode") String barcode) {
+        return gameService.getGameByBarcode(barcode);
+    }
+
+    @PutMapping("/games/{barcode}")
+    public ResponseEntity<? super UploadResponse> updateGame(
+            @PathVariable("barcode") String barcode,
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @RequestPart("data") GameUploadRequest request
+    ) {
+        try {
+            String imageUrl = gameService.updateGame(barcode, request, image);
+            return UploadResponse.success(imageUrl);
+        } catch (Exception e) {
+            // Consider more specific error handling
+            return UploadResponse.fail();
+        }
     }
 }

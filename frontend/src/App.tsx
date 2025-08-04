@@ -8,10 +8,11 @@ import AdditionalInfo from "./views/Authentication/AdditionalInfo";
 import AppLayout from "./views/AppLayout";
 import MyPage from "./views/My/MyPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
-import UploadGame from "./views/UploadGame";
+import UploadGame from "./views/Admin/UploadGame";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminRoute from "./components/AdminRoute";
+import EditGame from "./views/Admin/EditGame";
 
 function App() {
 
@@ -22,11 +23,19 @@ function App() {
             <Route path="/" element={<AppLayout />}>
                 <Route index element={<Main />} />
                 <Route path="my" element={<MyPage />} />
-                <Route path="upload" element={
-                    <AdminRoute>
-                        <UploadGame />
-                    </AdminRoute>
-                } />
+                <Route path="admin">
+                    <Route path="upload" element={
+                        <AdminRoute>
+                            <UploadGame />
+                        </AdminRoute>
+                    } />
+                    {/* ✅ 수정 페이지를 위한 새로운 라우트 추가 */}
+                    <Route path="edit" element={
+                        <AdminRoute>
+                            <EditGame />
+                        </AdminRoute>
+                    } />
+                </Route>
             </Route>
             {/* 인증 관련 페이지는 공통 레이아웃 없이 별도 처리 */}
             <Route path="/auth">

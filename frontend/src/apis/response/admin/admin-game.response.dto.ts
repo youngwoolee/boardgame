@@ -1,4 +1,6 @@
-export default interface GameResponseDto {
+import ResponseDto from "../response.dto";
+
+export default interface AdminGameResponseDto extends ResponseDto {
     id: number;
     name: string;
     description: string;

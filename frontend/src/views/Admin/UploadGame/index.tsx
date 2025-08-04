@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
-import {createGameByUrlRequest, createGameRequest, generateGameInfoRequest} from "../../apis";
-import {ResponseCode} from "../../types/enums";
-import UploadRequestDto from "../../apis/request/admin/upload.request.dto";
+import {createGameByUrlRequest, createGameRequest, generateGameInfoRequest} from "../../../apis";
+import {ResponseCode} from "../../../types/enums";
+import UploadRequestDto from "../../../apis/request/admin/upload.request.dto";
 import './style.css'
 import {useNavigate} from "react-router-dom";
-import {genreOptions} from '../../types/genreOptions';
-import {systemOptions} from '../../types/systemOptions';
+import {genreOptions} from '../../../types/genreOptions';
+import {systemOptions} from '../../../types/systemOptions';
 import Select from "react-select";
 import {toast} from "react-toastify";
 import {ClipLoader} from "react-spinners";
 import GeneratedGameInfoResponseDto
-    from "../../apis/response/admin/generated-game-info.response.dto";
+    from "../../../apis/response/admin/generated-game-info.response.dto";
 
 type SelectOption = { value: string, label: string };
 
@@ -18,10 +18,9 @@ export default function UploadGame() {
     const [file, setFile] = useState<File | null>(null);
     const [uploadedUrl, setUploadedUrl] = useState<string>('');
     const [boardGameName, setBoardGameName] = useState('');
-    const [isGenerating, setIsGenerating] = useState(false);
     const [quantity, setQuantity] = useState(1);
-    const [isSubmitting, setIsSubmitting] = useState(false); // ✅ 등록 진행 상태 추가
-
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [form, setForm] = useState({
         name: '',
         description: '',
@@ -105,7 +104,7 @@ export default function UploadGame() {
         if (!form.bestPlayers || form.bestPlayers <= 0|| form.bestPlayers < form.minPlayers) return toast.warn("베스트 인원을 입력해주세요.");
         if (!form.minPlayTime || form.minPlayTime <= 0) return toast.warn("최소 플레이 시간을 입력해주세요.");
         if (!form.maxPlayTime || form.maxPlayTime <= 0) return toast.warn("최대 플레이 시간을 입력해주세요.");
-        if (!form.weight || form.weight <= 0) return toast.warn("난이도를 소수점1자리까지 입력해주세요.");
+        if (!form.weight || form.weight <= 0) return toast.warn("난이도를 소수점 첫번째 자리까지 입력해주세요.");
         if (!form.genres || form.genres.length === 0) return toast.warn("장르를 하나 이상 선택해주세요.");
         if (!form.systems || form.systems.length === 0) return toast.warn("게임 시스템을 하나 이상 선택해주세요.");
         if (form.quantity <= 0) return toast.warn("수량을 입력해주세요.");
@@ -131,16 +130,17 @@ export default function UploadGame() {
 
         let result;
 
+
         if (file) {
-            // 파일 업로드 API
             result = await createGameRequest(file, gameData);
         } else if (form.imageUrl) {
-            // URL 기반 업로드 API
             result = await createGameByUrlRequest(gameData);
         } else {
-            alert("이미지를 선택하거나 AI로 생성해주세요.");
+            toast.warn("이미지를 선택하거나 AI로 생성해주세요.");
+            setIsSubmitting(false);
             return;
         }
+
 
         setIsSubmitting(false);
 
@@ -149,15 +149,15 @@ export default function UploadGame() {
             return;
         }
 
-        alert("보드게임 등록 성공!");
+        // Reset form
+        toast.success("보드게임 등록 성공!");
+        // 폼 초기화
         setForm({ name: '', description: '', minPlayers: 2, maxPlayers: 4, bestPlayers: 0, age: 0, minPlayTime: 0, maxPlayTime: 0, weight: 0.0, genres: [], systems: [], imageUrl: '', quantity: 1 });
         setFile(null);
-        setUploadedUrl('');
 
 
     };
 
-    // ✅ AI 생성 중이거나 최종 등록 중일 때 폼 전체를 비활성화
     const isFormDisabled = isGenerating || isSubmitting;
 
     return (
@@ -165,13 +165,11 @@ export default function UploadGame() {
             <div className="upload-game-container">
                 <div className="upload-game-box">
                     <div className="upload-game-title">보드게임 등록</div>
-
                     {(isGenerating || isSubmitting) && (
                         <div className="loading-overlay">
                             <ClipLoader size={50} color="#007bff" />
                         </div>
                     )}
-
                     <fieldset disabled={isFormDisabled} className="upload-game-content-box">
                         <div className="upload-game-content-input-box">
                             <label>보드게임 이름 (AI 생성용)</label>
