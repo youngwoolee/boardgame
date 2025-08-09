@@ -1,0 +1,81 @@
+.admin-dashboard {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-dashboard h2 {
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.admin-menu-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.admin-menu-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-left: 4px solid;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-menu-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.menu-content {
+    flex: 1;
+}
+
+.menu-content h3 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.menu-content p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.menu-arrow {
+    font-size: 20px;
+    color: #999;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+
+.admin-menu-card:hover .menu-arrow {
+    transform: translateX(4px);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .admin-dashboard {
+        padding: 15px;
+    }
+    
+    .admin-menu-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-menu-card {
+        padding: 16px;
+    }
+}

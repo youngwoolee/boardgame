@@ -57,4 +57,9 @@ public class Member extends BaseEntity{
     public void setRegistered(boolean registered) {
         this.isRegistered = registered;
     }
+
+    public void approveUser() {
+        this.role = "ROLE_USER";
+        this.isRegistered = true;
+    }
 }

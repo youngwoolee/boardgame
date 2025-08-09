@@ -6,7 +6,7 @@ import com.project.boardgame.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface UserRepository extends JpaRepository<Member, String> {
+public interface UserRepository extends JpaRepository<Member, Long> {
 
     Member findByUserId(String userId);
 

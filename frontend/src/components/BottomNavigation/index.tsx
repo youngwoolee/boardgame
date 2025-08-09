@@ -1,10 +1,12 @@
 import {useLocation, useNavigate} from "react-router-dom";
-import {FiList, FiShoppingCart, FiUser} from "react-icons/fi";
+import {getUserRole} from "../../utils/jwt";
 import './style.css'
 
 export default function BottomNavigation() {
     const location = useLocation();
     const navigate = useNavigate();
+    const userRole = getUserRole();
+    const isAdmin = userRole === "ROLE_ADMIN";
 
     const isActive = (path: string) =>
         location.pathname === path || location.pathname.startsWith(path + '/');
@@ -37,6 +39,17 @@ export default function BottomNavigation() {
             >
                 <span>나의 정보</span>
             </div>
+            {isAdmin && (
+                <div
+                    className={`nav-item ${isActive('/admin') ? 'active' : ''}`}
+                    onClick={() => navigate('/admin', { replace: true })}
+                    role="button"
+                    tabIndex={0}
+                    style={{ cursor: 'pointer' }}
+                >
+                    <span>관리</span>
+                </div>
+            )}
         </div>
     );
 }

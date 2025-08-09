@@ -13,6 +13,8 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminRoute from "./components/AdminRoute";
 import EditGame from "./views/Admin/EditGame";
+import UserApproval from "./views/Admin/UserApproval";
+import AdminDashboard from "./views/Admin/Dashboard";
 
 function App() {
 
@@ -24,6 +26,11 @@ function App() {
                 <Route index element={<Main />} />
                 <Route path="my" element={<MyPage />} />
                 <Route path="admin">
+                    <Route index element={
+                        <AdminRoute>
+                            <AdminDashboard />
+                        </AdminRoute>
+                    } />
                     <Route path="upload" element={
                         <AdminRoute>
                             <UploadGame />
@@ -33,6 +40,12 @@ function App() {
                     <Route path="edit" element={
                         <AdminRoute>
                             <EditGame />
+                        </AdminRoute>
+                    } />
+                    {/* ✅ 사용자 승인 페이지를 위한 새로운 라우트 추가 */}
+                    <Route path="user-approval" element={
+                        <AdminRoute>
+                            <UserApproval />
                         </AdminRoute>
                     } />
                 </Route>
@@ -46,18 +59,7 @@ function App() {
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-          <ToastContainer
-              position="bottom-center"
-              autoClose={2000}
-              hideProgressBar={true}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover={false}
-              theme="light"
-          />
+        <ToastContainer />
       </>
   );
 }

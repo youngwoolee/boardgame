@@ -31,6 +31,7 @@ import UploadRequestDto from "./request/admin/upload.request.dto";
 import {UserResponseDto} from "./response/user";
 import GeneratedGameInfoResponseDto from "./response/admin/generated-game-info.response.dto";
 import AdminGameResponseDto from "./response/admin/admin-game.response.dto";
+import { AdminUserListResponseDto } from "./response/admin";
 
 
 const responseHandler = <T> (response: AxiosResponse<any, any>) => {
@@ -70,6 +71,8 @@ const UPLOAD_BY_URL_IMAGE_URL = () => `${API_DOMAIN}/admin/upload-by-url`;
 const GENERATE_GAME_INFO_URL = () => `${API_DOMAIN}/admin/generate-info`;
 const GAME_BY_BARCODE_URL = (barcode: string) => `${API_DOMAIN}/admin/by-barcode/${barcode}`;
 const UPDATE_GAME_URL = (barcode: string) => `${API_DOMAIN}/admin/games/${barcode}`;
+const APPROVE_USER_URL = (userId: number) => `${API_DOMAIN}/admin/approve-user/${userId}`;
+const PENDING_USER_URL = () => `${API_DOMAIN}/admin/pending-users`;
 
 export const updateGameRequest = async (
     barcode: string,
@@ -264,6 +267,25 @@ export const checkCertificationRequest = async (requestBody: CheckCertificationR
 
     const result = await axios.post(CHECK_CERTIFICATION_URL(), requestBody)
         .then(responseHandler<CheckCertificationResponseDto>)
+        .catch(errorHandler);
+    return result;
+};
+
+// Admin APIs
+export const getPendingUsers = async () => {
+    const headers = getAccessTokenHeader();
+
+    const result = await axiosInstance.get(PENDING_USER_URL(), { headers })
+        .then(responseHandler<AdminUserListResponseDto>)
+        .catch(errorHandler);
+    return result;
+};
+
+export const approveUser = async (userId: number) => {
+    const headers = getAccessTokenHeader();
+
+    const result = await axiosInstance.post(APPROVE_USER_URL(userId), {}, { headers })
+        .then(responseHandler<ResponseDto>)
         .catch(errorHandler);
     return result;
 };
