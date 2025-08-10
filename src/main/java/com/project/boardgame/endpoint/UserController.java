@@ -25,7 +25,7 @@ public class UserController {
         String userId = principal.getName();
         Member member = userRepository.findByUserId(userId);
         if (member == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return UserResponse.validationFail();
         }
 
         return UserResponse.success(member);
