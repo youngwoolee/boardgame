@@ -13,5 +13,12 @@ spring:
       ddl-auto: update # 개발 중에는 스키마 자동 변경 허용
     show-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+  # data.sql 자동 실행 설정
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+  # 데이터소스 초기화 지연
 cors:
   allowed-origins: http://localhost:3000

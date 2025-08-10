@@ -119,27 +119,44 @@
 
 .user-actions {
     display: flex;
+    flex-direction: column;
     gap: 10px;
+    align-items: flex-end;
+}
+
+.role-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+    min-width: 120px;
+}
+
+.role-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .approve-btn {
-    background: #28a745;
+    padding: 8px 16px;
+    background-color: #28a745;
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s;
 }
 
 .approve-btn:hover {
-    background: #218838;
+    background-color: #218838;
 }
 
 .approve-btn:active {
-    transform: translateY(1px);
+    background-color: #1e7e34;
 }
 
 /* 반응형 디자인 */

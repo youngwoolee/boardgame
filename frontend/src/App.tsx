@@ -59,7 +59,16 @@ function App() {
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-        <ToastContainer />
+          <ToastContainer
+              position="bottom-center" // 알림 위치
+              autoClose={2000}     // 자동으로 닫히는 시간 (2초)
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              theme="light"
+          />
       </>
   );
 }

@@ -58,8 +58,8 @@ public class Member extends BaseEntity{
         this.isRegistered = registered;
     }
 
-    public void approveUser() {
-        this.role = "ROLE_USER";
+    public void approveUser(String role) {
+        this.role = role;
         this.isRegistered = true;
     }
 }

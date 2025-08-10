@@ -281,10 +281,13 @@ export const getPendingUsers = async () => {
     return result;
 };
 
-export const approveUser = async (userId: number) => {
+export const approveUser = async (userId: number, role: string = 'ROLE_USER') => {
     const headers = getAccessTokenHeader();
 
-    const result = await axiosInstance.post(APPROVE_USER_URL(userId), {}, { headers })
+    const result = await axiosInstance.post(APPROVE_USER_URL(userId), {}, { 
+        headers,
+        params: { role }
+    })
         .then(responseHandler<ResponseDto>)
         .catch(errorHandler);
     return result;

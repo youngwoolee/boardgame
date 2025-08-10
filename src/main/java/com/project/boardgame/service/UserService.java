@@ -32,7 +32,7 @@ public class UserService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseDto> approveUser(Long userId) {
+    public ResponseEntity<ResponseDto> approveUser(Long userId, String role) {
         try {
             Member member = userRepository.findById(userId).orElse(null);
             if (member == null) {
@@ -45,7 +45,13 @@ public class UserService {
                         .body(new ResponseDto(ResponseCode.VALIDATION_FAIL, "이미 승인된 사용자입니다."));
             }
             
-            member.approveUser();
+            // 역할 검증
+            if (!"ROLE_USER".equals(role) && !"ROLE_ADMIN".equals(role)) {
+                return ResponseEntity.badRequest()
+                        .body(new ResponseDto(ResponseCode.VALIDATION_FAIL, "유효하지 않은 역할입니다."));
+            }
+            
+            member.approveUser(role);
             userRepository.save(member);
             
             return ResponseEntity.ok()

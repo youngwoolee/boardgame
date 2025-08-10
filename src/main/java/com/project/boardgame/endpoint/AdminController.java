@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.project.boardgame.endpoint.response.ResponseDto;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -120,7 +121,9 @@ public class AdminController {
     }
 
     @PostMapping("/approve-user/{userId}")
-    public ResponseEntity<ResponseDto> approveUser(@PathVariable("userId") Long userId) {
-        return userService.approveUser(userId);
+    public ResponseEntity<ResponseDto> approveUser(
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "role", defaultValue = "ROLE_USER") String role) {
+        return userService.approveUser(userId, role);
     }
 }

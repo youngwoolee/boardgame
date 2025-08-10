@@ -10,16 +10,14 @@ import {AdminUserResponseDto} from "../../../apis/response/admin/admin-user.resp
 const UserApproval: React.FC = () => {
     const [pendingUsers, setPendingUsers] = useState<AdminUserResponseDto[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedRoles, setSelectedRoles] = useState<{ [key: number]: string }>({});
     const navigate = useNavigate();
 
     // 어드민 권한 확인
     useEffect(() => {
         const userRole = getUserRole();
         const tokenHeader = getAccessTokenHeader();
-        
-        console.log('User role:', userRole);
-        console.log('Token header:', tokenHeader);
-        
+
         if (userRole !== 'ROLE_ADMIN') {
             toast.error('어드민 권한이 필요합니다.');
             navigate('/');
@@ -36,8 +34,7 @@ const UserApproval: React.FC = () => {
     const fetchPendingUsers = async () => {
         try {
             const response = await getPendingUsers();
-            console.log('Pending users response:', response); // 디버깅용 로그
-            
+
             if (response && 'data' in response && response.data) {
                 setPendingUsers(response.data || []);
             } else {
@@ -53,12 +50,18 @@ const UserApproval: React.FC = () => {
 
     const handleApproveUser = async (userId: number) => {
         try {
-            const response = await approveUser(userId);
-            console.log('Approve user response:', response); // 디버깅용 로그
-            
+            const selectedRole = selectedRoles[userId] || 'ROLE_USER';
+            const response = await approveUser(userId, selectedRole);
+
             if (response && response.code === 'SU') {
                 toast.success('사용자 승인이 완료되었습니다.');
                 fetchPendingUsers(); // 목록 새로고침
+                // 선택된 역할 초기화
+                setSelectedRoles(prev => {
+                    const newRoles = { ...prev };
+                    delete newRoles[userId];
+                    return newRoles;
+                });
             } else {
                 toast.error(response?.message || '사용자 승인에 실패했습니다.');
             }
@@ -66,6 +69,13 @@ const UserApproval: React.FC = () => {
             console.error('Failed to approve user:', error);
             toast.error('사용자 승인에 실패했습니다.');
         }
+    };
+
+    const handleRoleChange = (userId: number, role: string) => {
+        setSelectedRoles(prev => ({
+            ...prev,
+            [userId]: role
+        }));
     };
 
     useEffect(() => {
@@ -116,6 +126,14 @@ const UserApproval: React.FC = () => {
                                 </div>
                             </div>
                             <div className="user-actions">
+                                <select
+                                    className="role-select"
+                                    value={selectedRoles[user.id] || 'ROLE_USER'}
+                                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                                >
+                                    <option value="ROLE_USER">일반 사용자</option>
+                                    <option value="ROLE_ADMIN">관리자</option>
+                                </select>
                                 <button 
                                     className="approve-btn"
                                     onClick={() => handleApproveUser(user.id)}
