@@ -200,7 +200,18 @@ export default function Main() {
                             onClick={() => {
                                 // ✅ 선택되지 않았을 때만 상세 모달이 열리도록 조건 추가
                                 if (!isSelected) {
-                                    setSelectedGame(game);
+                                    // 같은 게임의 모든 바코드를 수집
+                                    const allBarcodes = gameList
+                                        .filter(g => g.name === game.name)
+                                        .map(g => g.barcode);
+                                    
+                                    // 상세 모달용 게임 객체 생성 (모든 바코드 포함)
+                                    const gameWithAllBarcodes = {
+                                        ...game,
+                                        barcodes: allBarcodes
+                                    };
+                                    
+                                    setSelectedGame(gameWithAllBarcodes);
                                 }
                             }}
                         >

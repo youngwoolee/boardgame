@@ -5,13 +5,15 @@ import {
     FiHeart,
     FiClock,
     FiTag,
-    FiSettings, FiStar, FiTrendingUp
+    FiSettings, FiStar, FiTrendingUp,
+    FiHash
 } from 'react-icons/fi';
 
 type Game = {
     id: number;
     name: string;
     imageUrl: string;
+    barcodes?: string[];
     tag?: string | null;
     minPlayers?: number;
     maxPlayers?: number;
@@ -61,6 +63,25 @@ export default function GameDetailModal({ game, onClose }: Props) {
                                  e.currentTarget.style.display = 'none';
                              }}/>
                         <div className="modal-attributes">
+                            <div className="attribute barcode-attribute">
+                                <FiHash className='icon' />
+                                <div>
+                                    <div className="label">바코드</div>
+                                    <div className="value">
+                                        {game.barcodes && game.barcodes.length > 0 ? (
+                                            <div className="barcode-list">
+                                                {game.barcodes.map((barcode, index) => (
+                                                    <span key={index} className="barcode-item">
+                                                        {barcode}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            '정보 없음'
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
                             <div className="attribute">
                                 <FiUsers className='icon' />
                                 <div>

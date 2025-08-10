@@ -15,6 +15,7 @@ import AdminRoute from "./components/AdminRoute";
 import EditGame from "./views/Admin/EditGame";
 import UserApproval from "./views/Admin/UserApproval";
 import AdminDashboard from "./views/Admin/Dashboard";
+import BarcodeDownload from "./views/Admin/BarcodeDownload";
 
 function App() {
 
@@ -46,6 +47,11 @@ function App() {
                     <Route path="user-approval" element={
                         <AdminRoute>
                             <UserApproval />
+                        </AdminRoute>
+                    } />
+                    <Route path="barcode-download" element={
+                        <AdminRoute>
+                            <BarcodeDownload />
                         </AdminRoute>
                     } />
                 </Route>
