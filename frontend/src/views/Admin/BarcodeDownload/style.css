@@ -27,16 +27,48 @@
     margin-bottom: 24px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.search-controls {
+    display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
+    gap: 15px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.search-input {
+    flex: 1;
+    max-width: 400px;
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.filtered-count {
+    color: #666;
+    font-size: 14px;
+    white-space: nowrap;
+    font-weight: 500;
 }
 
 .select-controls {
     display: flex;
     align-items: center;
     gap: 16px;
+    justify-content: space-between;
 }
 
 .select-all-checkbox {
@@ -57,6 +89,84 @@
 .selected-count {
     color: #666;
     font-size: 14px;
+}
+
+.layout-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.layout-option {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.layout-option label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #333;
+}
+
+.layout-option input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.page-orientation,
+.barcodes-per-page {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.page-orientation label,
+.barcodes-per-page label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    color: #333;
+}
+
+.page-orientation select,
+.barcodes-per-page select {
+    padding: 6px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+}
+
+.page-orientation select:focus,
+.barcodes-per-page select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.layout-hint {
+    color: #6c757d;
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 4px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .download-selected-btn {
@@ -188,12 +298,25 @@
     }
     
     .controls-section {
-        flex-direction: column;
-        align-items: stretch;
+        gap: 16px;
     }
     
     .select-controls {
         justify-content: space-between;
+    }
+    
+    .layout-option {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .download-selected-btn {
+        width: 100%;
+        text-align: center;
     }
     
     .game-item {
