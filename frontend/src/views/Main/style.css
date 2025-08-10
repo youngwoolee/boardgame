@@ -45,6 +45,35 @@
     opacity: 0.5;
 }
 
+.main-card.rented {
+    filter: grayscale(100%);
+    opacity: 0.7;
+}
+
+.main-card.rented .main-card-image {
+    filter: grayscale(100%);
+}
+
+.rental-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.rental-overlay span {
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
 .main-tag.hot {
     background-color: #ff7675;
     color: white;

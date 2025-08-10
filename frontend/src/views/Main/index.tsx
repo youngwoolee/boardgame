@@ -34,7 +34,6 @@ export default function Main() {
 
     const [genreFilter, setGenreFilter] = useState<string>('');
     const [playerFilter, setPlayerFilter] = useState<string>('');
-    const [rentalStatusFilter, setRentalStatusFilter] = useState<string>('');
     const [sortFilter, setSortFilter] = useState<string>('name');
 
     const playerOptions = ['1', '2', '3', '4', '5', '6+'];
@@ -112,11 +111,6 @@ export default function Main() {
             const selectedCount = playerFilter === '6+' ? 6 : parseInt(playerFilter, 10);
             return game.minPlayers <= selectedCount && selectedCount <= game.maxPlayers;
         })
-        .filter(game => {
-            if (rentalStatusFilter === 'available') return game.available;
-            if (rentalStatusFilter === 'rented') return !game.available;
-            return true;
-        })
         .sort((a, b) => {
             if (sortFilter === 'weight') {
                 return (a.weight || 0) - (b.weight || 0); // 난이도 오름차순
@@ -167,12 +161,6 @@ export default function Main() {
                         ))}
                     </select>
 
-                    <select value={rentalStatusFilter} onChange={(e) => setRentalStatusFilter(e.target.value)}>
-                        <option value=''>전체</option>
-                        <option value='available'>대여 가능</option>
-                        <option value='rented'>대여 중</option>
-                    </select>
-
                     <select value={sortFilter} onChange={(e) => setSortFilter(e.target.value)}>
                         <option value='name'>이름순</option>
                         <option value='weight'>난이도순</option>
@@ -192,64 +180,80 @@ export default function Main() {
                 <div className="main-grid">
                     {uniqueFilteredGames.length > 0 ? (
                         uniqueFilteredGames.map((game) => {
-                    const isSelected = selectedList.some(g => g.name === game.name);
-                    return (
-                        <div
-                            className={`main-card`} // 'selected' 클래스는 더 이상 카드 자체에 필요 없습니다.
-                            key={game.name}
-                            onClick={() => {
-                                // ✅ 선택되지 않았을 때만 상세 모달이 열리도록 조건 추가
-                                if (!isSelected) {
-                                    // 같은 게임의 모든 바코드를 수집
-                                    const allBarcodes = gameList
-                                        .filter(g => g.name === game.name)
-                                        .map(g => g.barcode);
+                            const isSelected = selectedList.some(g => g.name === game.name);
+                            
+                            // 같은 이름의 게임들의 대여 상태 확인
+                            const sameNameGames = gameList.filter(g => g.name === game.name);
+                            const allRented = sameNameGames.every(g => !g.available);
                                     
-                                    // 상세 모달용 게임 객체 생성 (모든 바코드 포함)
-                                    const gameWithAllBarcodes = {
-                                        ...game,
-                                        barcodes: allBarcodes
-                                    };
-                                    
-                                    setSelectedGame(gameWithAllBarcodes);
-                                }
-                            }}
-                        >
-                            <div className="main-card-image-wrapper">
-                                <img src={game.imageUrl} alt={game.name} className="main-card-image"
-                                     onError={(e) => {
-                                         e.currentTarget.style.display = 'none';
-                                     }}/>
-                                {game.tag && (
-                                    <span className={`main-tag ${game.tag.toLowerCase()}`}>{game.tag}</span>
-                                )}
+                                    let rentalStatus = '';
+                                    let isAllRented = false;
+                                    if (allRented && sameNameGames.length > 0) {
+                                        rentalStatus = '대여 중';
+                                        isAllRented = true;
+                                    }
+                            
+                            return (
+                                <div
+                                    className={`main-card ${isAllRented ? 'rented' : ''}`}
+                                    key={game.name}
+                                    onClick={() => {
+                                        if (!isSelected) {
+                                            const allBarcodes = gameList
+                                                .filter(g => g.name === game.name)
+                                                .map(g => g.barcode);
+                                                
+                                            const gameWithAllBarcodes = {
+                                                ...game,
+                                                barcodes: allBarcodes
+                                            };
+                                            
+                                            setSelectedGame(gameWithAllBarcodes);
+                                        }
+                                    }}
+                                >
+                                    <div className="main-card-image-wrapper">
+                                        <img src={game.imageUrl} alt={game.name} className="main-card-image"
+                                             onError={(e) => {
+                                                 e.currentTarget.style.display = 'none';
+                                             }}/>
+                                        {game.tag && (
+                                            <span className={`main-tag ${game.tag.toLowerCase()}`}>{game.tag}</span>
+                                        )}
 
-                                {isSelected && (
-                                    <button
-                                        className="selection-overlay"
-                                        onClick={(e) => {
-                                            e.stopPropagation(); // 카드 전체 클릭(상세보기) 방지
-                                            toggleSelectByGame(game.name);
-                                        }}
-                                    >
-                                        <span>선택됨</span>
-                                    </button>
-                                )}
-                            </div>
-                            <div className="main-card-footer">
-                                <div className="main-card-title">
-                                    {game.name}
+                                        {isSelected && (
+                                            <button
+                                                className="selection-overlay"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    toggleSelectByGame(game.name);
+                                                }}
+                                            >
+                                                <span>선택됨</span>
+                                            </button>
+                                        )}
+                                        
+                                        {/* 대여 중 오버레이 */}
+                                        {isAllRented && (
+                                            <div className="rental-overlay">
+                                                <span>대여중</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="main-card-footer">
+                                        <div className="main-card-title">
+                                            {game.name}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    );
-                })
+                            );
+                        })
                     ) : (
                         <div className="no-results">
                             검색 결과가 없습니다.
                         </div>
                     )}
-            </div>
+                </div>
             )}
 
             {/* 하단 내비게이션 */}
