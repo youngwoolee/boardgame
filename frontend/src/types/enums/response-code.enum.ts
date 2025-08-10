@@ -6,7 +6,8 @@ enum ResponseCode {
     CERTIFICATION_FAIL= "CF",
     MAIL_FAIL="MF",
     DATABASE_ERROR="DBE",
-    ALREADY_RESERVATION="AR"
+    PENDING_APPROVAL = "PA",
+    ALREADY_RESERVATION="AR",
 };
 
 export default ResponseCode;

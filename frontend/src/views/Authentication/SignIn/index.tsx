@@ -43,6 +43,10 @@ export default function SignIn() {
             setMessage("로그인 정보가 일치하지 않습니다");
         }
         if( code === ResponseCode.DATABASE_ERROR) alert('데이터베이스 오류입니다');
+        if( code === ResponseCode.PENDING_APPROVAL) {
+            setMessage("사용자 승인이 필요합니다. 관리자에게 문의하세요.");
+            return;
+        }
         if( code !== ResponseCode.SUCCESS) return;
 
         const {token, expirationTime} = responseBody as SignInResponseDto;
