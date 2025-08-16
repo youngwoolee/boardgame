@@ -21,7 +21,7 @@
     border-radius: 12px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-    height: 180px;
+    height: 200px; /* 높이를 약간 늘려서 세로 배치를 위한 공간 확보 */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -67,8 +67,9 @@
 .reservation-info-row {
     font-size: 13px;
     display: flex;
-    justify-content: center;
-    gap: 6px;
+    flex-direction: column; /* 세로 배치로 변경 */
+    align-items: center; /* 중앙 정렬 */
+    gap: 2px; /* 라벨과 값 사이 간격 줄임 */
     margin-top: 4px;
 }
 
@@ -82,6 +83,19 @@
 .reservation-label {
     color: #555;
     font-weight: 500;
+    font-size: 12px; /* 라벨 폰트 크기 줄임 */
+    line-height: 1.2; /* 줄 간격 줄임 */
+}
+
+/* 반납예정일 정보를 위한 특별한 스타일 */
+.reservation-info-row.due .reservation-label {
+    font-size: 11px; /* 반납예정일 라벨은 더 작게 */
+    margin-bottom: 1px;
+}
+
+.reservation-info-row.due span:last-child {
+    font-size: 14px; /* 날짜는 더 크게 표시 */
+    font-weight: 600;
 }
 
 .overdue-text {
@@ -178,4 +192,55 @@
     font-size: 16px;
     color: #888;
     text-align: center;
+}
+
+/* 모바일 화면 최적화 */
+@media (max-width: 480px) {
+    .reservation-grid {
+        grid-template-columns: repeat(2, 1fr); /* 작은 화면에서는 2열로 변경 */
+        gap: 8px; /* 간격 줄임 */
+    }
+    
+    .reservation-card {
+        height: 180px; /* 작은 화면에서는 높이 줄임 */
+    }
+    
+    .reservation-card-content {
+        padding: 8px 6px; /* 패딩 줄임 */
+        font-size: 12px; /* 폰트 크기 줄임 */
+    }
+    
+    .reservation-game-name {
+        font-size: 14px; /* 게임명 폰트 크기 줄임 */
+        -webkit-line-clamp: 2;
+    }
+    
+    .reservation-info-row {
+        font-size: 12px;
+        gap: 1px; /* 간격 더 줄임 */
+    }
+    
+    .reservation-info-row.due .reservation-label {
+        font-size: 10px; /* 라벨 폰트 크기 더 줄임 */
+    }
+    
+    .reservation-info-row.due span:last-child {
+        font-size: 13px; /* 날짜 폰트 크기 조정 */
+    }
+    
+    .reservation-status-badge {
+        font-size: 11px; /* 상태 배지 폰트 크기 줄임 */
+        padding: 3px 6px; /* 패딩 줄임 */
+    }
+}
+
+/* 매우 작은 화면 (320px 이하) */
+@media (max-width: 320px) {
+    .reservation-grid {
+        grid-template-columns: 1fr; /* 매우 작은 화면에서는 1열로 변경 */
+    }
+    
+    .reservation-card {
+        height: 160px; /* 높이 더 줄임 */
+    }
 }
