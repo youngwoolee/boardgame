@@ -13,7 +13,8 @@ type Game = {
     id: number;
     name: string;
     imageUrl: string;
-    barcodes?: string[];
+    barcodes?: Array<{barcode: string; available: boolean}>;
+    available?: boolean;  // 대여 가능 여부
     tag?: string | null;
     minPlayers?: number;
     maxPlayers?: number;
@@ -66,13 +67,21 @@ export default function GameDetailModal({ game, onClose }: Props) {
                             <div className="attribute barcode-attribute">
                                 <FiHash className='icon' />
                                 <div>
-                                    <div className="label">바코드</div>
+                                    <div className="label">
+                                        바코드
+                                        {game.barcodes && game.barcodes.some(b => !b.available) && (
+                                            <span className="rented-status"> (일부 대여중)</span>
+                                        )}
+                                    </div>
                                     <div className="value">
                                         {game.barcodes && game.barcodes.length > 0 ? (
                                             <div className="barcode-list">
-                                                {game.barcodes.map((barcode, index) => (
-                                                    <span key={index} className="barcode-item">
-                                                        {barcode}
+                                                {game.barcodes.map((barcodeInfo, index) => (
+                                                    <span 
+                                                        key={index} 
+                                                        className={`barcode-item ${!barcodeInfo.available ? 'rented' : ''}`}
+                                                    >
+                                                        {barcodeInfo.barcode}
                                                     </span>
                                                 ))}
                                             </div>

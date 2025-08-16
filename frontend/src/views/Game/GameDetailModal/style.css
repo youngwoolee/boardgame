@@ -123,6 +123,20 @@
     word-break: break-all;
 }
 
+.barcode-item.rented {
+    text-decoration: line-through;
+    color: #6c757d;
+    background-color: #f1f3f4;
+    border-color: #dee2e6;
+    opacity: 0.7;
+}
+
+.rented-status {
+    color: #dc3545;
+    font-weight: 500;
+    font-size: 10px;
+}
+
 /* ✅ 폰트 크기 축소 */
 .label {
     font-size: 11px;

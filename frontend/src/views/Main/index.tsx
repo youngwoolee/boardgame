@@ -224,15 +224,19 @@ export default function Main() {
                                             return;
                                         }
                                         
-                                        const allBarcodes = gameList
-                                            .filter(g => g.name === game.name)
-                                            .map(g => g.barcode);
+                                        const sameNameGames = gameList.filter(g => g.name === game.name);
+                                        const barcodesWithStatus = sameNameGames.map(g => ({
+                                            barcode: g.barcode,
+                                            available: g.available
+                                        }));
                                             
                                         const gameWithAllBarcodes = {
                                             ...game,
-                                            barcodes: allBarcodes
+                                            barcodes: barcodesWithStatus,
+                                            available: game.available
                                         };
                                         
+                                        console.log('GameDetailModal에 전달할 데이터:', gameWithAllBarcodes);
                                         setSelectedGame(gameWithAllBarcodes);
                                     }}
                                 >
