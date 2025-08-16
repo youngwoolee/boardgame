@@ -146,16 +146,76 @@
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .admin-dashboard {
-        padding: 16px;
+        padding: 0;
+        max-width: 100%;
+        margin: 0;
+    }
+    
+    .dashboard-header {
+        padding: 0 12px;
+        margin-bottom: 20px;
     }
     
     .admin-menu-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 8px;
+        padding: 0 8px;
+    }
+    
+    .admin-menu-card {
+        padding: 12px;
+        margin: 0;
     }
     
     .dashboard-stats {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 8px;
+        padding: 0 8px;
+    }
+    
+    .stat-card {
+        padding: 12px;
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-dashboard {
+        padding: 0;
+        max-width: 100%;
+        margin: 0;
+    }
+    
+    .dashboard-header {
+        padding: 0 8px;
+        margin-bottom: 16px;
+    }
+    
+    .dashboard-title {
+        font-size: 18px;
+    }
+    
+    .dashboard-subtitle {
+        font-size: 13px;
+    }
+    
+    .admin-menu-grid {
+        gap: 6px;
+        padding: 0 4px;
+    }
+    
+    .admin-menu-card {
+        padding: 10px;
+        margin: 0;
+    }
+    
+    .dashboard-stats {
+        gap: 6px;
+        padding: 0 4px;
+    }
+    
+    .stat-card {
+        padding: 10px;
+        margin: 0;
     }
 }

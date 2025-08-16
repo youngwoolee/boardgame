@@ -162,19 +162,26 @@
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .user-approval-container {
-        padding: 15px;
+        padding: 0;
+        max-width: 100%;
+        margin: 0;
     }
     
     .header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+        padding: 0 12px;
+        margin-bottom: 20px;
     }
     
     .user-card {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
+        padding: 12px;
+        margin: 0 8px 8px 8px;
+        border-radius: 8px;
     }
     
     .user-actions {
@@ -185,5 +192,35 @@
     .approve-btn {
         width: 100%;
         padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-approval-container {
+        padding: 0;
+        max-width: 100%;
+        margin: 0;
+    }
+    
+    .header {
+        padding: 0 8px;
+        margin-bottom: 16px;
+    }
+    
+    .user-approval-container h2 {
+        font-size: 18px;
+    }
+    
+    .user-card {
+        padding: 10px;
+        margin: 0 4px 6px 4px;
+    }
+    
+    .user-header h3 {
+        font-size: 15px;
+    }
+    
+    .user-details p {
+        font-size: 12px;
     }
 }
