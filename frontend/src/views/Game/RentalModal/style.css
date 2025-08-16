@@ -84,9 +84,56 @@
     background-color: #eee;
 }
 
-.rental-item span {
+.rental-item .game-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.rental-item .game-name {
     font-size: 14px;
     font-weight: 500;
+}
+
+.rental-item .barcode {
+    font-size: 12px;
+    color: #666;
+}
+
+.rental-item .rented-badge {
+    font-size: 11px;
+    color: #ff3b30;
+    font-weight: 500;
+}
+
+.rental-item .remove-button {
+    background: #ff3b30;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rental-item .remove-button:hover:not(:disabled) {
+    background: #d70015;
+}
+
+.rental-item .remove-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.rental-item.rented {
+    opacity: 0.7;
+    background-color: #f8f8f8;
 }
 
 .rental-modal-footer {

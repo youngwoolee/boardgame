@@ -5,26 +5,24 @@ import ReserveGameRequestDto from "../../../apis/request/game/reserve-game.reque
 import ReserveGameResponseDto from "../../../apis/response/game/reserve-game.response.dto";
 import {ResponseBody} from "../../../types";
 import {ResponseCode} from "../../../types/enums";
-import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
-import {SignInResponseDto} from "../../../apis/response/auth";
-
 
 interface SelectedGame {
     id: number;
     barcode: string;
     name: string;
     imageUrl: string;
-}
+};
 
 interface Props {
     list: SelectedGame[];
     onClose: () => void;
     onRented: () => void;  // 대여 후 selectedList 초기화를 위한 콜백
-}
+    onRemoveGame: (gameName: string) => void;  // 게임 제거를 위한 콜백
+    gameList: any[];  // 전체 게임 목록 (대여 상태 확인용)
+};
 
-export default function RentalModal({ list, onClose, onRented }: Props) {
-    const navigate = useNavigate();
+export default function RentalModal({ list, onClose, onRented, onRemoveGame, gameList }: Props) {
 
     const copyRentalMessage = (data: ReserveGameResponseDto) => {
         const gameNames = data.gameNames.join(', ');
@@ -50,11 +48,11 @@ export default function RentalModal({ list, onClose, onRented }: Props) {
     };
 
     const reserveGameResponse = (responseBody: ResponseBody<ReserveGameResponseDto>) => {
-        if(!responseBody) return;
-        const { code, message} = responseBody;
-        if( code === ResponseCode.DATABASE_ERROR) alert('데이터베이스 오류입니다');
-        if( code === ResponseCode.ALREADY_RESERVATION) alert(message);
-        if( code !== ResponseCode.SUCCESS) return;
+        if (!responseBody) return;
+        const {code, message} = responseBody;
+        if (code === ResponseCode.DATABASE_ERROR) alert('데이터베이스 오류입니다');
+        if (code === ResponseCode.ALREADY_RESERVATION) alert(message);
+        if (code !== ResponseCode.SUCCESS) return;
 
         const data = responseBody as ReserveGameResponseDto;
 
@@ -65,6 +63,18 @@ export default function RentalModal({ list, onClose, onRented }: Props) {
             onClose();      // 모달 닫기
             window.location.reload();
         }, 1000);
+    };
+
+    const handleRemoveGame = (gameName: string) => {
+        // 대여중인 게임인지 확인
+        const game = gameList.find(g => g.name === gameName);
+        if (game && !game.available) {
+            toast.error(`'${gameName}'은(는) 이미 대여중인 보드게임입니다.`);
+            return;
+        }
+        
+        onRemoveGame(gameName);
+        toast.success(`'${gameName}'이(가) 목록에서 제거되었습니다.`);
     };
 
     const handleSubmit = async () => {
@@ -93,13 +103,33 @@ export default function RentalModal({ list, onClose, onRented }: Props) {
                         <div className="empty">선택한 보드게임이 없습니다.</div>
                     ) : (
                         <ul className="rental-list">
-                            {list.map((game) => (
-                                <li className="rental-item" key={game.barcode}>
-                                    <img src={game.imageUrl} alt={game.name} />
-                                    <span>{game.name}</span>
-                                    <span className="barcode">{game.barcode}</span>
-                                </li>
-                            ))}
+                            {list.map((game) => {
+                                // 대여 상태 확인
+                                const gameInfo = gameList.find(g => g.name === game.name);
+                                const isRented = gameInfo && !gameInfo.available;
+                                
+                                return (
+                                    <li className={`rental-item ${isRented ? 'rented' : ''}`} key={game.barcode}>
+                                        <img src={game.imageUrl} alt={game.name}/>
+                                        <div className="game-info">
+                                            <span className="game-name">{game.name}</span>
+                                            <span className="barcode">{game.barcode}</span>
+                                            {isRented && <span className="rented-badge">대여중</span>}
+                                        </div>
+                                        <button 
+                                            className="remove-button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleRemoveGame(game.name);
+                                            }}
+                                            disabled={isRented}
+                                            title={isRented ? "대여중인 게임은 제거할 수 없습니다" : "목록에서 제거"}
+                                        >
+                                            ×
+                                        </button>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     )}
                 </div>
@@ -113,4 +143,3 @@ export default function RentalModal({ list, onClose, onRented }: Props) {
         </div>
     );
 }
-

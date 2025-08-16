@@ -2,7 +2,7 @@ import React, {JSX, useEffect, useState} from 'react';
 import './style.css';
 import {FiBookmark, FiCamera, FiSearch, FiShoppingCart, FiUsers} from 'react-icons/fi';
 import GameDetailModal from '../Game/GameDetailModal';
-import RentalModal from "../Game/GameRentalModal";
+import RentalModal from "../Game/RentalModal";
 import BarcodeScanner from "../Game/BarcodeScanner";
 import {GameListResponseDto, GameResponseDto} from "../../apis/response/game";
 import {getGameListRequest} from "../../apis";
@@ -80,6 +80,13 @@ export default function Main() {
             return;
         }
 
+        // 대여중인 게임인지 확인
+        if (!matched.available) {
+            toast.error(`'${matched.name}'은(는) 이미 대여중인 보드게임입니다.`);
+            setShowScanner(false);
+            return;
+        }
+
         const newEntry: SelectedGame = {
             id: matched.id,
             barcode: matched.barcode,
@@ -93,6 +100,13 @@ export default function Main() {
     };
 
     const toggleSelectByGame = (name: string) => {
+        // 대여중인 게임인지 확인
+        const game = gameList.find(g => g.name === name);
+        if (game && !game.available) {
+            toast.error(`'${name}'은(는) 이미 대여중인 보드게임입니다.`);
+            return;
+        }
+        
         setSelectedList(prev => prev.filter(g => g.name !== name));
     };
 
@@ -198,18 +212,28 @@ export default function Main() {
                                     className={`main-card ${isAllRented ? 'rented' : ''}`}
                                     key={game.name}
                                     onClick={() => {
-                                        if (!isSelected) {
-                                            const allBarcodes = gameList
-                                                .filter(g => g.name === game.name)
-                                                .map(g => g.barcode);
-                                                
-                                            const gameWithAllBarcodes = {
-                                                ...game,
-                                                barcodes: allBarcodes
-                                            };
-                                            
-                                            setSelectedGame(gameWithAllBarcodes);
+                                        if (isSelected) {
+                                            // 이미 선택된 게임이면 선택 해제
+                                            toggleSelectByGame(game.name);
+                                            return;
                                         }
+                                        
+                                        // 대여중인 게임은 상세 모달을 열 수 없음
+                                        if (!game.available) {
+                                            toast.error(`'${game.name}'은(는) 이미 대여중인 보드게임입니다.`);
+                                            return;
+                                        }
+                                        
+                                        const allBarcodes = gameList
+                                            .filter(g => g.name === game.name)
+                                            .map(g => g.barcode);
+                                            
+                                        const gameWithAllBarcodes = {
+                                            ...game,
+                                            barcodes: allBarcodes
+                                        };
+                                        
+                                        setSelectedGame(gameWithAllBarcodes);
                                     }}
                                 >
                                     <div className="main-card-image-wrapper">
@@ -228,6 +252,7 @@ export default function Main() {
                                                     e.stopPropagation();
                                                     toggleSelectByGame(game.name);
                                                 }}
+                                                title="클릭하여 선택 해제"
                                             >
                                                 <span>선택됨</span>
                                             </button>
@@ -275,12 +300,14 @@ export default function Main() {
                 <GameDetailModal game={selectedGame} onClose={() => setSelectedGame(null)} />
             )}
 
-            {/* 대여 모달 */}
+                        {/* 대여 모달 */}
             {showRentalModal && (
                 <RentalModal
-                list={selectedList}
-                onClose={() => setShowRentalModal(false)}
-                onRented={() => setSelectedList([])}  // 예: 대여 후 목록 초기화
+                    list={selectedList}
+                    onClose={() => setShowRentalModal(false)}
+                    onRented={() => setSelectedList([])}  // 예: 대여 후 목록 초기화
+                    onRemoveGame={(gameName) => setSelectedList(prev => prev.filter(g => g.name !== gameName))}
+                    gameList={gameList}
                 />
             )}
 
@@ -310,6 +337,12 @@ export default function Main() {
                         const matched = gameList.find(g => g.barcode === code);
                         if (!matched) {
                             toast.error('일치하는 보드게임을 찾을 수 없습니다.');
+                            return;
+                        }
+
+                        // 대여중인 게임인지 확인
+                        if (!matched.available) {
+                            toast.error(`'${matched.name}'은(는) 이미 대여중인 보드게임입니다.`);
                             return;
                         }
 
