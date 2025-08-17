@@ -8,6 +8,7 @@ enum ResponseCode {
     DATABASE_ERROR="DBE",
     PENDING_APPROVAL = "PA",
     ALREADY_RESERVATION="AR",
+    DUPLICATE_EMAIL="DE",
 };
 
 export default ResponseCode;

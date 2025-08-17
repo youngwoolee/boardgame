@@ -22,7 +22,7 @@ export default function AdditionalInfo() {
     useEffect(() => {
         if (!token || !expirationTime) {
             alert("토큰이 만료되었거나 로그인 정보가 없습니다.");
-            navigate('/auth/sign-in');
+            navigate('/auth/sign-in', { replace: true });
         }
     },  [token, expirationTime]);
 

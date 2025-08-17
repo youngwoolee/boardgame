@@ -1,20 +1,18 @@
-import React, {JSX, useEffect, useState} from "react";
-import { Navigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import jwt_decode from 'jwt-decode';
 
 interface JwtPayload {
-    sub: string;
-    exp: number;
-    role: string | string[];
+    role: string;
     [key: string]: any;
 }
 
-interface Props {
-    children: JSX.Element;
+interface AdminRouteProps {
+    children: React.ReactNode;
 }
 
-const AdminRoute = ({ children }: Props) => {
+const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
     const [cookies] = useCookies(['accessToken']);
     const [role, setRole] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -23,75 +21,41 @@ const AdminRoute = ({ children }: Props) => {
         const checkRole = () => {
             try {
                 const token = cookies.accessToken;
-                
                 if (!token) {
                     setRole(null);
                     setIsLoading(false);
                     return;
                 }
 
-                // JWT 직접 디코딩
                 const decoded = jwt_decode<JwtPayload>(token);
-                
-                let extractedRole: string | null = null;
-                
-                if (Array.isArray(decoded.role)) {
-                    extractedRole = decoded.role[0];
-                } else if (typeof decoded.role === 'string') {
-                    extractedRole = decoded.role;
-                } else {
-                    // 다른 가능한 필드들 확인
-                    const possibleRoleFields = ['authorities', 'roles', 'userRole', 'user_role'];
-                    for (const field of possibleRoleFields) {
-                        if (decoded[field]) {
-                            if (Array.isArray(decoded[field])) {
-                                extractedRole = decoded[field][0];
-                            } else {
-                                extractedRole = decoded[field];
-                            }
-                            break;
-                        }
-                    }
-                }
-                
-                setRole(extractedRole);
+                const userRole = decoded.role;
+                setRole(userRole);
                 setIsLoading(false);
-                
             } catch (error) {
-                console.error('AdminRoute - Error decoding JWT:', error);
+                console.error('JWT 디코딩 오류:', error);
                 setRole(null);
                 setIsLoading(false);
             }
         };
 
-        // 즉시 권한 확인
         checkRole();
     }, [cookies.accessToken]);
 
     if (isLoading) {
-        return (
-            <div style={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center', 
-                height: '100vh',
-                fontSize: '16px',
-                color: '#666'
-            }}>
-                권한 확인 중...
-            </div>
-        );
+        return <div>로딩 중...</div>;
     }
 
     if (!role) {
+        // 권한이 없으면 로그인 페이지로 이동 (replace 사용)
         return <Navigate to="/auth/sign-in" replace />;
     }
 
-    if (role !== "ROLE_ADMIN") {
+    if (role !== 'ROLE_ADMIN') {
+        // 관리자가 아니면 메인 페이지로 이동 (replace 사용)
         return <Navigate to="/" replace />;
     }
 
-    return children;
+    return <>{children}</>;
 };
 
 export default AdminRoute;

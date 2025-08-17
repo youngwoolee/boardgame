@@ -4,6 +4,8 @@ import JsBarcode from 'jsbarcode';
 import { getGameListRequest } from '../../../apis';
 import { GameResponseDto } from '../../../apis/response/game';
 import './style.css';
+import { useNavigate } from 'react-router-dom'; // useNavigate 추가
+import { FiArrowLeft } from 'react-icons/fi'; // FiArrowLeft 추가
 
 export default function BarcodeDownload() {
     const [gameList, setGameList] = useState<GameResponseDto[]>([]);
@@ -12,6 +14,8 @@ export default function BarcodeDownload() {
     const [downloading, setDownloading] = useState(false);
     const [printLayout, setPrintLayout] = useState<'single' | 'a4'>('a4');
     const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 추가
+
+    const navigate = useNavigate(); // useNavigate 훅 사용
 
     // 검색된 게임 목록 계산
     const filteredGameList = gameList.filter(game => 
@@ -368,11 +372,22 @@ export default function BarcodeDownload() {
         }
     };
 
+    const handleBackClick = () => {
+        // 관리자 대시보드로 돌아갈 때는 replace로 처리하여 히스토리 스택을 관리
+        navigate('/admin', { replace: true });
+    };
+
     return (
         <div className="barcode-download-page">
             <div className="page-header">
-                <h1>바코드 다운로드</h1>
-                <p>게임을 선택하고 바코드를 다운로드하거나 인쇄하세요. (한 페이지에 8개씩 2x4 출력)</p>
+                <button className="back-button" onClick={handleBackClick}>
+                    <FiArrowLeft className="back-icon" />
+                    뒤로가기
+                </button>
+                <div className="header-content">
+                    <h1>바코드 다운로드</h1>
+                    <p>게임별 바코드를 생성하고 다운로드합니다</p>
+                </div>
             </div>
 
             <div className="controls-section">

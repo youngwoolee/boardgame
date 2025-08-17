@@ -219,9 +219,13 @@ export default function EditGame() {
                                 <button className="primary-button-lg full-width" onClick={handleSubmit} disabled={isFormDisabled}>
                                     {isSubmitting ? <ClipLoader size={20} color="#fff" /> : '수정하기'}
                                 </button>
-                                <div className="text-link-lg full-width" onClick={() => navigate('/')}>
-                                    메인으로
-                                </div>
+                                <button
+                                    onClick={() => navigate('/admin', { replace: true })}
+                                    className="edit-game-button"
+                                    style={{ background: 'linear-gradient(135deg, #6c757d, #495057)' }}
+                                >
+                                    취소
+                                </button>
                             </div>
                         </fieldset>
                     )}

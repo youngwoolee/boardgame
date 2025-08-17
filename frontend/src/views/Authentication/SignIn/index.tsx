@@ -69,7 +69,7 @@ export default function SignIn() {
     };
 
     const onSignUpButtonClickHandler = () => {
-        navigate('/auth/sign-up');
+        navigate('/auth/sign-up', { replace: true });
     };
 
     const onSignInButtonClickHandler = () => {

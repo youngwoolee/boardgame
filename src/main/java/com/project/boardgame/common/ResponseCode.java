@@ -13,4 +13,5 @@ public interface ResponseCode {
     String ALREADY_RESERVATION="AR";
 
     String NOT_FOUND="NF";
+    String DUPLICATE_EMAIL="DE";
 }

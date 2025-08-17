@@ -228,9 +228,13 @@ export default function UploadGame() {
                             <button className="primary-button-lg full-width" onClick={handleSubmit} disabled={isFormDisabled}>
                                 {isSubmitting ? <ClipLoader size={20} color="#fff" /> : '등록하기'}
                             </button>
-                            <div className="text-link-lg full-width" onClick={() => navigate('/')}>
-                                메인으로
-                            </div>
+                            <button
+                                onClick={() => navigate('/admin', { replace: true })}
+                                className="upload-game-button"
+                                style={{ background: 'linear-gradient(135deg, #6c757d, #495057)' }}
+                            >
+                                취소
+                            </button>
                         </div>
                     </fieldset>
                 </div>

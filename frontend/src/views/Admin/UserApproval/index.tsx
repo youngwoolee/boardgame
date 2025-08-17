@@ -6,6 +6,7 @@ import { getAccessTokenHeader } from '../../../utils/token';
 import { toast } from 'react-toastify';
 import './style.css';
 import {AdminUserResponseDto} from "../../../apis/response/admin/admin-user.response.dto";
+import { FiArrowLeft } from 'react-icons/fi';
 
 const UserApproval: React.FC = () => {
     const [pendingUsers, setPendingUsers] = useState<AdminUserResponseDto[]>([]);
@@ -89,6 +90,11 @@ const UserApproval: React.FC = () => {
         return new Date(dateString).toLocaleString('ko-KR');
     };
 
+    const handleBackClick = () => {
+        // 관리자 대시보드로 돌아갈 때는 replace로 처리하여 히스토리 스택을 관리
+        navigate('/admin', { replace: true });
+    };
+
     if (loading) {
         return (
             <div className="user-approval-container">
@@ -100,10 +106,7 @@ const UserApproval: React.FC = () => {
     return (
         <div className="user-approval-container">
             <div className="header">
-                <button className="back-btn" onClick={() => navigate('/admin')}>
-                    ← 뒤로가기
-                </button>
-                <h2>사용자 승인 관리</h2>
+                <h2>사용자 승인</h2>
             </div>
             
             {pendingUsers.length === 0 ? (

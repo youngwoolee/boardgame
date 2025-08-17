@@ -73,7 +73,7 @@ export default function SignUp() {
     useEffect(() => {
         if (cookie.accessToken) {
             // 이미 로그인된 사용자이면 홈으로 이동
-            navigate('/',{ replace: true });
+            navigate('/', { replace: true });
         }
     }, [cookie, navigate]);
 
@@ -131,22 +131,22 @@ export default function SignUp() {
     const signUpResponse = (responseBody: ResponseBody<SignUpResponseDto>) => {
         if(!responseBody) return;
         const { code } = responseBody;
-        if( code === ResponseCode.VALIDATION_FAIL) alert('모든 값을 입력하세요');
+        if( code === ResponseCode.VALIDATION_FAIL) alert('입력 정보를 확인해주세요');
         if( code === ResponseCode.DUPLICATE_ID) {
             setIdError(true);
             setIdMessage("이미 사용중인 아이디 입니다");
             setIdCheck(false);
         }
-        if( code === ResponseCode.CERTIFICATION_FAIL) {
-            setCertificationNumberError(true);
-            setCertificationNumberMessage("인증번호가 일치하지 않습니다");
+        if( code === ResponseCode.DUPLICATE_EMAIL) {
+            setEmailError(true);
+            setEmailMessage("이미 사용중인 이메일 입니다");
             setCertificationCheck(false);
         }
         if( code === ResponseCode.DATABASE_ERROR) alert('데이터베이스 오류입니다');
         if( code !== ResponseCode.SUCCESS) return;
 
-        toast.success("회원가입에 성공했습니다");
-        navigate("/auth/sign-in");
+        toast.success('회원가입이 완료되었습니다. 로그인해주세요.');
+        navigate('/auth/sign-in', { replace: true });
     };
 
     const onIdChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {

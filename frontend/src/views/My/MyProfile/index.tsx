@@ -27,11 +27,17 @@ export default function MyProfile() {
         setProfile(responseBody as UserResponseDto);
     };
 
-    const handleLogout = () => {
-        // Access Token 쿠키 삭제
-        removeCookie('accessToken', { path: '/' });
-        // 로그인 페이지로 이동
-        navigate('/auth/sign-in');
+    const onLogoutButtonClickHandler = () => {
+        setCookie('accessToken', '', { expires: new Date(), path: '/' });
+        navigate('/auth/sign-in', { replace: true });
+    };
+
+    const onWithdrawButtonClickHandler = () => {
+        const confirmed = window.confirm('정말로 탈퇴하시겠습니까?');
+        if (!confirmed) return;
+
+        setCookie('accessToken', '', { expires: new Date(), path: '/' });
+        navigate('/auth/sign-in', { replace: true });
     };
 
     if (!profile) {
@@ -54,7 +60,7 @@ export default function MyProfile() {
                 <div className="profile-value">{profile.email}</div>
             </div>
 
-            <button className="logout-button" onClick={handleLogout}>
+            <button className="logout-button" onClick={onLogoutButtonClickHandler}>
                 로그아웃
             </button>
         </div>
