@@ -35,26 +35,31 @@ public class AiService {
 
 
     public GeneratedGameDto getGameData(String gameName) {
-        // 1. Scrape factual data from BoardGameGeek's embedded JSON
-        GeneratedGameDto scrapedDto = scrapeBoardGameDetailsFromApi(gameName);
-        if (scrapedDto == null) {
-            log.error("Failed to scrape initial data for game: {}", gameName);
-            return null;
+        try {
+            // 1. Scrape factual data from BoardGameGeek's embedded JSON
+            GeneratedGameDto scrapedDto = scrapeBoardGameDetailsFromApi(gameName);
+            if (scrapedDto == null) {
+                log.error("Failed to scrape initial data for game: {}", gameName);
+                throw new RuntimeException("게임 정보를 가져올 수 없습니다: " + gameName);
+            }
+
+            // 2. Use AI to generate descriptive content
+            AiGeneratedContent aiContent = generateDescriptiveContent(gameName);
+            if (aiContent == null) {
+                log.error("Failed to generate AI content for game: {}", gameName);
+                throw new RuntimeException("AI 콘텐츠 생성에 실패했습니다: " + gameName);
+            }
+
+            // 3. Merge AI content into the scraped DTO
+            scrapedDto.setDescription(aiContent.description());
+            scrapedDto.setGenres(aiContent.genres());
+            scrapedDto.setSystems(aiContent.systems());
+
+            return scrapedDto;
+        } catch (Exception e) {
+            log.error("Error in getGameData for game '{}': {}", gameName, e.getMessage());
+            throw new RuntimeException("게임 데이터를 가져오는 중 오류가 발생했습니다: " + gameName, e);
         }
-
-        // 2. Use AI to generate descriptive content
-        AiGeneratedContent aiContent = generateDescriptiveContent(gameName);
-        if (aiContent == null) {
-            log.error("Failed to generate AI content for game: {}", gameName);
-            return null;
-        }
-
-        // 3. Merge AI content into the scraped DTO
-        scrapedDto.setDescription(aiContent.description());
-        scrapedDto.setGenres(aiContent.genres());
-        scrapedDto.setSystems(aiContent.systems());
-
-        return scrapedDto;
     }
 
     private AiGeneratedContent generateDescriptiveContent(String gameName) {

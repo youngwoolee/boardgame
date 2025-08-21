@@ -45,9 +45,14 @@ public class AdminController {
 
     @PostMapping("/generate-info")
     public ResponseEntity<? super GeneratedGameInfoResponse> generate(@RequestBody GenerateInfoRequest request) {
-        log.info("[log] generate : {}", request.toString());
-        GeneratedGameDto dto = aiService.getGameData(request.getBoardGameName());
-        return GeneratedGameInfoResponse.success(dto);
+        try {
+            log.info("[log] generate : {}", request.toString());
+            GeneratedGameDto dto = aiService.getGameData(request.getBoardGameName());
+            return GeneratedGameInfoResponse.success(dto);
+        } catch (Exception e) {
+            log.error("Error generating game info for '{}': {}", request.getBoardGameName(), e.getMessage());
+            return GeneratedGameInfoResponse.fail("게임 정보 생성에 실패했습니다: " + e.getMessage());
+        }
     }
 
     @PostMapping("/upload")
