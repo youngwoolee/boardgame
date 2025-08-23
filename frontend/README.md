@@ -1,46 +1,58 @@
-# Getting Started with Create React App
+# 아임 더 보스 - 보드게임 대여 서비스
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 소셜 미디어 공유 최적화
 
-## Available Scripts
+이 프로젝트는 카카오톡, 페이스북 등 소셜 미디어에 공유할 때 최적화된 메타 정보를 포함하고 있습니다.
 
-In the project directory, you can run:
+### Open Graph 메타 태그
 
-### `npm start`
+- **제목**: "아임 더 보스 - 보드게임 대여 서비스"
+- **설명**: "다양한 보드게임을 쉽고 편리하게 대여하세요. 전략게임부터 파티게임까지!"
+- **이미지**: `logo-og.svg` (1200x630px)
+- **타입**: website
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 카카오톡 공유 최적화
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+카카오톡에서 링크를 공유할 때 다음 정보가 표시됩니다:
+- 대표 이미지: 아임 더 보스 로고
+- 제목: 아임 더 보스 - 보드게임 대여 서비스
+- 설명: 다양한 보드게임을 쉽고 편리하게 대여하세요
 
-### `npm test`
+### 로고 파일
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `logo-og.svg`: 소셜 미디어 공유용 SVG 로고 (1200x630px)
+  - #007bff 기반 파란색 그라데이션
+  - 게임 보드 느낌의 격자 패턴
+  - 중앙에 주사위 아이콘
+  - 현대적이고 세련된 디자인
+- `logo-favicon.svg`: favicon용 SVG 로고 (64x64px)
+  - 브라우저 탭과 북마크에 표시
+  - 주사위 아이콘 포함
+- `logo-og.png`: 소셜 미디어 공유용 PNG 로고 (1200x630px)
 
-### `npm run build`
+### 로고 변환
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+SVG를 PNG로 변환하려면:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+npm install sharp puppeteer
+npm run convert-logo
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 개발
 
-### `npm run eject`
+```bash
+npm start
+npm run build
+npm test
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 빌드
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+프로덕션 빌드를 위해:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+npm run build
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+빌드된 파일은 `build` 폴더에 생성됩니다.
