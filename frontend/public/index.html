@@ -8,17 +8,17 @@
     <meta name="theme-color" content="#007bff" />
     <meta
       name="description"
-      content="아임 더 보스 - 보드게임 대여 서비스. 다양한 보드게임을 쉽고 편리하게 대여하세요."
+      content="신한카드 보드게임 동아리(아임 더 보스)"
     />
     
     <!-- Open Graph 메타 태그 (카카오톡, 페이스북 등 소셜 미디어 공유용) -->
     <meta property="og:title" content="아임 더 보스 - 보드게임 대여 서비스" />
-    <meta property="og:description" content="다양한 보드게임을 쉽고 편리하게 대여하세요. 전략게임부터 파티게임까지!" />
-    <meta property="og:image" content="%PUBLIC_URL%/logo-og.svg" />
+    <meta property="og:description" content="신한카드 보드게임 동아리(아임 더 보스)" />
+    <meta property="og:image" content="/logo-og.svg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="%PUBLIC_URL%" />
+    <meta property="og:url" content="/" />
     <meta property="og:site_name" content="아임 더 보스" />
     
     <!-- 카카오톡 공유 최적화 -->
@@ -27,8 +27,33 @@
     <!-- Twitter Card 메타 태그 -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="아임 더 보스 - 보드게임 대여 서비스" />
-    <meta name="twitter:description" content="다양한 보드게임을 쉽고 편리하게 대여하세요." />
-    <meta name="twitter:image" content="%PUBLIC_URL%/logo-og.svg" />
+    <meta name="twitter:description" content="신한카드 보드게임 동아리(아임 더 보스)" />
+    <meta name="twitter:image" content="/logo-og.svg" />
+    
+    <!-- 동적 메타 태그 설정을 위한 스크립트 -->
+    <script>
+      (function() {
+        var baseUrl = window.location.origin;
+        
+        // Open Graph 이미지 URL 설정
+        var ogImage = document.querySelector('meta[property="og:image"]');
+        if (ogImage) {
+          ogImage.setAttribute('content', baseUrl + '/logo-og.svg');
+        }
+        
+        // Open Graph URL 설정
+        var ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) {
+          ogUrl.setAttribute('content', baseUrl + window.location.pathname);
+        }
+        
+        // Twitter 이미지 URL 설정
+        var twitterImage = document.querySelector('meta[name="twitter:image"]');
+        if (twitterImage) {
+          twitterImage.setAttribute('content', baseUrl + '/logo-og.svg');
+        }
+      })();
+    </script>
     
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--

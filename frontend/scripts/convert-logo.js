@@ -12,3 +12,4 @@ console.log('node scripts/convert-logo.js');
 
 // 실제 변환 로직은 sharp나 puppeteer를 사용하여 구현할 수 있습니다.
 // 현재는 placeholder 스크립트입니다.
+
